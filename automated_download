@@ -23,5 +23,4 @@ while start <= end:
         break
     start += delta
 
-#print(data_by_state.iloc[57][:])
 data_by_state.to_csv(r"C:\Users\kq146\code\Covid_data\updated_data.csv")
