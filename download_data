@@ -4,7 +4,7 @@ import numpy as np
 import datetime as dt
 
 #Downloads and cleans Covid data
-
+#test
 #Johns Hopkins data downloaded from Git Hub
 url = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports_us/'
 data_by_state = pd.read_csv(url + "04-12-2020" + ".csv")
