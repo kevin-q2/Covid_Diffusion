@@ -6,9 +6,12 @@ import datetime as dt
 #Downloads and cleans Covid data
 #test
 #Johns Hopkins data downloaded from Git Hub
-url = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports_us/'
-data_by_state = pd.read_csv(url + "04-12-2020" + ".csv")
+Johns_url = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports_us/'
+data_by_state = pd.read_csv(Johns_url + "04-12-2020" + ".csv")
 
+deaths_url = 'https://data.cdc.gov/api/views/r8kw-7aab/rows.csv'
+death_data = pd.read_csv(deaths_url)
+print(death_data.head())
 #Automatically updates to get the most current data
 start = dt.date(2020, 4, 13)
 end = dt.date.today()
@@ -17,10 +20,11 @@ delta = dt.timedelta(days=1)
 while start <= end:
     date_string = start.strftime("%m-%d-%Y")
     try:
-        new_day = pd.read_csv(url + date_string + ".csv")
+        new_day = pd.read_csv(Johns_url + date_string + ".csv")
         data_by_state = data_by_state.append(new_day)
     except:
         break
     start += delta
 
-data_by_state.to_csv(r"C:\Users\kq146\code\Covid_data\updated_data.csv", index = False)
+data_by_state.to_csv(r"C:\Users\kq146\code\Covid_data\State_Data.csv", index = False)
+death_data.to_csv(r"C:\Users\kq146\code\Covid_data\cdc_death_data.csv", index = False)
