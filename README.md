@@ -6,6 +6,9 @@ http://peerunreviewed.blogspot.com/2019/11/a-short-tutorial-on-robust-synthetic.
 
 Right now synthetic_control_tests demonstrates a few tests with the method, mostly for my own understanding
 
+tslib comes from the original researcher's own github project:
+https://github.com/jehangiramjad/tslib
+The functions defined there are essential to the work here
 
 ### Collected Data:
 
