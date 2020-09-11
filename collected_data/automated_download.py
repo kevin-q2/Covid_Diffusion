@@ -19,6 +19,8 @@ death_data = pd.read_csv(deaths_url)
 covid_tracker_url = "https://covidtracking.com/api/v1/states/daily.csv"
 covid_tracker_daily = pd.read_csv(covid_tracker_url, index_col = "date", parse_dates=True)
 
+county_data_url = "https://usafactsstatic.blob.core.windows.net/public/data/covid-19/covid_confirmed_usafacts.csv"
+county_data = pd.read_csv(county_data_url)
 #NYC data
 #nyc_data_url = "https://raw.githubusercontent.com/nychealth/coronavirus-data/master/case-hosp-death.csv"
 #nyc_data = pd.read_csv(nyc_data_url)
@@ -47,3 +49,4 @@ data_by_state.to_csv(r"C:\Users\kq146\code\Covid_data\collected_data\State_Data.
 covid_tracker_daily.to_csv(r"C:\Users\kq146\code\Covid_data\collected_data\covid_tracker_daily.csv")
 #nyc_data.to_csv(r"C:\Users\kq146\code\Covid_data\collected_data\daily_nyc.csv")
 #world_xls.to_csv(r"C:\Users\kq146\code\Covid_data\collected_data\daily_worldwide.csv", encoding = "utf-8")
+county_data.to_csv(r"C:\Users\kq146\code\Covid_data\collected_data\county_data.csv")
