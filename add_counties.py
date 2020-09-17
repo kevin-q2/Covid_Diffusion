@@ -42,8 +42,8 @@ while start <= end:
     county_frame = pd.read_csv(county_file + ".csv")
     start += delta
 
-    university = university.loc[:, ["School", "Cases", "County", "State", "Date"]]
-    university.columns = ["School", "Cases", "City", "State", "Date"]
+    university = university.loc[:, ["School", "Cases", "City", "State", "Date"]]
+    #university.columns = ["School", "Cases", "City", "State", "Date"]
     u_loc = university.loc[:,["City", "State"]]
     states = u_loc.State.unique()
 
@@ -70,4 +70,5 @@ while start <= end:
     with_cases = pd.concat([combined, count_cases], axis = 1)
     #with_cases.columns = ["School", "Cases", "City", "County", "State", "Date", "County_Cases"]
     with_cases = with_cases[["School", "Cases", "County_Active_Cases","County_Total_Cases", "City", "County", "State", "Date"]]
+    #print(with_cases)
     with_cases.to_csv(r"C:\Users\kq146\code\Covid_data\UniversityCases\university_cases_" + date_string + ".csv")
