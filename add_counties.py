@@ -28,7 +28,7 @@ def add_the_cases(univ, county):
 cities = pd.read_csv(r"C:\Users\kq146\code\Covid_data\US_Counties\csv\us_cities.csv")
 #county_frame = pd.read_csv(r"C:\Users\kq146\code\Covid_data\collected_data\county_data.csv")
 
-start = dt.date(2020, 9,8)
+start = dt.date(2020, 9,17)
 end = dt.date.today()
 delta = dt.timedelta(days=1)
 while start <= end:
