@@ -27,13 +27,13 @@
 25,University of Alaska Anchorage,4,3775.0,3803.0,Anchorage,Anchorage,Alaska,09-19-2020
 26,University of Alaska Fairbanks,35,937.0,946.0,Fairbanks,Fairbanks North Star,Alaska,09-19-2020
 27,University of Alaska Southeast,1,261.0,262.0,Juneau,Juneau,Alaska,09-19-2020
-28,Arizona State University,"1,330",136000.0,139245.0,Tempe,Maricopa,Arizona,09-19-2020
-29,Arizona Western College,4,12156.0,12498.0,Yuma,Yuma,Arizona,09-19-2020
-30,Embry-Riddle Aeronautical University at Prescott,21,2378.0,2457.0,Prescott,Yavapai,Arizona,09-19-2020
-31,Grand Canyon University,46,136000.0,139245.0,Phoenix,Maricopa,Arizona,09-19-2020
-32,Midwestern University at Glendale,55,136000.0,139245.0,Glendale,Maricopa,Arizona,09-19-2020
-33,Northern Arizona University,37,3605.0,3738.0,Flagstaff,Coconino,Arizona,09-19-2020
-34,University of Arizona,709,23700.0,24313.0,Tucson,Pima,Arizona,09-19-2020
+28,Arizona State University,"1,330",136327.0,139586.0,Tempe,Maricopa,Arizona,09-19-2020
+29,Arizona Western College,4,12189.0,12531.0,Yuma,Yuma,Arizona,09-19-2020
+30,Embry-Riddle Aeronautical University at Prescott,21,2387.0,2466.0,Prescott,Yavapai,Arizona,09-19-2020
+31,Grand Canyon University,46,136327.0,139586.0,Phoenix,Maricopa,Arizona,09-19-2020
+32,Midwestern University at Glendale,55,136327.0,139586.0,Glendale,Maricopa,Arizona,09-19-2020
+33,Northern Arizona University,37,3580.0,3713.0,Flagstaff,Coconino,Arizona,09-19-2020
+34,University of Arizona,709,23898.0,24511.0,Tucson,Pima,Arizona,09-19-2020
 35,Arkansas State University,143,2564.0,2584.0,Jonesboro,Craighead,Arkansas,09-19-2020
 36,Arkansas Tech University,6,1973.0,2002.0,Russellville,Pope,Arkansas,09-19-2020
 37,Harding University,1,695.0,714.0,Searcy,White,Arkansas,09-19-2020
@@ -103,7 +103,7 @@
 101,"University of California, Riverside",48,55528.0,56681.0,Riverside,Riverside,California,09-19-2020
 102,"University of California, San Diego*",237,43497.0,44293.0,San Diego,San Diego,California,09-19-2020
 103,"University of California, Santa Barbara",11,8736.0,8846.0,Santa Barbara,Santa Barbara,California,09-19-2020
-104,"University of California, Santa Cruz",16,2753.0,2815.0,Santa Cruz,Santa Cruz,California,09-19-2020
+104,"University of California, Santa Cruz",16,2754.0,2816.0,Santa Cruz,Santa Cruz,California,09-19-2020
 105,University of Redlands,5,51379.0,52287.0,Redlands,San Bernardino,California,09-19-2020
 106,University of San Diego,1,43497.0,44293.0,San Diego,San Diego,California,09-19-2020
 107,University of San Francisco,6,10599.0,10696.0,San Francisco,San Francisco,California,09-19-2020
@@ -819,14 +819,14 @@
 817,University of Tulsa,13,1021.0,1051.0,Tulsa,Creek,Oklahoma,09-19-2020
 818,Eastern Oregon University,3,808.0,839.0,La Grande,Union,Oregon,09-19-2020
 819,Lane Community College,1,12.0,12.0,Eugene,Lane,Oregon,09-19-2020
-820,Lewis & Clark College,3,2165.0,2226.0,Portland,Clackamas,Oregon,09-19-2020
+820,Lewis & Clark College,3,2176.0,2237.0,Portland,Clackamas,Oregon,09-19-2020
 821,Linfield University,1,,,McMinnville,,Oregon,09-19-2020
-822,Oregon Health & Science University*,112,2165.0,2226.0,Portland,Clackamas,Oregon,09-19-2020
-823,Oregon Institute of Technology,6,267.0,269.0,Klamath Falls,Klamath,Oregon,09-19-2020
+822,Oregon Health & Science University*,112,2176.0,2237.0,Portland,Clackamas,Oregon,09-19-2020
+823,Oregon Institute of Technology,6,270.0,272.0,Klamath Falls,Klamath,Oregon,09-19-2020
 824,Oregon State University,3,6093.0,6172.0,Corvallis,Benton,Oregon,09-19-2020
 825,Pacific University,1,531.0,544.0,Forest Grove,Washington,Oregon,09-19-2020
-826,Portland State University,2,2165.0,2226.0,Portland,Clackamas,Oregon,09-19-2020
-827,Reed College,8,2165.0,2226.0,Portland,Clackamas,Oregon,09-19-2020
+826,Portland State University,2,2176.0,2237.0,Portland,Clackamas,Oregon,09-19-2020
+827,Reed College,8,2176.0,2237.0,Portland,Clackamas,Oregon,09-19-2020
 828,Southern Oregon University,2,1483.0,1494.0,Ashland,Jackson,Oregon,09-19-2020
 829,University of Oregon,54,12.0,12.0,Eugene,Lane,Oregon,09-19-2020
 830,Western Oregon University,1,,,Mounmouth,,Oregon,09-19-2020
@@ -1170,22 +1170,22 @@
 1168,West Virginia University Institute of Technology,2,409.0,418.0,Montgomery,Fayette,West Virginia,09-19-2020
 1169,Wheeling University,2,69.0,76.0,Wheeling,Ohio,West Virginia,09-19-2020
 1170,Beloit College,2,146.0,146.0,Beloit,Rock,Wisconsin,09-19-2020
-1171,Carroll University,19,6367.0,6452.0,Waukesha,Waukesha,Wisconsin,09-19-2020
-1172,Carthage College,1,3151.0,3216.0,Kenosha,Kenosha,Wisconsin,09-19-2020
-1173,Edgewood College,14,8414.0,8455.0,Madison,Dane,Wisconsin,09-19-2020
-1174,Lakeland University,14,1401.0,1415.0,Plymouth,Sheboygan,Wisconsin,09-19-2020
-1175,Lawrence University,2,3250.0,3277.0,Appleton,Outagamie,Wisconsin,09-19-2020
+1171,Carroll University,19,7077.0,7162.0,Waukesha,Waukesha,Wisconsin,09-19-2020
+1172,Carthage College,1,3572.0,3637.0,Kenosha,Kenosha,Wisconsin,09-19-2020
+1173,Edgewood College,14,9045.0,9086.0,Madison,Dane,Wisconsin,09-19-2020
+1174,Lakeland University,14,1472.0,1486.0,Plymouth,Sheboygan,Wisconsin,09-19-2020
+1175,Lawrence University,2,3605.0,3632.0,Appleton,Outagamie,Wisconsin,09-19-2020
 1176,Marian University,34,,,Fond Du Lac,Fond Du Lac,Wisconsin,09-19-2020
-1177,Marquette University,138,25881.0,26402.0,Milwaukee,Milwaukee,Wisconsin,09-19-2020
+1177,Marquette University,138,27747.0,28268.0,Milwaukee,Milwaukee,Wisconsin,09-19-2020
 1178,Ripon College,4,,,Ripon,Fond Du Lac,Wisconsin,09-19-2020
 1179,Saint Norbert College,12,36.0,36.0,De Pere,Brown,Wisconsin,09-19-2020
-1180,University of Wisconsin-Eau Claire,69,1470.0,1476.0,Eau Claire,Eau Claire,Wisconsin,09-19-2020
+1180,University of Wisconsin-Eau Claire,69,1541.0,1547.0,Eau Claire,Eau Claire,Wisconsin,09-19-2020
 1181,University of Wisconsin-Green Bay,4,36.0,36.0,Green Bay,Brown,Wisconsin,09-19-2020
-1182,University of Wisconsin-La Crosse,12,2373.0,2375.0,La Crosse,La Crosse,Wisconsin,09-19-2020
-1183,University of Wisconsin-Madison,"1,097",8414.0,8455.0,Madison,Dane,Wisconsin,09-19-2020
-1184,University of Wisconsin-Milwaukee,82,25881.0,26402.0,Milwaukee,Milwaukee,Wisconsin,09-19-2020
+1182,University of Wisconsin-La Crosse,12,2616.0,2618.0,La Crosse,La Crosse,Wisconsin,09-19-2020
+1183,University of Wisconsin-Madison,"1,097",9045.0,9086.0,Madison,Dane,Wisconsin,09-19-2020
+1184,University of Wisconsin-Milwaukee,82,27747.0,28268.0,Milwaukee,Milwaukee,Wisconsin,09-19-2020
 1185,University of Wisconsin-Oshkosh,1,5069.0,5218.0,Oshkosh,Winnebago,Wisconsin,09-19-2020
-1186,University of Wisconsin-Parkside,1,3151.0,3216.0,Somers,Kenosha,Wisconsin,09-19-2020
+1186,University of Wisconsin-Parkside,1,3572.0,3637.0,Somers,Kenosha,Wisconsin,09-19-2020
 1187,University of Wisconsin-Platteville,56,243.0,245.0,Platteville,Grant,Wisconsin,09-19-2020
 1188,University of Wisconsin-River Falls,4,572.0,589.0,River Falls,Pierce,Wisconsin,09-19-2020
 1189,University of Wisconsin-Stevens Point,52,998.0,1064.0,Stevens Point,Portage,Wisconsin,09-19-2020
