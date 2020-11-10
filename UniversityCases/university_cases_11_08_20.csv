@@ -445,25 +445,25 @@
 443,Allen County Community College,16,11191.0,11441.0,Iola,Allen,Kansas,11-08-2020
 444,Baker University,80,5464.0,5532.0,Baldwin City,Douglas,Kansas,11-08-2020
 445,Benedictine College,125,613.0,620.0,Atchison,Atchison,Kansas,11-08-2020
-446,Bethel College,132,784.0,792.0,North Newton,Harvey,Kansas,11-08-2020
+446,Bethel College,132,784.0,1048.0,North Newton,Harvey,Kansas,11-08-2020
 447,Butler Community College,108,1011.0,1052.0,El Dorado,Butler,Kansas,11-08-2020
 448,Central Christian College,11,,,McPherson,,Kansas,11-08-2020
 449,Dodge City Community College,13,378.0,397.0,Dodge City,Ford,Kansas,11-08-2020
 450,Emporia State University,82,641.0,649.0,Emporia,Lyon,Kansas,11-08-2020
-451,Fort Hays State University,296,1568.0,1586.0,Hays,Ellis,Kansas,11-08-2020
-452,Hesston College,7,784.0,792.0,Hesston,Harvey,Kansas,11-08-2020
-453,Hutchinson Community College,32,2845.0,2865.0,Hutchinson,Reno,Kansas,11-08-2020
+451,Fort Hays State University,296,1568.0,1634.0,Hays,Ellis,Kansas,11-08-2020
+452,Hesston College,7,784.0,1048.0,Hesston,Harvey,Kansas,11-08-2020
+453,Hutchinson Community College,32,2845.0,3024.0,Hutchinson,Reno,Kansas,11-08-2020
 454,Johnson County Community College,103,1079.0,1090.0,Overland Park,Johnson,Kansas,11-08-2020
 455,Kansas State University,945,2397.0,2409.0,Manhattan,Riley,Kansas,11-08-2020
 456,Kansas Wesleyan University,27,3341.0,3382.0,Salina,Saline,Kansas,11-08-2020
-457,Labette Community College,5,446.0,452.0,Parsons,Labette,Kansas,11-08-2020
+457,Labette Community College,5,446.0,499.0,Parsons,Labette,Kansas,11-08-2020
 458,Newman University,39,,,Whichita,,Kansas,11-08-2020
 459,Pittsburg State University,190,2343.0,2376.0,Pittsburg,Crawford,Kansas,11-08-2020
-460,Southwestern College,59,701.0,711.0,Winfield,Cowley,Kansas,11-08-2020
-461,Sterling College,9,176.0,177.0,Sterling,Rice,Kansas,11-08-2020
+460,Southwestern College,59,701.0,793.0,Winfield,Cowley,Kansas,11-08-2020
+461,Sterling College,9,176.0,200.0,Sterling,Rice,Kansas,11-08-2020
 462,University of Kansas,"1,121",5464.0,5532.0,Lawrence,Douglas,Kansas,11-08-2020
-463,University of Saint Mary,4,2728.0,2749.0,Leavenworth,Leavenworth,Kansas,11-08-2020
-464,Washburn University,105,4163.0,4252.0,Topeka,Shawnee,Kansas,11-08-2020
+463,University of Saint Mary,4,2728.0,2913.0,Leavenworth,Leavenworth,Kansas,11-08-2020
+464,Washburn University,105,4163.0,4735.0,Topeka,Shawnee,Kansas,11-08-2020
 465,Wichita State University,87,59.0,60.0,Wichita,Sedgwick,Kansas,11-08-2020
 466,Alice Lloyd College,76,403.0,411.0,Pippa Passes,Knott,Kentucky,11-08-2020
 467,Asbury Theological Seminary,5,1142.0,1160.0,Wilmore,Jessamine,Kentucky,11-08-2020
@@ -641,9 +641,9 @@
 639,Ferris State University,352,746.0,750.0,Big Rapids,Mecosta,Michigan,11-08-2020
 640,Finlandia University,31,1104.0,1113.0,Hancock,Houghton,Michigan,11-08-2020
 641,Grand Rapids Community College,59,3656.0,3778.0,Grand Rapids,Kent,Michigan,11-08-2020
-642,Grand Valley State University,"1,153",128.0,128.0,Allendale,Ottawa,Michigan,11-08-2020
+642,Grand Valley State University,"1,153",128.0,145.0,Allendale,Ottawa,Michigan,11-08-2020
 643,Henry Ford College,6,1260.0,1296.0,Dearborn,Wayne,Michigan,11-08-2020
-644,Hope College,59,128.0,128.0,Holland,Ottawa,Michigan,11-08-2020
+644,Hope College,59,128.0,145.0,Holland,Ottawa,Michigan,11-08-2020
 645,Jackson College,1,2454.0,2476.0,Jackson,Jackson,Michigan,11-08-2020
 646,Kalamazoo College,40,5997.0,6126.0,Kalamazoo,Kalamazoo,Michigan,11-08-2020
 647,Kettering University,4,8151.0,8508.0,Flint,Genesee,Michigan,11-08-2020
@@ -678,7 +678,7 @@
 676,Bemidji State University,139,1235.0,1248.0,Bemidji,Beltrami,Minnesota,11-08-2020
 677,Bethany Lutheran College,27,2528.0,2535.0,Mankato,Blue Earth,Minnesota,11-08-2020
 678,Bethel University,118,12514.0,12661.0,Saint Paul,Dakota,Minnesota,11-08-2020
-679,Carleton College,16,176.0,177.0,Northfield,Rice,Minnesota,11-08-2020
+679,Carleton College,16,176.0,200.0,Northfield,Rice,Minnesota,11-08-2020
 680,Central Lakes College-Brainerd,14,1771.0,1793.0,Brainerd,Crow Wing,Minnesota,11-08-2020
 681,Central Lakes College-Staples,3,307.0,320.0,Staples,Todd,Minnesota,11-08-2020
 682,Century College,39,,,White Bear Lake,,Minnesota,11-08-2020
@@ -718,7 +718,7 @@
 716,St. Catherine University,71,,,St. Paul,,Minnesota,11-08-2020
 717,St. Cloud State University,162,,,St. Cloud,,Minnesota,11-08-2020
 718,St. Cloud Technical and Community College,23,,,St. Cloud,,Minnesota,11-08-2020
-719,St. Olaf College,45,176.0,177.0,Northfield,Rice,Minnesota,11-08-2020
+719,St. Olaf College,45,176.0,200.0,Northfield,Rice,Minnesota,11-08-2020
 720,St. Paul College,17,,,St. Paul,,Minnesota,11-08-2020
 721,University of Minnesota Crookston,2,430.0,435.0,Crookston,Polk,Minnesota,11-08-2020
 722,University of Minnesota Duluth,310,,,Duluth,Saint Louis,Minnesota,11-08-2020
@@ -798,7 +798,7 @@
 796,Hastings College,45,17954.0,18226.0,Hastings,Adams,Nebraska,11-08-2020
 797,Midland University,139,637.0,666.0,Fremont,Dodge,Nebraska,11-08-2020
 798,Nebraska Wesleyan University,258,11007.0,11056.0,Lincoln,Lancaster,Nebraska,11-08-2020
-799,Peru State College,111,414.0,418.0,Peru,Nemaha,Nebraska,11-08-2020
+799,Peru State College,111,414.0,552.0,Peru,Nemaha,Nebraska,11-08-2020
 800,University of Nebraska Medical Center*,20,5464.0,5532.0,Omaha,Douglas,Nebraska,11-08-2020
 801,University of Nebraska at Kearney,224,2360.0,2379.0,Kearney,Buffalo,Nebraska,11-08-2020
 802,University of Nebraska at Omaha,270,5464.0,5532.0,Omaha,Douglas,Nebraska,11-08-2020
@@ -827,10 +827,10 @@
 825,Bloomfield College,15,25121.0,26490.0,Bloomfield,Essex,New Jersey,11-08-2020
 826,Caldwell University,1,25121.0,26490.0,Caldwell,Essex,New Jersey,11-08-2020
 827,Centenary University,1,165.0,171.0,Hackettstown,Warren,New Jersey,11-08-2020
-828,College of Saint Elizabeth,5,85.0,85.0,Morristown,Morris,New Jersey,11-08-2020
-829,Drew University,1,85.0,85.0,Madison,Morris,New Jersey,11-08-2020
+828,College of Saint Elizabeth,5,85.0,97.0,Morristown,Morris,New Jersey,11-08-2020
+829,Drew University,1,85.0,97.0,Madison,Morris,New Jersey,11-08-2020
 830,Fairleigh Dickinson University‡,9,24853.0,26924.0,Teaneck,Bergen,New Jersey,11-08-2020
-831,Fairleigh Dickinson University Florham‡,7,85.0,85.0,Madison,Morris,New Jersey,11-08-2020
+831,Fairleigh Dickinson University Florham‡,7,85.0,97.0,Madison,Morris,New Jersey,11-08-2020
 832,Felician University,1,24853.0,26924.0,Lodi,Bergen,New Jersey,11-08-2020
 833,Georgian Court University,25,16489.0,17566.0,Lakewood,Ocean,New Jersey,11-08-2020
 834,Kean University,28,1208.0,1261.0,Union,Union,New Jersey,11-08-2020
@@ -917,7 +917,7 @@
 915,Hudson Valley Community College,22,3909.0,4049.0,Troy,Albany,New York,11-08-2020
 916,Iona College,102,40703.0,42179.0,New Rochelle,Westchester,New York,11-08-2020
 917,Ithaca College,36,702.0,702.0,Ithaca,Tompkins,New York,11-08-2020
-918,Jamestown Community College,14,24.0,24.0,Jamestown,Chautauqua,New York,11-08-2020
+918,Jamestown Community College,14,24.0,33.0,Jamestown,Chautauqua,New York,11-08-2020
 919,Keuka College,119,156.0,163.0,Keuka Park,Yates,New York,11-08-2020
 920,Le Moyne College,34,6279.0,6491.0,Syracuse,Onondaga,New York,11-08-2020
 921,Long Island University,106,,,Brookville,,New York,11-08-2020
@@ -978,7 +978,7 @@
 976,SUNY Purchase College,30,40703.0,42179.0,Purchase,Westchester,New York,11-08-2020
 977,SUNY University at Buffalo,249,14260.0,14988.0,Buffalo,Erie,New York,11-08-2020
 978,SUNY Westchester Community College,66,40703.0,42179.0,Valhalla,Westchester,New York,11-08-2020
-979,SUNY at Fredonia,151,24.0,24.0,Fredonia,Chautauqua,New York,11-08-2020
+979,SUNY at Fredonia,151,24.0,33.0,Fredonia,Chautauqua,New York,11-08-2020
 980,Sarah Lawrence College,5,40703.0,42179.0,Bronxville,Westchester,New York,11-08-2020
 981,Schenectady County Community College,5,1665.0,1716.0,Schenectady,Schenectady,New York,11-08-2020
 982,Siena College,84,,,Loudonville,,New York,11-08-2020
@@ -1012,7 +1012,7 @@
 1010,Weill Cornell Medical College*,4,,,New York City,,New York,11-08-2020
 1011,Yeshiva University,5,,,New York City,,New York,11-08-2020
 1012,Appalachian State University,"1,115",1493.0,1499.0,Boone,Watauga,North Carolina,11-08-2020
-1013,Barton College,108,145.0,149.0,Wilson,Wilson,North Carolina,11-08-2020
+1013,Barton College,108,145.0,155.0,Wilson,Wilson,North Carolina,11-08-2020
 1014,Belmont Abbey College,63,8176.0,8321.0,Belmont,Gaston,North Carolina,11-08-2020
 1015,Brevard College,15,447.0,456.0,Brevard,Transylvania,North Carolina,11-08-2020
 1016,Campbell University,102,,,Bules Creek,,North Carolina,11-08-2020
@@ -1153,7 +1153,7 @@
 1151,University of Tulsa,128,1774.0,1814.0,Tulsa,Creek,Oklahoma,11-08-2020
 1152,Eastern Oregon University,17,1208.0,1261.0,La Grande,Union,Oregon,11-08-2020
 1153,George Fox University,7,1155.0,1170.0,Newberg,Yamhill,Oregon,11-08-2020
-1154,Lane Community College,26,40.0,40.0,Eugene,Lane,Oregon,11-08-2020
+1154,Lane Community College,26,40.0,43.0,Eugene,Lane,Oregon,11-08-2020
 1155,Lewis & Clark College,3,3854.0,3925.0,Portland,Clackamas,Oregon,11-08-2020
 1156,Linfield University,9,,,McMinnville,,Oregon,11-08-2020
 1157,Linfield University-School of Nursing,1,3854.0,3925.0,Portland,Clackamas,Oregon,11-08-2020
@@ -1164,7 +1164,7 @@
 1162,Portland State University,5,3854.0,3925.0,Portland,Clackamas,Oregon,11-08-2020
 1163,Reed College,14,3854.0,3925.0,Portland,Clackamas,Oregon,11-08-2020
 1164,Southern Oregon University,10,2454.0,2476.0,Ashland,Jackson,Oregon,11-08-2020
-1165,University of Oregon,539,40.0,40.0,Eugene,Lane,Oregon,11-08-2020
+1165,University of Oregon,539,40.0,43.0,Eugene,Lane,Oregon,11-08-2020
 1166,Western Oregon University,5,,,Mounmouth,,Oregon,11-08-2020
 1167,Willamette University,10,1180.0,1211.0,Salem,Marion,Oregon,11-08-2020
 1168,Albright College,7,9918.0,10355.0,Reading,Berks,Pennsylvania,11-08-2020
@@ -1280,7 +1280,7 @@
 1278,Roger Williams University,72,13291.0,14065.0,Bristol,Bristol,Rhode Island,11-08-2020
 1279,Salve Regina University,8,787.0,797.0,Newport,Newport,Rhode Island,11-08-2020
 1280,University of Rhode Island,462,800.0,812.0,Kingston,Washington,Rhode Island,11-08-2020
-1281,Anderson University,38,263.0,263.0,Anderson,Anderson,South Carolina,11-08-2020
+1281,Anderson University,38,263.0,284.0,Anderson,Anderson,South Carolina,11-08-2020
 1282,Benedict College,6,9541.0,9756.0,Columbia,Lexington,South Carolina,11-08-2020
 1283,Bob Jones University,34,18875.0,19243.0,Greenville,Greenville,South Carolina,11-08-2020
 1284,Charleston Southern University‡,23,6368.0,6464.0,North Charleston,Berkeley,South Carolina,11-08-2020
@@ -1325,7 +1325,7 @@
 1323,Christian Brothers University,81,8180.0,8251.0,Memphis,Shelby,Tennessee,11-08-2020
 1324,Cleveland State Community College,58,375.0,383.0,Cleveland,Bradley,Tennessee,11-08-2020
 1325,Columbia State Community College,75,4153.0,4195.0,Columbia,Maury,Tennessee,11-08-2020
-1326,Cumberland University,134,145.0,149.0,Lebanon,Wilson,Tennessee,11-08-2020
+1326,Cumberland University,134,145.0,155.0,Lebanon,Wilson,Tennessee,11-08-2020
 1327,Dyersburg State Community College,53,2568.0,2607.0,Dyersburg,Dyer,Tennessee,11-08-2020
 1328,East Tennessee State University,331,800.0,812.0,Johnson City,Washington,Tennessee,11-08-2020
 1329,Jackson State Community College,57,10253.0,10358.0,Jackson,Madison,Tennessee,11-08-2020
@@ -1381,7 +1381,7 @@
 1379,University of Tennessee at Martin,361,1701.0,1730.0,Martin,Weakley,Tennessee,11-08-2020
 1380,"University of Tennessee, Knoxville","1,820",1719.0,1750.0,Knoxville,Knox,Tennessee,11-08-2020
 1381,Vanderbilt University,568,4094.0,4141.0,Nashville,Davidson,Tennessee,11-08-2020
-1382,Volunteer State Community College,109,380.0,384.0,Gallatin,Sumner,Tennessee,11-08-2020
+1382,Volunteer State Community College,109,380.0,470.0,Gallatin,Sumner,Tennessee,11-08-2020
 1383,Walters State Community College,44,2691.0,2742.0,Morristown,Hamblen,Tennessee,11-08-2020
 1384,Abilene Christian University,297,1513.0,1531.0,Abilene,Taylor,Texas,11-08-2020
 1385,Angelo State University,178,5784.0,5871.0,San Angelo,Tom Green,Texas,11-08-2020
@@ -1405,7 +1405,7 @@
 1403,McLennan Community College,129,,,Waco,Mclennan,Texas,11-08-2020
 1404,McMurry University,66,1513.0,1531.0,Abilene,Taylor,Texas,11-08-2020
 1405,Midland College,22,1512.0,1526.0,Midland,Midland,Texas,11-08-2020
-1406,Midwestern State University,133,51.0,51.0,Wichita Falls,Wichita,Texas,11-08-2020
+1406,Midwestern State University,133,51.0,75.0,Wichita Falls,Wichita,Texas,11-08-2020
 1407,Odessa College,75,7256.0,7379.0,Odessa,Ector,Texas,11-08-2020
 1408,Prairie View A&M University,392,1015.0,1032.0,Prairie View,Waller,Texas,11-08-2020
 1409,Rice University,147,17818.0,18135.0,Houston,Fort Bend,Texas,11-08-2020
@@ -1428,7 +1428,7 @@
 1426,Texas A&M University-San Antonio,71,66198.0,67627.0,San Antonio,Bexar,Texas,11-08-2020
 1427,Texas A&M University-Texarkana,38,2132.0,2217.0,Texarkana,Bowie,Texas,11-08-2020
 1428,Texas Christian University,"1,292",72758.0,73636.0,Fort Worth,Tarrant,Texas,11-08-2020
-1429,Texas College,1,45.0,45.0,Tyler,Smith,Texas,11-08-2020
+1429,Texas College,1,45.0,56.0,Tyler,Smith,Texas,11-08-2020
 1430,Texas Lutheran University,23,53.0,54.0,Seguin,Guadalupe,Texas,11-08-2020
 1431,Texas Southern University,41,17818.0,18135.0,Houston,Fort Bend,Texas,11-08-2020
 1432,Texas State University,797,6240.0,6331.0,San Marcos,Hays,Texas,11-08-2020
@@ -1438,7 +1438,7 @@
 1436,Texas Wesleyan University,64,72758.0,73636.0,Fort Worth,Tarrant,Texas,11-08-2020
 1437,Texas Woman’s University,60,15593.0,15777.0,Denton,Denton,Texas,11-08-2020
 1438,Trinity University‡,20,,,San Antonia,,Texas,11-08-2020
-1439,Tyler Junior College,132,45.0,45.0,Tyler,Smith,Texas,11-08-2020
+1439,Tyler Junior College,132,45.0,56.0,Tyler,Smith,Texas,11-08-2020
 1440,University of Dallas,26,1959.0,1986.0,Irving,Dallas,Texas,11-08-2020
 1441,University of Houston,341,17818.0,18135.0,Houston,Fort Bend,Texas,11-08-2020
 1442,University of Houston-Clear Lake,55,17818.0,18135.0,Houston,Fort Bend,Texas,11-08-2020
@@ -1451,7 +1451,7 @@
 1449,University of St. Thomas,2,17818.0,18135.0,Houston,Fort Bend,Texas,11-08-2020
 1450,University of Texas Health Science Center at Houston*,301,17818.0,18135.0,Houston,Fort Bend,Texas,11-08-2020
 1451,University of Texas Health Science Center at San Antonio*,251,66198.0,67627.0,San Antonio,Bexar,Texas,11-08-2020
-1452,University of Texas Health Science Center at Tyler*,46,45.0,45.0,Tyler,Smith,Texas,11-08-2020
+1452,University of Texas Health Science Center at Tyler*,46,45.0,56.0,Tyler,Smith,Texas,11-08-2020
 1453,University of Texas MD Anderson Cancer Center,11,17818.0,18135.0,Houston,Fort Bend,Texas,11-08-2020
 1454,University of Texas Medical Branch at Galveston,52,12907.0,13078.0,Galveston,Galveston,Texas,11-08-2020
 1455,University of Texas Permian Basin,32,7256.0,7379.0,Odessa,Ector,Texas,11-08-2020
@@ -1462,7 +1462,7 @@
 1460,University of Texas at Dallas,80,19965.0,20165.0,Dallas,Collin,Texas,11-08-2020
 1461,University of Texas at El Paso,835,13853.0,14062.0,El Paso,El Paso,Texas,11-08-2020
 1462,University of Texas at San Antonio,41,66198.0,67627.0,San Antonio,Bexar,Texas,11-08-2020
-1463,University of Texas at Tyler,170,45.0,45.0,Tyler,Smith,Texas,11-08-2020
+1463,University of Texas at Tyler,170,45.0,56.0,Tyler,Smith,Texas,11-08-2020
 1464,University of the Incarnate Word,55,66198.0,67627.0,San Antonio,Bexar,Texas,11-08-2020
 1465,Wayland Baptist University,179,795.0,825.0,Plainview,Hale,Texas,11-08-2020
 1466,West Texas A&M University,408,6887.0,6950.0,Canyon,Randall,Texas,11-08-2020
@@ -1594,37 +1594,37 @@
 1592,West Virginia University at Parkersburg,9,3034.0,3138.0,Parkersburg,Wood,West Virginia,11-08-2020
 1593,West Virginia Wesleyan College,1,528.0,543.0,Buckhannon,Upshur,West Virginia,11-08-2020
 1594,Wheeling University,3,161.0,168.0,Wheeling,Ohio,West Virginia,11-08-2020
-1595,Alverno College,42,48673.0,49295.0,Milwaukee,Milwaukee,Wisconsin,11-08-2020
+1595,Alverno College,42,48673.0,52480.0,Milwaukee,Milwaukee,Wisconsin,11-08-2020
 1596,Beloit College,27,429.0,438.0,Beloit,Rock,Wisconsin,11-08-2020
-1597,Carroll University,117,15468.0,15614.0,Waukesha,Waukesha,Wisconsin,11-08-2020
-1598,Carthage College,79,6322.0,6418.0,Kenosha,Kenosha,Wisconsin,11-08-2020
-1599,Concordia University Wisconsin,25,3066.0,3093.0,Mequon,Ozaukee,Wisconsin,11-08-2020
-1600,Edgewood College,87,18468.0,18523.0,Madison,Dane,Wisconsin,11-08-2020
-1601,Lakeland University,37,5967.0,5999.0,Plymouth,Sheboygan,Wisconsin,11-08-2020
-1602,Lawrence University,45,10953.0,11039.0,Appleton,Outagamie,Wisconsin,11-08-2020
+1597,Carroll University,117,15468.0,16873.0,Waukesha,Waukesha,Wisconsin,11-08-2020
+1598,Carthage College,79,6322.0,7071.0,Kenosha,Kenosha,Wisconsin,11-08-2020
+1599,Concordia University Wisconsin,25,3066.0,3402.0,Mequon,Ozaukee,Wisconsin,11-08-2020
+1600,Edgewood College,87,18468.0,19144.0,Madison,Dane,Wisconsin,11-08-2020
+1601,Lakeland University,37,5967.0,6214.0,Plymouth,Sheboygan,Wisconsin,11-08-2020
+1602,Lawrence University,45,10953.0,11466.0,Appleton,Outagamie,Wisconsin,11-08-2020
 1603,Maranatha Baptist University,2,637.0,666.0,Watertown,Dodge,Wisconsin,11-08-2020
 1604,Marian University,89,,,Fond Du Lac,Fond Du Lac,Wisconsin,11-08-2020
-1605,Marquette University,605,48673.0,49295.0,Milwaukee,Milwaukee,Wisconsin,11-08-2020
-1606,Milwaukee School of Engineering,71,48673.0,49295.0,Milwaukee,Milwaukee,Wisconsin,11-08-2020
-1607,Mount Mary University,22,48673.0,49295.0,Milwaukee,Milwaukee,Wisconsin,11-08-2020
+1605,Marquette University,605,48673.0,52480.0,Milwaukee,Milwaukee,Wisconsin,11-08-2020
+1606,Milwaukee School of Engineering,71,48673.0,52480.0,Milwaukee,Milwaukee,Wisconsin,11-08-2020
+1607,Mount Mary University,22,48673.0,52480.0,Milwaukee,Milwaukee,Wisconsin,11-08-2020
 1608,Northland College,5,586.0,606.0,Ashland,Ashland,Wisconsin,11-08-2020
 1609,Ripon College,24,,,Ripon,Fond Du Lac,Wisconsin,11-08-2020
 1610,Saint Norbert College,188,179.0,179.0,De Pere,Brown,Wisconsin,11-08-2020
-1611,University of Wisconsin-Eau Claire,590,5005.0,5036.0,Eau Claire,Eau Claire,Wisconsin,11-08-2020
+1611,University of Wisconsin-Eau Claire,590,5005.0,5087.0,Eau Claire,Eau Claire,Wisconsin,11-08-2020
 1612,University of Wisconsin-Green Bay,164,179.0,179.0,Green Bay,Brown,Wisconsin,11-08-2020
-1613,University of Wisconsin-La Crosse†,430,5443.0,5469.0,La Crosse,La Crosse,Wisconsin,11-08-2020
-1614,University of Wisconsin-Madison,"3,626",18468.0,18523.0,Madison,Dane,Wisconsin,11-08-2020
-1615,University of Wisconsin-Milwaukee,785,48673.0,49295.0,Milwaukee,Milwaukee,Wisconsin,11-08-2020
+1613,University of Wisconsin-La Crosse†,430,5443.0,5639.0,La Crosse,La Crosse,Wisconsin,11-08-2020
+1614,University of Wisconsin-Madison,"3,626",18468.0,19144.0,Madison,Dane,Wisconsin,11-08-2020
+1615,University of Wisconsin-Milwaukee,785,48673.0,52480.0,Milwaukee,Milwaukee,Wisconsin,11-08-2020
 1616,University of Wisconsin-Oshkosh,"1,033",13385.0,13600.0,Oshkosh,Winnebago,Wisconsin,11-08-2020
-1617,University of Wisconsin-Parkside,95,6322.0,6418.0,Somers,Kenosha,Wisconsin,11-08-2020
+1617,University of Wisconsin-Parkside,95,6322.0,7071.0,Somers,Kenosha,Wisconsin,11-08-2020
 1618,University of Wisconsin-Platteville,320,406.0,410.0,Platteville,Grant,Wisconsin,11-08-2020
 1619,University of Wisconsin-River Falls†,239,687.0,712.0,River Falls,Pierce,Wisconsin,11-08-2020
 1620,University of Wisconsin-Stevens Point,396,2183.0,2251.0,Stevens Point,Portage,Wisconsin,11-08-2020
 1621,University of Wisconsin-Stout†,137,225.0,231.0,Menomonie,Dunn,Wisconsin,11-08-2020
 1622,University of Wisconsin-Superior,11,5464.0,5532.0,Superior,Douglas,Wisconsin,11-08-2020
 1623,University of Wisconsin-Whitewater,515,309.0,319.0,Whitewater,Walworth,Wisconsin,11-08-2020
-1624,Viterbo University,214,5443.0,5469.0,La Crosse,La Crosse,Wisconsin,11-08-2020
-1625,Wisconsin Lutheran College,34,48673.0,49295.0,Milwaukee,Milwaukee,Wisconsin,11-08-2020
+1624,Viterbo University,214,5443.0,5639.0,La Crosse,La Crosse,Wisconsin,11-08-2020
+1625,Wisconsin Lutheran College,34,48673.0,52480.0,Milwaukee,Milwaukee,Wisconsin,11-08-2020
 1626,Casper College,185,2217.0,2230.0,Casper,Natrona,Wyoming,11-08-2020
 1627,Eastern Wyoming College,6,246.0,252.0,Torrington,Goshen,Wyoming,11-08-2020
 1628,University of Wyoming,"1,012",3909.0,4049.0,Laramie,Albany,Wyoming,11-08-2020
