@@ -1,0 +1,69 @@
+,CollectionDate,WorkerID,SchoolName,LastUpdate,WeeklyNewCases,CumulativeCases,WeeklyNewTests,TotalTests,Comments,Status
+0,11/08/2020,A3I9FTHSULHPYS,University of Kentucky,2020-11-06,,2501,,23982,None,Approved
+0,11/08/2020,A1EN9IMH5K6QQ6,University of Kentucky,2020-11-03,,1849,,38235,"These data reflect PCR COVID-19 test results conducted through on-campus testing and retesting (Wild Health and University Health Service) as well as PCR tests from other healthcare providers uploaded to University Health Service, from July 20 through Nov. 3.",Rejected
+0,11/08/2020,A295A84E7LY9EU,University of Kentucky,2020-11-06,,191,,23982,"i think it is accurate, thank you!",Approved
+0,11/08/2020,AJISH3SHWGM7L,Iowa State University,2020-11-20,,0,,0,Not enough info available,Rejected
+0,11/08/2020,A3I9FTHSULHPYS,University of Iowa,2020-11-02,,1251,,28734,None,Approved
+0,11/08/2020,A3EKD58LLDYNP,University of Iowa,2020-11-02,,1331,,9709,Total test data only available from 08/17/2020,Approved
+0,11/08/2020,A3TKUXUTDX6FBF,University of Iowa,2020-11-01,,1251,,11,Accurate,Approved
+0,11/08/2020,A1EN9IMH5K6QQ6,University of Florida,2020-11-08,,4619,,15000,,Approved
+0,11/08/2020,A3EKD58LLDYNP,University of Florida Health,2020-11-07,,4619,,19030,Some dates are inconsitent.,Approved
+0,11/08/2020,A3TKUXUTDX6FBF,University of Florida,2020-11-01,,4619,,13,Accurate,Approved
+0,11/08/2020,A2RV6QX6SN4YIC,University of Florida,2020-07-11,,446,,1445,I think about this covid situation is  very dangerous,Rejected
+0,11/08/2020,A3I9FTHSULHPYS,Marquette University,2020-11-06,,617,,3439,NONE,Approved
+0,11/08/2020,A1EN9IMH5K6QQ6,Marquette University,2020-11-06,,3439,,617,ACCURATE,Rejected
+0,11/08/2020,A1ZZINLCZZYOH4,Marquette University,2020-08-21,,617,,3439,,Approved
+0,11/08/2020,A3I9FTHSULHPYS,Louisiana State University,2020-11-06,,108,,11351,Only active number of positive cases is available.,Approved
+0,11/08/2020,A2CYAUQ7POERRG,Louisiana State University,2020-11-06,,108,,12103,I THINK IT WAS ACCURATE,Approved
+0,11/08/2020,A1EN9IMH5K6QQ6,Louisiana State University,2020-11-06,,701,,12103,"As of 11/06/2020 ,12103  tests have been administered by Bard College.",Approved
+0,11/08/2020,A3EKD58LLDYNP,University of Georgia,2020-11-01,,623,,20075,The link to the dashboard is incorrect. The right one is: https://www.uhs.uga.edu/healthtopics/covid-19-health-and-exposure-updates,Approved
+0,11/08/2020,A3TKUXUTDX6FBF,University of Georgia,2020-11-25,,450,,13,,Rejected
+0,11/08/2020,A1TFEJN0T51ECQ,University of Georgia University Health Center Student Affairs University of Georgia,2020-11-01,,1726,,1726,I think it was accurate,Approved
+0,11/08/2020,A2RV6QX6SN4YIC,University of Georgia,2020-11-09,,350,,500,Not enough info available,Rejected
+0,11/08/2020,A2CYAUQ7POERRG,Lehigh University,2020-11-06,,272,,10040,THEY GIVE EACH AND EVERY DETAILS GOOD,Approved
+0,11/08/2020,A3I9FTHSULHPYS,Lehigh University,2020-11-06,,272,,10040,None,Approved
+0,11/08/2020,A1EN9IMH5K6QQ6,Lehigh University,2020-11-06,,10040,,272,ACCURATE,Rejected
+0,11/08/2020,A1ZT23GCNIEZKE,University of Illinois Urbana Champaign ,2018-02-01,,215,,200,good,Rejected
+0,11/08/2020,A1EN9IMH5K6QQ6,University of Illinois Urbana Champaign ,2020-11-01,,750966,,4506,ACCURATE,Rejected
+0,11/08/2020,A3EKD58LLDYNP,University of Illinois Urbana Champaign ,2020-11-07,,4506,,750966,"Total cases was 0.60%, so it's not accurate",Rejected
+0,11/08/2020,A16GH5GPKBX5GA,University of Illinois Urbana Champaign ,2020-11-07,,0,,750966,"Yes, they gave the correct information.",Approved
+0,11/08/2020,A3I9FTHSULHPYS,Drexel,2020-11-01,,25,,1710,none,Rejected
+0,11/08/2020,A1EN9IMH5K6QQ6,Drexel,2020-11-01,,1710,,25,The University is sharing results of COVID-19 testing among members of the Drexel community in this report.,Rejected
+0,11/08/2020,A3EKD58LLDYNP,Drexel,2020-11-08,,32,,2276,Accurate data,Rejected
+0,11/08/2020,A3TKUXUTDX6FBF,Drexel,2020-11-08,,45,,2276,2276,Approved
+0,11/08/2020,A3I9FTHSULHPYS,LaGrange College,2020-11-08,,27,,,Total covid Testing data not available.,Approved
+0,11/08/2020,A2CYAUQ7POERRG,LaGrange CollegeLaGrange College,2020-08-18,,24,,,NOT ENOUGH DATA AVILABLE,Approved
+0,11/08/2020,A1EN9IMH5K6QQ6,LaGrange College,2020-11-07,,560,,24,,Rejected
+0,11/08/2020,A3EKD58LLDYNP,LaGrange College,2020-11-06,,27,,,Data is accurate,Approved
+0,11/08/2020,A3I9FTHSULHPYS,Dartmouth,2020-11-07,,22,,42279,None,Approved
+0,11/08/2020,A1EN9IMH5K6QQ6,Dartmouth,2020-11-07,,13,,42279,ACCURATE,Approved
+0,11/08/2020,A3EKD58LLDYNP,Dartmouth,2020-02-08,,22,,42280,Accurate data,Rejected
+0,11/08/2020,A3I9FTHSULHPYS,Kent State University,2020-11-03,,404,,,No information on total covid TESTS available.,Approved
+0,11/08/2020,A1EN9IMH5K6QQ6,Kent State University,2020-11-03,,404,,2250,,Approved
+0,11/08/2020,A3EKD58LLDYNP,Kent State University,2020-11-03,,404,,,Data was available only for Kent campus,Approved
+0,11/08/2020,A3I9FTHSULHPYS,Duke,2020-11-02,,17,,15311,None,Approved
+0,11/08/2020,A3EKD58LLDYNP,Duke,2020-11-02,,17,,15578,Data is accurate,Approved
+0,11/08/2020,A3TKUXUTDX6FBF,Duke,2020-10-30,,17,,12,Accurate,Approved
+0,11/08/2020,A3I9FTHSULHPYS,Ball State University,2020-11-07,,1182,,,Total number of covid Tests unavailable.,Approved
+0,11/08/2020,A3EKD58LLDYNP,Ball State University,2020-11-09,,356,,1023,"Has stats from multiple sources. This is for Ball State employees and students who have been tested for COVID-19 through our partnership with IU Health. IU Health only conducts testing for people who have COVID-19 symptoms. Therefore, the percentage testing positive is much higher.",Rejected
+0,11/08/2020,A3TKUXUTDX6FBF,Ball State University,2020-11-08,,1182,,12,accurate,Approved
+0,11/08/2020,A16GH5GPKBX5GA,Ball State University,2020-11-08,,958,,,I think it was accurate,Approved
+0,11/08/2020,A3I9FTHSULHPYS,Creighton University,2020-10-03,,481,,,Total number of covid Tests unvailable.,Rejected
+0,11/08/2020,A1EN9IMH5K6QQ6,Creighton University,2020-10-31,,481,,6041,GOOD,Approved
+0,11/08/2020,A3EKD58LLDYNP,Creighton University,2020-10-31,,481,,6041,Total tests is from 08/23/2020 onwards,Approved
+0,11/08/2020,A3EKD58LLDYNP,Augustana College,2020-10-30,,1,,,none of the requested data was found. All data was in %. I couldn't leave the fields blank. So I'm entering 1.,Approved
+0,11/08/2020,A3TKUXUTDX6FBF,Augustana College,2020-10-29,,179,,12,Accurate,Rejected
+0,11/08/2020,A13781NZULAIPZ,Augustana College,2020-10-30,,12,,68,I think is accurate,Approved
+0,11/08/2020,A21VEGA3LHNPZN,Augustana College,2020-10-27,,23,,250,not enough info available,Rejected
+0,11/08/2020,A3I9FTHSULHPYS,Cornell,2020-11-05,,19,,34697,NONE,Approved
+0,11/08/2020,A1EN9IMH5K6QQ6,Cornell,2020-11-05,,19,,34647,CURRENT CORNELL COVID-19 ALERT LEVEL GREEN: NEW NORMAL,Approved
+0,11/08/2020,A3EKD58LLDYNP,Cornell,2020-11-06,,19,,,"The dates are inconsistent, i.e., date of last test is not the same as the date mentioned in total cases",Approved
+0,11/08/2020,A3I9FTHSULHPYS,Bard College,2020-11-07,,1,,5697,None,Approved
+0,11/08/2020,A1EN9IMH5K6QQ6,Bard College,2020-11-07,,5967,,1,All data based on tests administered by Bard College.,Rejected
+0,11/08/2020,A3EKD58LLDYNP,Bard College,2020-11-07,,1,,5697,Accurate data,Approved
+0,11/08/2020,A3I9FTHSULHPYS,American University,2020-11-02,,28,,,Total covid TESTS data not available.,Approved
+0,11/08/2020,A3EKD58LLDYNP,American University,2020-11-02,,28,,,Total tests info missing,Approved
+0,11/08/2020,A3TKUXUTDX6FBF,American University,2020-10-26,,28,,11,Accurate,Rejected
+0,11/08/2020,A1EN9IMH5K6QQ6,Auburn University,2020-11-01,,1420,,3711,Results presented do not include individual tests performed at the AU Medical Clinic or at other testing sites.,Approved
+0,11/08/2020,A3EKD58LLDYNP,Auburn University,2020-11-01,,2055,,,total tests unavailable; had to look through historical data,Approved
+0,11/08/2020,A3TKUXUTDX6FBF,Auburn University,2020-09-06,,1420,,10,Accurate,Approved

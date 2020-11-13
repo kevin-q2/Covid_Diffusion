@@ -1,0 +1,92 @@
+,CollectionDate,WorkerID,SchoolName,LastUpdate,WeeklyNewCases,CumulativeCases,WeeklyNewTests,TotalTests,Comments,Status
+0,11/09/2020,A2MSJRDUC5X680,University of Iowa,2020-11-01,,1251,,38447,ok,Approved
+0,11/09/2020,A3746TDKYH8SJ9,University of Iowa,2020-11-20,,103,,,,Rejected
+0,11/09/2020,A4D99Y82KOLC8,University of Iowa,2020-11-02,,1331,,38447,,Approved
+0,11/09/2020,A3R2HHQ128MHRS,University of Iowa,2020-11-02,,11535,,1300,'I think it was accurate',Approved
+0,11/09/2020,A1EN9IMH5K6QQ6,University of Iowa,2020-11-02,,1332,,13731,ACCURATE,Approved
+0,11/09/2020,A34US36IOLDD1U,University of Iowa,2020-11-02,,1236,,28734,I think it was accurate,Approved
+0,11/09/2020,A1EN9IMH5K6QQ6,University of Kentucky,2020-11-06,,1954,,39083,"These data reflect PCR COVID-19 test results conducted through on-campus testing and retesting (Wild Health and University Health Service) as well as PCR tests from other healthcare providers uploaded to University Health Service, from July 20 through Nov. 6.",Approved
+0,11/09/2020,A2MSJRDUC5X680,University of Kentucky,2020-11-06,,1954,,39083,ok,Approved
+0,11/09/2020,A32DRYN7M7HIZT,University of Kentucky,2020-11-09,,271,,39083,,Rejected
+0,11/09/2020,A2MSJRDUC5X680,Louisiana State University.,2020-11-06,,11351,,39000,partially accurate,Rejected
+0,11/09/2020,A3GGE6TW2JXBEA,Louisiana State University,2020-11-06,,1271,,11351,I think it was accurate,Approved
+0,11/09/2020,A3746TDKYH8SJ9,Louisiana State University,2020-11-06,,108,,11351,,Approved
+0,11/09/2020,A34US36IOLDD1U,Louisiana State University,2020-11-06,,108,,11351,I THINK IT WAS ACCURATE,Approved
+0,11/09/2020,A32DRYN7M7HIZT,University of Florida,2020-09-11,,3614,,633,,Rejected
+0,11/09/2020,A3GGE6TW2JXBEA,University of Florida,2020-11-09,,0,,0,Not enough available,Rejected
+0,11/09/2020,A2MSJRDUC5X680,University of Florida,2020-11-09,,4654,,811,,Rejected
+0,11/09/2020,A1TIO97G4K0ZFF,University of Florida,2020-11-09,,811,,4654,,Approved
+0,11/09/2020,A4D99Y82KOLC8,University of Florida,2020-11-09,,811,,4654,,Approved
+0,11/09/2020,A4D99Y82KOLC8,University of Illinois Urbana Champaign ,2020-11-02,,0,,750966,"Does not provide number of positive cases, only as percentage hence 0 in # 2",Approved
+0,11/09/2020,A3746TDKYH8SJ9,University of Illinois Urbana Champaign ,2020-06-07,,-0,,750966,,Approved
+0,11/09/2020,A1EN9IMH5K6QQ6,University of Illinois Urbana Champaign ,2020-11-07,,4506,,750966,"Results for University of Illinois, Urbana-Champaign.",Approved
+0,11/09/2020,A34US36IOLDD1U,University of Illinois Urbana Champaign ,2020-11-07,,4505,,750966,not enough information,Approved
+0,11/09/2020,A3R2HHQ128MHRS,University of Illinois Urbana Champaign ,2020-11-07,,450579,,750966,'I think it was accurate',Approved
+0,11/09/2020,A1ZZINLCZZYOH4,University of Illinois Urbana Champaign ,2020-11-07,,4016,,750966,,Approved
+0,11/09/2020,A2MSJRDUC5X680,The University of Georgia,2020-11-09,,0,,0,no more information here,Approved
+0,11/09/2020,A2ZZW6KME1FUDU,Marquette University,2020-11-06,,617,,3439,,Approved
+0,11/09/2020,A32DRYN7M7HIZT,Marquette University,2020-06-11,,617,,3439,,Approved
+0,11/09/2020,A2MSJRDUC5X680,Marquette University,2020-11-08,,446,,3439,,Rejected
+0,11/09/2020,A4D99Y82KOLC8,Marquette University,2020-11-06,,446,,3439,,Approved
+0,11/09/2020,A297WCJYDD9QBQ,Marquette University,2020-11-06,,617,,3439,Result was correct,Approved
+0,11/09/2020,A2MSJRDUC5X680,Lehigh University,2020-11-06,,78,,10040,ok,Approved
+0,11/09/2020,A32DRYN7M7HIZT,Lehigh University,2020-06-11,,70,,10040,,Rejected
+0,11/09/2020,A3746TDKYH8SJ9,Lehigh University,2020-11-06,,272,,1040,,Rejected
+0,11/09/2020,A297WCJYDD9QBQ,Lehigh University,2020-11-06,,78,,10040,,Approved
+0,11/09/2020,A3AK3UL0UCNVKE,Kent State University,2020-03-11,,404,,,,Approved
+0,11/09/2020,A3R2HHQ128MHRS,Kent State University,2020-11-03,,404,,,' I think it was accurate,Approved
+0,11/09/2020,A2MSJRDUC5X680,Kent State University,2020-11-03,,56,,0,,Rejected
+0,11/09/2020,A2ZZW6KME1FUDU,LaGrange College,2020-11-05,,27,,,,Rejected
+0,11/09/2020,A2MSJRDUC5X680,LaGrange College,2020-08-18,,3,,24,ok,Approved
+0,11/09/2020,A3GGE6TW2JXBEA,LaGrange College,2020-08-18,,24,,0,Not enough info available,Approved
+0,11/09/2020,A1TIO97G4K0ZFF,LaGrange College,2020-08-18,,1,,24,,Approved
+0,11/09/2020,A297WCJYDD9QBQ,LaGrange College,2020-11-06,,27,,,,Rejected
+0,11/09/2020,A4D99Y82KOLC8,LaGrange College,2020-08-18,,24,,0,"total number not available. hence ""0"" inputted for me to submit hit",Approved
+0,11/09/2020,A24NDC7JH9LEM1,Duke,2020-11-06,,187,,149614,,Approved
+0,11/09/2020,A2MSJRDUC5X680,Duke,2020-11-06,,132,,15555,,Approved
+0,11/09/2020,A32DRYN7M7HIZT,Duke,2020-11-06,,31,,15555,,Approved
+0,11/09/2020,A1TIO97G4K0ZFF,Duke,2020-11-06,,22,,15858,,Approved
+0,11/09/2020,A4D99Y82KOLC8,Duke,2020-11-06,,22,,15858,,Approved
+0,11/09/2020,A3R2HHQ128MHRS,Duke,2020-11-09,,187,,149614,'I think it was accurate',Rejected
+0,11/09/2020,A3R2HHQ128MHRS,Drexel,2020-11-09,,2276,,32,'I think it was accurate',Rejected
+0,11/09/2020,A2MSJRDUC5X680,Drexel,2020-11-08,,14,,1132,ok,Rejected
+0,11/09/2020,AWJ0LF6A0LXJN,Drexel,2020-11-08,,7,,556,,Rejected
+0,11/09/2020,A4D99Y82KOLC8,Drexel,2020-11-09,,32,,2276,,Rejected
+0,11/09/2020,A1ZZINLCZZYOH4,Drexel,2020-11-08,,7,,566,,Rejected
+0,11/09/2020,A297WCJYDD9QBQ,Drexel,2020-11-09,,2276,,32,Correct Result,Approved
+0,11/09/2020,A3GGE6TW2JXBEA,Creighton University,2020-11-07,,520,,7772,I think is was accurate,Approved
+0,11/09/2020,A2MSJRDUC5X680,Creighton University,2020-10-03,,39,,1464,ok,Rejected
+0,11/09/2020,A1TIO97G4K0ZFF,Creighton University,2020-11-07,,520,,922,,Approved
+0,11/09/2020,AWJ0LF6A0LXJN,Creighton University,2020-11-07,,0,,1036,,Rejected
+0,11/09/2020,A3746TDKYH8SJ9,Creighton University,2020-11-07,,520,,,,Approved
+0,11/09/2020,A4D99Y82KOLC8,Creighton University,2020-11-07,,520,,7772,,Approved
+0,11/09/2020,ALDQRWYZ8KQ9A,Bard College,2020-11-07,,1,,5697,"The total campus cases, which are listed as ""active"" can be verified by multiplying the positivity rate (0.018%) for tests with the total number of tests.  This yields one positive test.",Approved
+0,11/09/2020,A3GGE6TW2JXBEA,Bard College,2020-11-07,,1,,5697,I think it was accurate,Approved
+0,11/09/2020,A4D99Y82KOLC8,Bard College,2020-11-07,,1,,5697,,Approved
+0,11/09/2020,A243X2Y9HP7630,Dartmouth,2020-11-08,,22,,42280,NA,Approved
+0,11/09/2020,AWJ0LF6A0LXJN,Dartmouth,2020-11-08,,5,,1636,,Rejected
+0,11/09/2020,A1TIO97G4K0ZFF,Dartmouth,2020-11-08,,13,,42280,,Approved
+0,11/09/2020,A4D99Y82KOLC8,Dartmouth,2020-11-08,,13,,42280,,Approved
+0,11/09/2020,A1EN9IMH5K6QQ6,Cornell,2020-11-05,,15,,34647,ACCURATE,Approved
+0,11/09/2020,A2MSJRDUC5X680,Cornell,2020-11-05,,15,,2,partially know,Approved
+0,11/09/2020,A1TIO97G4K0ZFF,Cornell,2020-11-05,,11,,15,,Rejected
+0,11/09/2020,A3746TDKYH8SJ9,Cornell,2020-11-06,,19,,,,Rejected
+0,11/09/2020,A4D99Y82KOLC8,Cornell,2020-11-05,,15,,34647,,Approved
+0,11/09/2020,A3TKUXUTDX6FBF,Auburn University,2020-11-01,,1420,,3711,I have slight doubt about the overall data.,Approved
+0,11/09/2020,A2MSJRDUC5X680,Auburn University,2020-09-11,,0,,0,,Rejected
+0,11/09/2020,A4D99Y82KOLC8,Auburn University,2020-11-01,,0,,2046,,Rejected
+0,11/09/2020,AWJ0LF6A0LXJN,Auburn University,2020-11-01,,08,,616,,Rejected
+0,11/09/2020,AYYSG3O9FNU15,Auburn University,2020-11-09,,1420,,3095,It seems to be up to date. I had to tally up the weeks for the total for both question 2 and 3,Approved
+0,11/09/2020,A1EN9IMH5K6QQ6,Auburn University,2020-11-01,,1420,,3711,Data collected from the Self-Report Form and Sentinel Testing is available on the Auburn University COVID-19 Resource Center website.,Approved
+0,11/09/2020,A2MSJRDUC5X680,Augustana College,2020-10-27,,52,,68,partially knowed,Approved
+0,11/09/2020,A32DRYN7M7HIZT,Augustana College,2020-10-30,,2,,2,,Rejected
+0,11/09/2020,A1ZZINLCZZYOH4,Augustana College,2020-10-27,,33,,,,Approved
+0,11/09/2020,A69HWH4QYTZ19,Augustana College,2020-11-09,,120,,170,not enouch,Rejected
+0,11/10/2020,A3QTW23DMB8PHI,Augustana College,2020-11-03,,50,,,Not enough info available,Submitted
+0,11/10/2020,A16GH5GPKBX5GA,Augustana College,2020-11-06,,113,,44,information are not given correctly,Rejected
+0,11/09/2020,A32DRYN7M7HIZT,American University,2020-11-09,,1,,29,,Approved
+0,11/09/2020,A4D99Y82KOLC8,American University,2020-11-09,,29,,0,,Rejected
+0,11/09/2020,A1TIO97G4K0ZFF,American University,2020-11-09,,1,,29,,Approved
+0,11/09/2020,A4D99Y82KOLC8,Ball State University,2020-11-08,,349,,958,,Approved
+0,11/09/2020,A2MSJRDUC5X680,Ball State University,2020-11-08,,12,,349,,Rejected
+0,11/09/2020,A32DRYN7M7HIZT,Ball State University,2020-11-08,,349,,958,,Approved
