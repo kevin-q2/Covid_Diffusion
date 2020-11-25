@@ -8,5 +8,5 @@
 	path = US_Counties
 	url = https://github.com/kelvins/US-Cities-Database.git
 [submodule "bigten-covid-dataset"] 
-	path = bigten-covid-dataset 
+	path = college-covid19-dataset
 	url = https://github.com/wadefagen/college-covid19-dataset.git
