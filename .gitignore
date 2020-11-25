@@ -4,6 +4,22 @@ push.sh
 
 update.sh
 
+client_secret.json
+
+credentials.json
+
+groups.py
+
+id_list.txt
+
+test_list.txt
+
+quickstart.py
+
+sheetmaker.py
+
+token.pickle
+
 .ipynb_checkpoints/
 
 safegraph/
@@ -21,3 +37,35 @@ geckodriver.txt
 quinnk@csa2.bu.edu
 
 scraper.py
+
+approval.py
+
+Big ten mod.ipynb
+
+bigten_vs_nytimes.ipynb
+
+form_maker.py
+
+debug.log
+
+geckodriver.log
+
+groups.py
+
+hit_id.csv
+
+id_list.txt
+
+ids.txt
+
+last_creation_time.txt
+
+rootkey.csv
+
+school_extra.csv
+
+school_sample.csv
+
+school_sandbox.csv
+
+test_list.txt
