@@ -25,19 +25,25 @@ def add_the_cases(univ, county):
     cases.columns = ["County_Active_Cases", "County_Total_Cases"]
     return cases
 
-cities = pd.read_csv(r"C:\Users\kq146\code\Covid_data\US_Counties\csv\us_cities.csv")
+cities = pd.read_csv(r"C:\Users\kq146\code\covid_college_tracker\US-Cities-Database\csv\us_cities.csv")
 #county_frame = pd.read_csv(r"C:\Users\kq146\code\Covid_data\collected_data\county_data.csv")
 start = dt.datetime.today() - dt.timedelta(days=3)
 end = dt.datetime.today()
 delta = dt.timedelta(days=1)
 
-while start <= end:
-    date_string = start.strftime("%m_%d_%y")
-    other_date = start.strftime("%m-%d-%Y")
-    filename = r"C:\Users\kq146\code\Covid_data\UniversityCases\university_cases_"
-    filename = filename + date_string + ".csv"
-    university = pd.read_csv(filename)
-    county_file = r"C:\Users\kq146\code\Covid_data\COVID-19\csse_covid_19_data\csse_covid_19_daily_reports"
+f = open('last_scrape.txt', 'r')
+files = [i.strip() for i in f.readlines()]
+
+d = open('last_scrape.txt', 'w')
+d.close()
+
+for h in files:
+    date_string = dt.datetime.strptime(h[-12:-4], "%m_%d_%y")
+    under_scores = date_string.strftime("%m_%d_%y")
+    other_date = date_string.strftime("%m-%d-%Y")
+
+    university = pd.read_csv(h)
+    county_file = r"C:\Users\kq146\code\covid_college_tracker\johns_hopkins\csse_covid_19_data\csse_covid_19_daily_reports"
     county_file = os.path.join(county_file, other_date)
 
     try:
@@ -69,9 +75,9 @@ while start <= end:
             #with_cases.columns = ["School", "Cases", "City", "County", "State", "Date", "County_Cases"]
             with_cases = with_cases[["School", "Cases", "County_Active_Cases","County_Total_Cases", "City", "County", "State", "Date"]]
             #print(with_cases)
-            with_cases.to_csv(r"C:\Users\kq146\code\Covid_data\UniversityCases\university_cases_" + date_string + ".csv")
+            with_cases.to_csv(r"C:\Users\kq146\code\covid_college_tracker\Covid_data\UniversityCases\university_cases_" + under_scores + ".csv")
 
-    except:
-        pass
-
-    start += delta
+    except FileNotFoundError:
+        re = open('last_scrape.txt', 'a')
+        re.write(h)
+        re.close()

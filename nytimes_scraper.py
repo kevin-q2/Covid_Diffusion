@@ -42,7 +42,11 @@ print(frame)
 
 
 file_name = r"\university_cases_" + this + ".csv"
-frame.to_csv(r"C:\Users\kq146\code\Covid_data\UniversityCases" + file_name)
+frame.to_csv(r"C:\Users\kq146\code\covid_college_tracker\Covid_data\UniversityCases" + file_name)
+
+f = open('last_scrape.txt', 'a')
+f.write(r"C:\Users\kq146\code\covid_college_tracker\Covid_data\UniversityCases" + file_name)
+f.close()
 
 
 driver.quit()
