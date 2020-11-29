@@ -25,11 +25,11 @@ def add_the_cases(univ, county):
     cases.columns = ["County_Active_Cases", "County_Total_Cases"]
     return cases
 
-cities = pd.read_csv(r"C:\Users\kq146\code\covid_college_tracker\US-Cities-Database\csv\us_cities.csv")
-#county_frame = pd.read_csv(r"C:\Users\kq146\code\Covid_data\collected_data\county_data.csv")
-start = dt.datetime.today() - dt.timedelta(days=3)
-end = dt.datetime.today()
-delta = dt.timedelta(days=1)
+curr_d = os.getcwd()
+par = os.path.join(curr_d, os.pardir)
+par = os.path.abspath(par)
+
+cities = pd.read_csv(os.path.join(par, "US-Cities-Database","csv","us_cities.csv"))
 
 f = open('last_scrape.txt', 'r')
 files = [i.strip() for i in f.readlines()]
@@ -43,11 +43,11 @@ for h in files:
     other_date = date_string.strftime("%m-%d-%Y")
 
     university = pd.read_csv(h)
-    county_file = r"C:\Users\kq146\code\covid_college_tracker\johns_hopkins\csse_covid_19_data\csse_covid_19_daily_reports"
-    county_file = os.path.join(county_file, other_date)
+    county_file = os.path.join(par, 'johns_hopkins','csse_covid_19_data','csse_covid_19_daily_reports')
+    county_file = os.path.join(county_file, other_date + ".csv")
 
     try:
-        county_frame = pd.read_csv(county_file + ".csv")
+        county_frame = pd.read_csv(county_file)
         university = university.loc[:, ["School", "Cases", "City", "State", "Date"]]
         #university.columns = ["School", "Cases", "City", "State", "Date"]
         u_loc = university.loc[:,["City", "State"]]
@@ -75,7 +75,7 @@ for h in files:
             #with_cases.columns = ["School", "Cases", "City", "County", "State", "Date", "County_Cases"]
             with_cases = with_cases[["School", "Cases", "County_Active_Cases","County_Total_Cases", "City", "County", "State", "Date"]]
             #print(with_cases)
-            with_cases.to_csv(r"C:\Users\kq146\code\covid_college_tracker\Covid_data\UniversityCases\university_cases_" + under_scores + ".csv")
+            with_cases.to_csv(os.path.join(curr_d, "UniversityCases", 'university_cases_' + under_scores + ".csv"))
 
     except FileNotFoundError:
         re = open('last_scrape.txt', 'a')

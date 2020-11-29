@@ -3,7 +3,7 @@ import pandas as pd
 from bs4 import BeautifulSoup
 from selenium import webdriver
 import datetime as dt
-
+import os
 
 driver = webdriver.Chrome()
 driver.get("https://www.nytimes.com/interactive/2020/us/covid-college-cases-tracker.html?referringSource=articleShare")
@@ -40,12 +40,12 @@ today = today.strftime("%m-%d-%Y")
 frame["Date"] = today
 print(frame)
 
-
-file_name = r"\university_cases_" + this + ".csv"
-frame.to_csv(r"C:\Users\kq146\code\covid_college_tracker\Covid_data\UniversityCases" + file_name)
+curr_d = os.getcwd()
+file_name = os.path.join(curr_d, "university_cases_" + this + ".csv")
+frame.to_csv(file_name)
 
 f = open('last_scrape.txt', 'a')
-f.write(r"C:\Users\kq146\code\covid_college_tracker\Covid_data\UniversityCases" + file_name)
+f.write(file_name)
 f.close()
 
 
