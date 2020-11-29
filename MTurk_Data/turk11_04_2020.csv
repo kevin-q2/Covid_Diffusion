@@ -1,0 +1,5 @@
+,CollectionDate,WorkerID,Status,SchoolName,LastUpdate,DailyNewCases,WeeklyNewCases,ActiveCases,CumulativeCases,DailyNewTests,WeeklyNewTests,TotalTests,Comments
+0,11/04/2020,A1XZDMS989M3QJ,Approved,American University,2020-11-01,4,,,340,,,5,
+0,11/04/2020,A1XZDMS989M3QJ,Approved,American University,2020-11-01,3,,,340,5,,,Not enough
+0,11/04/2020,A1XZDMS989M3QJ,Approved,American University,2020-11-01,4,,,340,5,,,I dont think so
+0,11/04/2020,A1XZDMS989M3QJ,Approved,American University,2020-11-01,,,,654,,,,
