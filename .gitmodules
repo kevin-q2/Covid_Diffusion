@@ -1,6 +1,0 @@
-[submodule "COVID-19"]
-	path = COVID-19
-	url = https://github.com/CSSEGISandData/COVID-19.git
-[submodule "bigten-covid-dataset"] 
-	path = college-covid19-dataset
-	url = https://github.com/wadefagen/college-covid19-dataset.git
