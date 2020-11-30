@@ -41,11 +41,11 @@ frame["Date"] = today
 print(frame)
 
 curr_d = os.getcwd()
-file_name = os.path.join(curr_d, "university_cases_" + this + ".csv")
+file_name = os.path.join(curr_d, "UniversityCases","university_cases_" + this + ".csv")
 frame.to_csv(file_name)
 
 f = open('last_scrape.txt', 'a')
-f.write(file_name)
+f.write(file_name + '\n')
 f.close()
 
 
