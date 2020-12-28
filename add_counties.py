@@ -33,11 +33,13 @@ cities = pd.read_csv(os.path.join(par, "US-Cities-Database","csv","us_cities.csv
 
 f = open('last_scrape.txt', 'r')
 files = [i.strip() for i in f.readlines()]
+f.close()
 
 d = open('last_scrape.txt', 'w')
 d.close()
 
 for h in files:
+    print(h[-12:-4])
     date_string = dt.datetime.strptime(h[-12:-4], "%m_%d_%y")
     under_scores = date_string.strftime("%m_%d_%y")
     other_date = date_string.strftime("%m-%d-%Y")
@@ -45,9 +47,19 @@ for h in files:
     university = pd.read_csv(h)
     county_file = os.path.join(par, 'johns_hopkins','csse_covid_19_data','csse_covid_19_daily_reports')
     county_file = os.path.join(county_file, other_date + ".csv")
-
+    print(county_file)
+    file = ''
     try:
         county_frame = pd.read_csv(county_file)
+        file = 'found'
+    except:
+        re = open('last_scrape.txt', 'a')
+        re.write(h + '\n')
+        re.close()
+        file = 'notfound'
+
+    if file == 'found':
+        print(county_frame.head())
         university = university.loc[:, ["School", "Cases", "City", "State", "Date"]]
         #university.columns = ["School", "Cases", "City", "State", "Date"]
         u_loc = university.loc[:,["City", "State"]]
@@ -76,8 +88,3 @@ for h in files:
             with_cases = with_cases[["School", "Cases", "County_Active_Cases","County_Total_Cases", "City", "County", "State", "Date"]]
             #print(with_cases)
             with_cases.to_csv(os.path.join(curr_d, "UniversityCases", 'university_cases_' + under_scores + ".csv"))
-
-    except FileNotFoundError:
-        re = open('last_scrape.txt', 'a')
-        re.write(h)
-        re.close()

@@ -4,25 +4,29 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 import datetime as dt
 import os
+import codecs
+
+# I was previously using selenium with chromedriver to get the webpage
+# But to do it on the csa machines I'm now just downloading html files everyday with wget
 
 driver = webdriver.Chrome()
 driver.get("https://www.nytimes.com/interactive/2020/us/covid-college-cases-tracker.html?referringSource=articleShare")
 html = driver.page_source
 
+#h = codecs.open('nyt_scrape.html', 'r', 'utf-8')
 soup = BeautifulSoup(html, "html.parser")
-#school_list = soup.find("div", id = "schoolList")
 school_list = soup.select('body > div > main > article > section > div > div.g-story.g-freebird.g-max-limit ')
 school_list = school_list[0].select('#searchlist > div > .list_container > #schoolList')
-state = list(school_list[0].children)
+ranger = list(school_list[0].children)
 
 table = []
-for i in range(len(state)):
-    #s_name = state[i].find_all("div", class_= "statename")
-    s_name = state[i].select('div > div > .statename')
+for i in range(len(ranger)):
+    num = 'div.list_statename.state' + str(i)
+    s_name = soup.select('body > div > main > article > section > div > div.g-story.g-freebird.g-max-limit > #searchlist > div > .list_container > #schoolList > ' + num + ' > div > .statename')
     name = [s_name[0].get_text(strip = True)]
-    #state_schools = state[i].find_all("div", class_="schoolcard individualschools")
-    state_schools = state[i].select('div > .schoolholder > div')
 
+    state_schools = soup.select('body > div > main > article > section > div > div.g-story.g-freebird.g-max-limit > #searchlist > div > .list_container > #schoolList > ' + num + ' > .schoolholder')
+    state_schools = state_schools[0].find_all("div", class_="schoolcard individualschools")
 
     for j in state_schools:
         ind_school = [text for text in j.stripped_strings]
