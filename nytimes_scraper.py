@@ -5,11 +5,16 @@ from selenium import webdriver
 import datetime as dt
 import os
 import codecs
+from selenium.webdriver.chrome.options import Options
 
 # I was previously using selenium with chromedriver to get the webpage
 # But to do it on the csa machines I'm now just downloading html files everyday with wget
 
-driver = webdriver.Chrome()
+chrome_options = Options()
+chrome_options.add_argument('--headless')
+chrome_options.add_argument('--no-sandbox')
+chrome_options.add_argument('--diable-dev-shm-usage')
+driver = webdriver.Chrome('/usr/bin/chromedriver',options=chrome_options)
 driver.get("https://www.nytimes.com/interactive/2020/us/covid-college-cases-tracker.html?referringSource=articleShare")
 html = driver.page_source
 
