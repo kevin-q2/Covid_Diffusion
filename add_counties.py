@@ -84,5 +84,5 @@ for h in files:
             with_cases = pd.concat([combined, count_cases], axis = 1)
             #with_cases.columns = ["School", "Cases", "City", "County", "State", "Date", "County_Cases"]
             with_cases = with_cases[["School", "Cases", "County_Active_Cases","County_Total_Cases", "City", "County", "State", "Date"]]
-            print(with_cases)
+            #print(with_cases)
             with_cases.to_csv(os.path.join(curr_d, "UniversityCases", 'university_cases_' + under_scores + ".csv"))
