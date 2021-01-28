@@ -46,10 +46,10 @@ class dataset(mat_opr):
         cwd = os.getcwd()
         par = os.path.join(cwd, os.pardir)
         par = os.path.abspath(par)
-        #parpar = os.path.join(par, os.pardir)
-        #parpar = os.path.abspath(parpar)
-        nyt_datapath = os.path.join(cwd, 'UniversityCases', '')
-        big10_datapath = os.path.join(par, 'college-covid19-dataset', 'data', '')
+        parpar = os.path.join(par, os.pardir)
+        parpar = os.path.abspath(parpar)
+        nyt_datapath = os.path.join(par, 'UniversityCases', '')
+        big10_datapath = os.path.join(parpar, 'college-covid19-dataset', 'data', '')
 
         # For NYT:
         fnames = sorted(glob.glob(nyt_datapath+'*.csv'))

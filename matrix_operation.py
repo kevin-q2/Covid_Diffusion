@@ -44,15 +44,28 @@ class mat_opr:
         newframe = self.dataframe.loc[:, (self.dataframe!=val).any(axis=0)]
         self.dataframe = newframe
 
-    def hide_rows(self, percent):
+    def hide_rows(self, percent, non_random=None):
         # returns a new mat_opr object with a specified percent of the original rows randomly hidden
+        # OR if non_random (a list of indexes to drop from) is defined drop randomly from that list
+
         new_arr = self.dataframe.copy(deep=True)
 
         num_hide = int(len(new_arr.index)*percent)
-        to_hide = random.sample(list(new_arr.index), num_hide)
 
-        for t in to_hide:
-            new_arr = new_arr.drop(t, axis=0)
+        if not non_random is None:
+            if num_hide > len(non_random):
+                raise IndexError("Trying to hide too many values")
+            else:
+                to_hide = random.sample(non_random, num_hide)
+
+                for t in to_hide:
+                    new_arr = new_arr.drop(t, axis=0)
+                
+        else:
+            to_hide = random.sample(list(new_arr.index), num_hide)
+
+            for t in to_hide:
+                new_arr = new_arr.drop(t, axis=0)
 
         return mat_opr(new_arr)
 
@@ -89,6 +102,16 @@ class mat_opr:
 
         return mat_opr(new_arr), hiders
 
+    def non_mon(self, dicter):
+        # is_col_inc() and is_row_inc() return a dictionary of indices that violate -- {column: [rows]}
+        # this is a function to compute the fraction of points that violate monotonicity
+
+        total = self.dataframe.size
+        frac = 0
+        for i in dicter.values():
+            frac += len(i)
+        return frac/total
+
     def is_row_inc(self, printy=True):
         # Tests if the data frame is row increasing
         # prints results if printy is set to True
@@ -111,10 +134,10 @@ class mat_opr:
                 non_inc[i] = spots
 
         if printy == True:
-            print(str(len(non_inc)) + " rows are non increasing in at least one spot")
+            print(str(self.non_mon(non_inc) * 100) + " percent of the data points are non-increasing")
         return non_inc
 
-    def is_col_inc(self, printy=True):
+    def is_col_inc(self):
         # Tests if the data frame is column increasing
         # prints results if printy is set to True
         # returns a dictionary of indices where the dataframe is not increasing
@@ -135,9 +158,8 @@ class mat_opr:
             if len(spots) != 0:
                 non_inc[i] = spots
 
-        if printy == True:
-            print(str(len(non_inc)) + " columns are non increasing in at least one spot")
-        return non_inc
+        return non_inc, self.non_mon(non_inc) * 100
+
 
     def iso(self, axis=1):
         # performs isotonic regression row-wise (axis = 0) or column-wise (axis = 1)
@@ -173,14 +195,101 @@ class mat_opr:
                 tonic[i] = predictions
 
         newframe = pd.DataFrame(tonic)
+        newframe.columns = self.dataframe.columns
+        newframe.index = self.dataframe.index
         return mat_opr(newframe)
+
+    def known_for_iso(self, axis, unknowns):
+        knowns = self.known(unknowns)
+
+        if axis == 1:
+            known_dict ={ite:[] for ite in range(len(self.dataframe.columns))}
+            for i in knowns:
+                #try:
+                known_dict[i[1]].append(i[0])
+                #except:
+                    #known_dict[i[1]] = [i[0]]
+        else:
+            known_dict ={ite:[] for ite in range(len(self.dataframe.index))}
+            for i in knowns:
+                #try:
+                known_dict[i[0]].append(i[1])
+                #except:
+                    #known_dict[i[0]] = [i[1]]
+        return known_dict
+
+    def known_iso(self, axis=1, unknowns = 0):
+        # performs isotonic regression ONLY for known data values
+        # row-wise (axis = 0) or column-wise (axis = 1)
+        # unknowns should be 0 or none
+
+        tonic = copy.deepcopy(self.array) # returns a new isotonic matrix
+        known_dict = self.known_for_iso(axis, unknowns)
+        # dat dict tells me where things arent increasing (from is_row_inc() or is_col_inc())
+        if axis == 1:
+            for i in range(len(tonic[0])):
+                X = known_dict[i]
+
+                if X != []:
+                    initial_vals = [tonic[j][i] for j in X]
+
+                    # Use the initial values to fit the model and then predict what the decreasing ones should be
+                    iso = IsotonicRegression().fit(X,initial_vals)
+                    predictions = iso.predict(range(len(tonic)))
+
+                    # put everything back:
+                    for row in range(len(predictions)):
+                        tonic[row][i] = predictions[row]
+
+        else:
+
+            for i in range(len(tonic)):
+                X = known_dict[i]
+
+                if X != []:
+                    initial_vals = [tonic[i][j] for j in X]
+
+                    # Use the initial values to fit the model and then predict what the decreasing ones should be
+                    iso = IsotonicRegression().fit(X,initial_vals)
+                    predictions = iso.predict(range(len(tonic[i])))
+
+                    # put everything back:
+                    tonic[i] = predictions
+
+        newframe = pd.DataFrame(tonic)
+        newframe.columns = self.dataframe.columns
+        newframe.index = self.dataframe.index
+
+
+        if unknowns == 0:
+            # Isotonic outputs NaN values, replace them with zeros
+            newframe = newframe.fillna(0)
+
+        return mat_opr(newframe)
+
+    def rank_approx(self):
+        # approximates the rank of a matrix by summing the squares of the singular values
+
+        u,s,vt = np.linalg.svd(self.array)
+        denom = 0
+        for i in s:
+            denom += i**2
+
+        numer = 0
+        ratio = 0
+        ranker = 0
+        while ratio < 0.8:
+            ratio = (numer + s[ranker]**2)/denom
+            ranker += 1
+
+        return ranker
 
     def lmafitter(self, rank = None, val=0):
         # Perfroms low-rank matrix completion using the methods from lmafit.py
         # val takes the value of unknowns ex) either 0 or None
         # rank takes an approximate rank for the matrix
         if rank is None:
-            rank = np.linalg.matrix_rank(self.array)
+            rank = self.rank_approx()
 
         #First need to make the arrays needed
         known_seq = [[],[]]
