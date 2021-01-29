@@ -220,41 +220,60 @@ class mat_opr:
 
     def known_iso(self, axis=1, unknowns = 0):
         # performs isotonic regression ONLY for known data values
+        # and ONLY on columns where there are non-increasing points
         # row-wise (axis = 0) or column-wise (axis = 1)
         # unknowns should be 0 or none
 
         tonic = copy.deepcopy(self.array) # returns a new isotonic matrix
         known_dict = self.known_for_iso(axis, unknowns)
+        if axis == 1:
+            increase_dict, non_increase_percent = self.is_col_inc()
+        else:
+            increase_dict = self.is_row_inc()
+
         # dat dict tells me where things arent increasing (from is_row_inc() or is_col_inc())
         if axis == 1:
             for i in range(len(tonic[0])):
-                X = known_dict[i]
+                try:
+                    # if i is a key in increase dict then this column needs regression
+                    # else just pass to the next column
+                    tester = increase_dict[i]
 
-                if X != []:
-                    initial_vals = [tonic[j][i] for j in X]
+                    X = known_dict[i]
 
-                    # Use the initial values to fit the model and then predict what the decreasing ones should be
-                    iso = IsotonicRegression().fit(X,initial_vals)
-                    predictions = iso.predict(range(len(tonic)))
+                    if X != []:
+                        initial_vals = [tonic[j][i] for j in X]
 
-                    # put everything back:
-                    for row in range(len(predictions)):
-                        tonic[row][i] = predictions[row]
+                        # Use the initial values to fit the model and then predict what the decreasing ones should be
+                        iso = IsotonicRegression(out_of_bounds='clip').fit(X,initial_vals)
+                        predictions = iso.predict(range(len(tonic)))
+
+                        # put everything back:
+                        for row in range(len(predictions)):
+                            tonic[row][i] = predictions[row]
+                except:
+                    pass
 
         else:
-
+            # same thing but with rows
             for i in range(len(tonic)):
-                X = known_dict[i]
+                try:
+                    tester = increase_dict[i]
+                    X = known_dict[i]
 
-                if X != []:
-                    initial_vals = [tonic[i][j] for j in X]
+                    if X != []:
 
-                    # Use the initial values to fit the model and then predict what the decreasing ones should be
-                    iso = IsotonicRegression().fit(X,initial_vals)
-                    predictions = iso.predict(range(len(tonic[i])))
+                        initial_vals = [tonic[i][j] for j in X]
 
-                    # put everything back:
-                    tonic[i] = predictions
+                        # Use the initial values to fit the model and then predict what the decreasing ones should be
+                        iso = IsotonicRegression(out_of_bounds='clip').fit(X,initial_vals)
+                        predictions = iso.predict(range(len(tonic[i])))
+
+                        # put everything back:
+                        tonic[i] = predictions
+
+                except:
+                    pass
 
         newframe = pd.DataFrame(tonic)
         newframe.columns = self.dataframe.columns
@@ -267,7 +286,7 @@ class mat_opr:
 
         return mat_opr(newframe)
 
-    def rank_approx(self):
+    def rank_approx(self, percent = 0.8):
         # approximates the rank of a matrix by summing the squares of the singular values
 
         u,s,vt = np.linalg.svd(self.array)
@@ -278,7 +297,7 @@ class mat_opr:
         numer = 0
         ratio = 0
         ranker = 0
-        while ratio < 0.8:
+        while ratio < percent and ranker < len(s):
             ratio = (numer + s[ranker]**2)/denom
             ranker += 1
 

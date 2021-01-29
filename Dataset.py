@@ -8,6 +8,7 @@ import numpy as np
 import copy
 from matrix_operation import mat_opr
 
+
 # A class to simplify importing and combining the NYT and Big10 Case data
 # Uses matrix operation class as a parent function
 class dataset(mat_opr):
@@ -43,6 +44,7 @@ class dataset(mat_opr):
 
         # Right now this will really only work with the directory structure
         # that I'm working with. Maybe find a better way later?
+        """
         cwd = os.getcwd()
         par = os.path.join(cwd, os.pardir)
         par = os.path.abspath(par)
@@ -50,6 +52,23 @@ class dataset(mat_opr):
         parpar = os.path.abspath(parpar)
         nyt_datapath = os.path.join(par, 'UniversityCases', '')
         big10_datapath = os.path.join(parpar, 'college-covid19-dataset', 'data', '')
+        """
+        try:
+            # if this is being imported as a module
+            cwd = os.path.dirname(os.path.realpath(__file__))
+            par = os.path.dirname(cwd)
+            par = os.path.abspath(par)
+            nyt_datapath = os.path.join(cwd, 'UniversityCases', '')
+            big10_datapath = os.path.join(par, 'college-covid19-dataset', 'data', '')
+
+        except NameError:
+            # else if its being used in its original file location
+            cwd = os.getcwd()
+            par = os.path.join(cwd, os.pardir)
+            par = os.path.abspath(par)
+
+            nyt_datapath = os.path.join(cwd, 'UniversityCases', '')
+            big10_datapath = os.path.join(par, 'college-covid19-dataset', 'data', '')
 
         # For NYT:
         fnames = sorted(glob.glob(nyt_datapath+'*.csv'))
@@ -126,3 +145,15 @@ class dataset(mat_opr):
         no_zero = incomplete_matr.loc[(incomplete_matr!=0).any(axis=1)]
 
         self.combined = no_zero
+    
+    def drop_bad_rows(self):
+        # Professor from big10 collection stopped collecting so I need to drop
+        # some rows where he started dropping off
+        listy = list(self.dataframe.index)
+        cop = self.dataframe.copy(deep=True)
+
+        for i in self.dataframe.index:
+            if (self.dataframe.loc[i]!=0).sum() <= 10:
+                cop = cop.drop(i, axis=0)
+
+        return mat_opr(cop)
