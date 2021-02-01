@@ -12,29 +12,43 @@ from matrix_operation import mat_opr
 # A class to simplify importing and combining the NYT and Big10 Case data
 # Uses matrix operation class as a parent function
 class dataset(mat_opr):
-    def __init__(self):
-        self.big10_df = None
-        self.nyt_df = None
-        self.get_data()
+    def __init__(self, get_dat = False, saver = False):
+        if get_dat:
+            self.big10_df = None
+            self.nyt_df = None
+            self.get_data()
 
-        # The difference between NYT and Big10 school names
-        self.name_translator = {'University of Illinois Urbana-Champaign':'Illinois',
-                    'Indiana University Bloomington':'Indiana',
-                    'University of Iowa':'Iowa',
-                    'University of Maryland, College Park':'Maryland',
-                    'Michigan State University':'Michigan State',
-                    'University of Minnesota Twin Cities':'Minnesota',
-                    'Northwestern University':'Northwestern',
-                    'Ohio State University':'Ohio State',
-                    'Penn State University':'Penn State',
-                    'University of Wisconsin-Madison':'UW-Madison',
-                    'University of Michigan':'Michigan',
-                    'University of Nebraska-Lincoln':'Nebraska',
-                    'Purdue University':'Purdue',
-                    'Rutgers University':'Rutgers'}
+            # The difference between NYT and Big10 school names
+            self.name_translator = {'University of Illinois Urbana-Champaign':'Illinois',
+                        'Indiana University Bloomington':'Indiana',
+                        'University of Iowa':'Iowa',
+                        'University of Maryland, College Park':'Maryland',
+                        'Michigan State University':'Michigan State',
+                        'University of Minnesota Twin Cities':'Minnesota',
+                        'Northwestern University':'Northwestern',
+                        'Ohio State University':'Ohio State',
+                        'Penn State University':'Penn State',
+                        'University of Wisconsin-Madison':'UW-Madison',
+                        'University of Michigan':'Michigan',
+                        'University of Nebraska-Lincoln':'Nebraska',
+                        'Purdue University':'Purdue',
+                        'Rutgers University':'Rutgers'}
 
-        self.combined = None
-        self.combine_data()
+            self.combined = None
+            self.combine_data()
+
+            if saver:
+                self.combined.to_csv("combined_dataset.csv")
+        
+        else:
+            try:
+                # If this is being imported as a module
+                cwd = os.path.dirname(os.path.realpath(__file__))
+                combo = os.path.join(cwd, "combined_dataset.csv")
+                self.combined = pd.read_csv(combo, index_col = 0)
+            except:
+                # If being used in the original file location
+                self.combined = pd.read_csv("combined_dataset.csv", index_col = 0)
 
         super().__init__(self.combined)
 
@@ -42,17 +56,6 @@ class dataset(mat_opr):
     def get_data(self):
         # import all the data
 
-        # Right now this will really only work with the directory structure
-        # that I'm working with. Maybe find a better way later?
-        """
-        cwd = os.getcwd()
-        par = os.path.join(cwd, os.pardir)
-        par = os.path.abspath(par)
-        parpar = os.path.join(par, os.pardir)
-        parpar = os.path.abspath(parpar)
-        nyt_datapath = os.path.join(par, 'UniversityCases', '')
-        big10_datapath = os.path.join(parpar, 'college-covid19-dataset', 'data', '')
-        """
         try:
             # if this is being imported as a module
             cwd = os.path.dirname(os.path.realpath(__file__))
