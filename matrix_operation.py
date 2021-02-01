@@ -298,7 +298,8 @@ class mat_opr:
         ratio = 0
         ranker = 0
         while ratio < percent and ranker < len(s):
-            ratio = (numer + s[ranker]**2)/denom
+            numer += s[ranker]**2
+            ratio = numer/denom
             ranker += 1
 
         return ranker
