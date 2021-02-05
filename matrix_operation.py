@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 from sklearn.datasets import make_regression
 from sklearn.isotonic import IsotonicRegression
+from sklearn.decomposition import  NMF
 import random
 import copy
 
@@ -33,6 +34,15 @@ class mat_opr:
                         indices.append((i,j))
 
         return indices
+    
+    def unknown(self, unknowns = None):
+        if unknowns == None:
+            self.dataframe = self.dataframe.fillna(0)
+            self.array = self.dataframe.values.tolist()
+        elif unknowns == 0:
+            self.dataframe = self.dataframe.replace(0, np.nan)
+            self.array = self.dataframe.values.tolist()
+
 
     def drop_zero_rows(self, val=0):
         # drops any row that contains all zeros or all of the value provided in val
@@ -68,6 +78,16 @@ class mat_opr:
                 new_arr = new_arr.drop(t, axis=0)
 
         return mat_opr(new_arr)
+    
+    def interpolater(self, method='linear'):
+        # interpolates between datapoints with a specified method
+        new_inter = self.dataframe.copy(deep=True)
+        new_inter = new_inter.replace(0, np.nan)
+        for col in new_inter.columns:
+            new_inter[col] = new_inter[col].interpolate(method=method)
+
+        new_inter = new_inter.fillna(0)
+        return mat_opr(new_inter)
 
     def hide_cols(self, percent):
         # returns a new mat_opr object with a specified percent of the original columns randomly hidden
@@ -161,44 +181,6 @@ class mat_opr:
         return non_inc, self.non_mon(non_inc) * 100
 
 
-    def iso(self, axis=1):
-        # performs isotonic regression row-wise (axis = 0) or column-wise (axis = 1)
-        tonic = copy.deepcopy(self.array) # returns a new isotonic matrix
-
-        # dat dict tells me where things arent increasing (from is_row_inc() or is_col_inc())
-        if axis == 1:
-            dat_dict = self.is_col_inc(False)
-            for i in dat_dict.keys():
-                initial_vals = [tonic[j][i] for j in range(len(tonic))]
-                X = list(range(len(initial_vals)))
-
-                # Use the initial values to fit the model and then predict what the decreasing ones should be
-                iso = IsotonicRegression().fit(X,initial_vals)
-                predictions = iso.predict(range(len(tonic)))
-
-                # put everything back:
-                for row in range(len(predictions)):
-                    tonic[row][i] = predictions[row]
-
-        else:
-            dat_dict = self.is_row_inc(False)
-
-            for i in dat_dict.keys():
-                initial_vals = list(tonic[i].copy())
-                X = list(range(len(tonic[i])))
-
-                # Use the initial values to fit the model and then predict what the decreasing ones should be
-                iso = IsotonicRegression().fit(X,initial_vals)
-                predictions = iso.predict(range(len(tonic[i])))
-
-                # put everything back:
-                tonic[i] = predictions
-
-        newframe = pd.DataFrame(tonic)
-        newframe.columns = self.dataframe.columns
-        newframe.index = self.dataframe.index
-        return mat_opr(newframe)
-
     def known_for_iso(self, axis, unknowns):
         knowns = self.known(unknowns)
 
@@ -217,6 +199,75 @@ class mat_opr:
                 #except:
                     #known_dict[i[0]] = [i[1]]
         return known_dict
+
+    def iso(self, axis=1, unk = 'No'):
+        # performs isotonic regression row-wise (axis = 0) or column-wise (axis = 1)
+        tonic = copy.deepcopy(self.array) # returns a new isotonic matrix
+
+        # either use a value for unknowns or just do isotonic with all present values
+        if unk == 0 or unk is None:
+            known_dict = self.known_for_iso(axis, unk)
+        else:
+            known_dict = None
+
+        # dat dict tells me where things arent increasing (from is_row_inc() or is_col_inc())
+        if axis == 1:
+            if known_dict is None:
+                for i in range(len(tonic[0])):
+                    initial_vals = [tonic[j][i] for j in range(len(tonic))]
+                    X = list(range(len(initial_vals)))
+
+                    # Use the initial values to fit the model and then predict what the decreasing ones should be
+                    iso = IsotonicRegression(out_of_bounds='clip').fit(X,initial_vals)
+                    predictions = iso.predict(range(len(tonic)))
+
+                    # put everything back:
+                    for row in range(len(predictions)):
+                        tonic[row][i] = predictions[row]
+
+            else:
+                for i in range(len(tonic[0])):
+                    X = known_dict[i]
+                    initial_vals = [tonic[j][i] for j in X]
+
+                    # Use the initial values to fit the model and then predict what the decreasing ones should be
+                    iso = IsotonicRegression(out_of_bounds='clip').fit(X,initial_vals)
+                    predictions = iso.predict(range(len(tonic)))
+
+                    # put everything back:
+                    for row in range(len(predictions)):
+                        tonic[row][i] = predictions[row]
+
+
+        else:
+            if known_dict is None:
+                for i in range(len(tonic)):
+                    initial_vals = [tonic[i][j] for j in range(len(tonic[0]))]
+                    X = list(range(len(initial_vals)))
+
+                    # Use the initial values to fit the model and then predict what the decreasing ones should be
+                    iso = IsotonicRegression(out_of_bounds='clip').fit(X,initial_vals)
+                    predictions = iso.predict(range(len(tonic)))
+
+                    # put everything back:
+                    tonic[i] = predictions
+
+            else:
+                for i in range(len(tonic)):
+                    X = known_dict[i]
+                    initial_vals = [tonic[i][j] for j in X]
+
+                    # Use the initial values to fit the model and then predict what the decreasing ones should be
+                    iso = IsotonicRegression(out_of_bounds='clip').fit(X,initial_vals)
+                    predictions = iso.predict(range(len(tonic)))
+
+                    # put everything back:
+                    tonic[i] = predictions
+
+        newframe = pd.DataFrame(tonic)
+        newframe.columns = self.dataframe.columns
+        newframe.index = self.dataframe.index
+        return mat_opr(newframe)
 
     def known_iso(self, axis=1, unknowns = 0):
         # performs isotonic regression ONLY for known data values
@@ -330,3 +381,22 @@ class mat_opr:
         X,Y,out = lmafit_mc_adp(len(self.array),len(self.array[0]),rank,known_indices,known_values)
 
         return X,Y,out
+
+    def nmf(self, components = 2, procedure=None, separate = False):
+        # Performs non-negative matrix factorization
+        # procedure takes one of the initial methods of approximation listed in the parameters for nmf here:
+        # https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.NMF.html
+
+        arr = np.array(self.array)
+        model = NMF(n_components= components, init=procedure, random_state=0)
+        W = model.fit_transform(arr)
+        H = model.components_
+
+        # Return either multiplied together as a new object OR as decomposed matrices
+        if separate == False:
+            tor = mat_opr(pd.DataFrame(np.dot(W,H)))
+            tor.dataframe.columns = self.dataframe.columns
+            tor.dataframe.index = self.dataframe.index
+            return tor
+        else:
+            return W, H
