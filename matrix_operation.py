@@ -5,6 +5,7 @@ from sklearn.isotonic import IsotonicRegression
 from sklearn.decomposition import  NMF
 import random
 import copy
+from NonnegMFPy import nmf
 
 # Note lmafit.py needs to be in the same directory for now
 from lmafit import lmafit_mc_adp
@@ -121,6 +122,65 @@ class mat_opr:
             new_arr.iloc[t[0],t[1]] = val
 
         return mat_opr(new_arr), hiders
+
+    def error(self, hidden_vals, newframe):
+        # computes error between hidden vals and a supplied data object
+
+        # hidden_vals is a dictionary with structure {(x,y): value}
+        # new frame is the dataframe after doing matrix completion etc.
+        
+        # Keeping things simple by doing mean absolute error for now
+        summ = 0
+        for h in hidden_vals.keys():
+            frame_val = newframe.iloc[h[0],h[1]]
+            if frame_val is None or np.isnan(frame_val):
+                frame_val = 0
+            err = abs(frame_val - hidden_vals[h])
+            summ += err
+            
+        mean_absolute = summ/len(hidden_vals)
+        
+        #print("The computed matrix has an average error of " + str(mean_absolute))
+        #print()
+        return mean_absolute
+
+    def hidden_tester(self, trials = [], method = 'nmf', ranker = 0, isotonic = False):
+        # hides a random set of entries then performs a matrix completion method ('nmf' or 'lmafit')
+        # along with isotonic regression if set to true
+
+        # The function will then compute the error between the completed matrix and the hidden values
+        # This can be over a set of different trials:
+        # trials should be a list of percents [0.33, 0.25, ...] corresponding to how much data is hidden
+        trials.sort()
+        complete_results = []
+        iso_results = []
+        if ranker == 0:
+            ranker = self.rank_approx()
+
+        for i in trials:
+            # Make the new hidden matrix and record the values that were hidden
+            hidden_matrix, hidden_values = self.hide_entries(i, 0)
+            
+            # Do lmafit
+            if method == 'lmafit':
+                X,Y,other = hidden_matrix.lmafitter(rank = ranker, val = 0)
+                complete = pd.DataFrame(np.dot(X,Y))
+                complete = mat_opr(complete)
+            elif method == 'nmf':
+                complete = hidden_matrix.missing_nmf(ranker)
+            else:
+                raise error("invalid method name")
+            
+            
+            # Optional: do isotonic regression
+            if isotonic == True:
+                iso_reg = complete.known_iso()
+                complete_results.append(self.error(hidden_values, complete.dataframe))
+                iso_results.append(self.error(hidden_values, iso_reg.dataframe))
+            else:
+                complete_results.append(self.error(hidden_values, complete.dataframe))
+                
+        return complete_results, iso_results
 
     def non_mon(self, dicter):
         # is_col_inc() and is_row_inc() return a dictionary of indices that violate -- {column: [rows]}
@@ -382,7 +442,7 @@ class mat_opr:
 
         return X,Y,out
 
-    def nmf(self, components = 2, procedure=None, separate = False):
+    def sci_nmf(self, components = 2, procedure=None, separate = False):
         # Performs non-negative matrix factorization
         # procedure takes one of the initial methods of approximation listed in the parameters for nmf here:
         # https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.NMF.html
@@ -400,3 +460,46 @@ class mat_opr:
             return tor
         else:
             return W, H
+
+    def missing_nmf(self, components, max_iterations = 1000, separate = False):
+        # this is just a different implementation of nmf that is able to handle
+        # missing or unknown data
+        # https://www.guangtunbenzhu.com/nonnegative-matrix-factorization
+
+        mask = np.array(self.dataframe.astype(bool).values.tolist())
+        arr = np.array(self.array)
+
+        #This is just so I have a consistent random state
+        mod = np.random.RandomState(101) #weird that something like 39 throws everything off
+        # 301 is good for 2
+        dub = mod.rand(arr.shape[0], components)
+        vee = mod.rand(components, arr.shape[1])
+
+        model = nmf.NMF(X=arr, W=dub, H=vee, M=mask, n_components=components)
+        model.SolveNMF(sparsemode=True, maxiters=max_iterations)
+        w = model.W
+        h = model.H
+
+        if separate == False:
+            tor = mat_opr(pd.DataFrame(np.dot(w,h)))
+            tor.dataframe.columns = self.dataframe.columns
+            tor.dataframe.index = self.dataframe.index
+            return tor
+        else:
+            return w,h
+
+            
+
+
+"""
+# a function for plotting basis vectors that I haven't implemented yet...
+def plot_bases(data_obj, ranky):
+    w,h = data_obj.missing_nmf(ranky,separate = True)
+    bases = pd.DataFrame(w)
+    
+    for i in bases.columns:
+        bases[i].plot()
+        plt.title("basis " + str(i))
+        plt.show()
+
+"""
