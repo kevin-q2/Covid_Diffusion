@@ -160,3 +160,25 @@ class dataset(mat_opr):
                 cop = cop.drop(i, axis=0)
 
         return mat_opr(cop)
+
+
+"""
+def new_case_calc(data_obj, name=None, locr=None):
+    if locr is None and name is None:
+        return "need more arguments"
+    
+    elif locr is None:
+        bosu = data_obj.dataframe[name]
+    else:
+        bosu = data_obj.dataframe.iloc[:,locr]
+
+    new_cases = []
+    for i in range(len(bosu)):
+        if i == 0:
+            new_cases.append(0)
+        else:
+            diff = bosu.iloc[i] - bosu.iloc[i-1]
+            new_cases.append(diff)
+            
+    return new_cases
+"""

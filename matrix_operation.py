@@ -182,6 +182,18 @@ class mat_opr:
                 
         return complete_results, iso_results
 
+    def normalizer(self):
+        # This function normalizes a dataframe by dividing each column by its max value
+        # Note: For this project the max value is assumed to be the last (cumulative cases)
+        #       So this should work given that isotonic corrects all mistakes beforehand.
+
+        norm = self.dataframe.copy(deep=True)
+
+        for i in norm.columns:
+            norm[i] /= norm[i].iloc[-1]
+
+        return mat_opr(norm)
+
     def non_mon(self, dicter):
         # is_col_inc() and is_row_inc() return a dictionary of indices that violate -- {column: [rows]}
         # this is a function to compute the fraction of points that violate monotonicity

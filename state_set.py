@@ -25,10 +25,12 @@ class state_data(mat_opr):
                 # If this is being imported as a module
                 cwd = os.path.dirname(os.path.realpath(__file__))
                 combo = os.path.join(cwd, "state_dataset.csv")
-                self.combined = pd.read_csv(combo, index_col = 0)
+                self.state_df = pd.read_csv(combo, index_col = 0)
             except:
                 # If being used in the original file location
-                self.combined = pd.read_csv("state_dataset.csv", index_col = 0)
+                self.state_df = pd.read_csv("state_dataset.csv", index_col = 0)
+
+        super().__init__(self.state_df)
 
     def get_data(self):
         try:
@@ -62,8 +64,17 @@ class state_data(mat_opr):
         state_cases.pop('Recovered')
         state_cases.pop('American Samoa')
         state_cases.pop('Diamond Princess')
+        state_cases.pop('Grand Princess')
         state_cases.pop('Northern Mariana Islands')
         cumul = pd.DataFrame(data=state_cases, index=ind)
+        
+        days = []
+        for ind in cumul.index:
+            days.append(dt.datetime.strptime(ind, "%m-%d-%Y"))
+        
+        cumul.index = days
+        cumul = cumul.sort_index()
+
         return cumul
 
         
