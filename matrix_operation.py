@@ -144,6 +144,20 @@ class mat_opr:
         #print()
         return mean_absolute
 
+    def mean_square_error(self, newframe, unknowns):
+        # computes mean squared error between the original matrix
+        # and a new one: newframe
+        # 
+        # Note that this only computes the error on known values 
+        known_ind = self.known(unknowns)
+        meaner = 0
+        for ind in known_ind:
+            orig = self.dataframe.iloc[ind[0],ind[1]]
+            newn = newframe.dataframe.iloc[ind[0], ind[1]]
+            meaner += (orig - newn) ** 2
+
+        return meaner/len(known_ind)
+
     def hidden_tester(self, trials = [], method = 'nmf', ranker = 0, isotonic = False):
         # hides a random set of entries then performs a matrix completion method ('nmf' or 'lmafit')
         # along with isotonic regression if set to true
@@ -191,8 +205,32 @@ class mat_opr:
 
         for i in norm.columns:
             norm[i] /= norm[i].iloc[-1]
+            #norm[i] /= norm[i].max()
 
         return mat_opr(norm)
+
+    def new_case_calc(self):
+        # This method returns a new matrix object where the cases are considered based on daily increase
+        # instead of a cumulative count
+
+        new_frame_dict = {}
+
+        for col in self.dataframe.columns:
+            bosu = self.dataframe[col]
+
+            new_cases = []
+            for i in range(len(bosu)):
+                if i == 0:
+                    new_cases.append(0)
+                else:
+                    diff = bosu.iloc[i] - bosu.iloc[i-1]
+                    new_cases.append(diff)
+
+            new_frame_dict[col] = new_cases
+
+        news = pd.DataFrame(new_frame_dict)
+        news.index = self.dataframe.index
+        return mat_opr(news)
 
     def non_mon(self, dicter):
         # is_col_inc() and is_row_inc() return a dictionary of indices that violate -- {column: [rows]}
