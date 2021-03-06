@@ -7,8 +7,16 @@ import os
 import codecs
 from selenium.webdriver.chrome.options import Options
 
+####################################################################################
+
+# This program is used to scrape data from the NY Times dashboard on Covid in Universities
+# https://www.nytimes.com/interactive/2020/us/covid-college-cases-tracker.html
+
 # I was previously using selenium with chromedriver to get the webpage
-# But to do it on the csa machines I'm now just downloading html files everyday with wget
+# But to do it on the csa servers at BU I'm now just downloading html files everyday with wget
+# Its being automatically run everyday on those servers
+####################################################################################
+
 
 chrome_options = Options()
 chrome_options.add_argument('--headless')
@@ -50,9 +58,13 @@ frame["Date"] = today
 print(frame)
 
 curr_d = os.getcwd()
-file_name = os.path.join(curr_d, "UniversityCases","university_cases_" + this + ".csv")
+par = os.path.join(curr_d, os.pardir)
+par = os.path.abspath(par)
+
+file_name = os.path.join(par, "UniversityCases","university_cases_" + this + ".csv")
 frame.to_csv(file_name)
 
+# Just a file that keeps track of when I last scraped
 f = open('last_scrape.txt', 'a')
 f.write(file_name + '\n')
 f.close()

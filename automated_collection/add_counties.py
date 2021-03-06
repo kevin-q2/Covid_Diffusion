@@ -3,6 +3,17 @@ import numpy as np
 import datetime as dt
 import os
 
+#############################################################
+
+# Johns Hopkins keeps track of US county level cases
+# This is part of an automated program to combine that data
+# with the data that I'm collecting for US universities
+
+# **TO update requires a git pull from Johns Hopkins**
+
+##############################################################
+
+
 def add_the_cases(univ, county):
     univ_counties = univ.County
     county = county.loc[county.Country_Region == "US"]
@@ -28,8 +39,9 @@ def add_the_cases(univ, county):
 curr_d = os.getcwd()
 par = os.path.join(curr_d, os.pardir)
 par = os.path.abspath(par)
+parpar = os.path.dirname(par)
 
-cities = pd.read_csv(os.path.join(par, "US-Cities-Database","csv","us_cities.csv"))
+cities = pd.read_csv(os.path.join(parpar, "US-Cities-Database","csv","us_cities.csv"))
 
 f = open('last_scrape.txt', 'r')
 files = [i.strip() for i in f.readlines()]
@@ -44,7 +56,7 @@ for h in files:
     other_date = date_string.strftime("%m-%d-%Y")
 
     university = pd.read_csv(h)
-    county_file = os.path.join(par, 'johns_hopkins','csse_covid_19_data','csse_covid_19_daily_reports')
+    county_file = os.path.join(parpar, 'johns_hopkins','csse_covid_19_data','csse_covid_19_daily_reports')
     county_file = os.path.join(county_file, other_date + ".csv")
 
     file = ''
@@ -85,4 +97,4 @@ for h in files:
             #with_cases.columns = ["School", "Cases", "City", "County", "State", "Date", "County_Cases"]
             with_cases = with_cases[["School", "Cases", "County_Active_Cases","County_Total_Cases", "City", "County", "State", "Date"]]
             #print(with_cases)
-            with_cases.to_csv(os.path.join(curr_d, "UniversityCases", 'university_cases_' + under_scores + ".csv"))
+            with_cases.to_csv(os.path.join(par, "UniversityCases", 'university_cases_' + under_scores + ".csv"))
