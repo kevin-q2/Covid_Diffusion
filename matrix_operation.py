@@ -196,19 +196,30 @@ class mat_opr:
                 
         return complete_results, iso_results
 
-    def normalizer(self):
+    def normalizer(self, maxer=False):
         # This function normalizes a dataframe by dividing each column by its max value
         # Note: For this project the max value is assumed to be the last (cumulative cases)
         #       So this should work given that isotonic corrects all mistakes beforehand.
 
-        norm = self.dataframe.copy(deep=True)
+        # IF its not the case that the last should be the biggest, setting maxer = True will work
 
-        for i in norm.columns:
-            norm[i] /= norm[i].iloc[-1]
-            #norm[i] /= norm[i].max()
+        norm = self.dataframe.copy(deep=True)
+        if maxer:
+            for i in norm.columns:
+                norm[i] /= norm[i].max()
+        else:
+            for i in norm.columns:
+                norm[i] /= norm[i].iloc[-1]
 
         return mat_opr(norm)
+    """
+    def population_normalizer(self, pop_frame):
+        #Normalized based on populations. i.e. for schools divide all cases by total enrollment
 
+        norm = self.dataframe.copy(deep=True)
+
+        for i in norm.columns
+    """
     def new_case_calc(self):
         # This method returns a new matrix object where the cases are considered based on daily increase
         # instead of a cumulative count
@@ -492,13 +503,13 @@ class mat_opr:
 
         return X,Y,out
 
-    def sci_nmf(self, components = 2, procedure=None, separate = False):
+    def sci_nmf(self, components = 2, procedure=None, separate = False, max_iter=1000):
         # Performs non-negative matrix factorization
         # procedure takes one of the initial methods of approximation listed in the parameters for nmf here:
         # https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.NMF.html
 
         arr = np.array(self.array)
-        model = NMF(n_components= components, init=procedure, random_state=0)
+        model = NMF(n_components= components, init=procedure, random_state=0, max_iter=1000)
         W = model.fit_transform(arr)
         H = model.components_
 
