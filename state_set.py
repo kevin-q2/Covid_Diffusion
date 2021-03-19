@@ -18,7 +18,7 @@ from matrix_operation import mat_opr
 # otherwise it will just read a preloaded version
 
 class state_data(mat_opr):
-    def __init__(self, get_state_dat = False ,get_test_dat=False, saver = False):
+    def __init__(self, get_state_dat = False, saver = False):
 
         # State Case data
         if get_state_dat:
@@ -143,12 +143,15 @@ class state_test_data(mat_opr):
             date = re.search(r'\d{2}-\d{2}-\d{4}',fnames[f]).group(0)
             ind.append(date)
             date_frame = pd.read_csv(fnames[f], index_col="Province_State")
-
+            if 'People_Tested' in date_frame.columns:
+                caller = 'People_Tested'
+            else:
+                caller = 'Total_Test_Results'
             for d in date_frame.index:
                 try:
-                    test_rates[d].append(date_frame.loc[d,'Testing_Rate'])
+                    test_rates[d].append(date_frame.loc[d,caller])
                 except:
-                    test_rates[d] = [date_frame.loc[d,'Testing_Rate']]
+                    test_rates[d] = [date_frame.loc[d,caller]]
 
         #unecessary locations
         test_rates.pop('Recovered')
