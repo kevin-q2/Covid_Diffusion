@@ -5,7 +5,7 @@ from sklearn.isotonic import IsotonicRegression
 from sklearn.decomposition import  NMF
 import random
 import copy
-from NonnegMFPy import nmf
+#from NonnegMFPy import nmf
 
 # Note lmafit.py needs to be in the same directory for now
 from lmafit import lmafit_mc_adp
@@ -49,11 +49,13 @@ class mat_opr:
         # drops any row that contains all zeros or all of the value provided in val
         newframe = self.dataframe.loc[(self.dataframe!=val).any(axis=1)]
         self.dataframe = newframe
+        self.array = self.dataframe.values.tolist()
 
     def drop_zero_cols(self, val=0):
         # drops any column that contains all zeros or all of the value provided in val
         newframe = self.dataframe.loc[:, (self.dataframe!=val).any(axis=0)]
         self.dataframe = newframe
+        self.array = self.dataframe.values.tolist()
 
     def hide_rows(self, percent, non_random=None):
         # returns a new mat_opr object with a specified percent of the original rows randomly hidden
@@ -242,6 +244,35 @@ class mat_opr:
         news = pd.DataFrame(new_frame_dict)
         news.index = self.dataframe.index
         return mat_opr(news)
+
+    def pairwise_distance(self, axis=1):
+        # Calculates the pairwise distance between every row or column and all possible pairs
+        # axis = 1 --- columns
+        # axis = 0 --- rows
+        # returns a pandas dataframe of the distances 
+        # The returned dataframe is square in size 
+
+        if axis == 1:
+            dist = {col:[] for col in self.dataframe.columns}
+            for col in self.dataframe.columns:
+                for pair in self.dataframe.columns:
+                    col_arr = np.array(self.dataframe.loc[:,col])
+                    pair_arr = np.array(self.dataframe.loc[:,pair])
+                    dist[col].append(np.linalg.norm(col_arr - pair_arr))
+            
+            return pd.DataFrame.from_dict(dist)
+
+        else:
+            dist = {row:[] for col in self.dataframe.index}
+            for row in self.dataframe.index:
+                for pair in self.dataframe.index:
+                    row_arr = np.array(self.dataframe.loc[row,:])
+                    pair_arr = np.array(self.dataframe.loc[pair,:])
+                    dist[row].append(np.linalg.nor(row_arr - pair_arr))
+
+            return pd.DataFrame.from_dict(dist, orient='index')
+
+
 
     def non_mon(self, dicter):
         # is_col_inc() and is_row_inc() return a dictionary of indices that violate -- {column: [rows]}
@@ -522,6 +553,9 @@ class mat_opr:
         else:
             return W, H
 
+
+# taking this out for now because I'm not using it.
+"""
     def missing_nmf(self, components, max_iterations = 1000, separate = False):
         # this is just a different implementation of nmf that is able to handle
         # missing or unknown data
@@ -548,7 +582,7 @@ class mat_opr:
             return tor
         else:
             return w,h
-
+"""
             
 
 
