@@ -92,17 +92,14 @@ class nmf_cluster(mat_opr):
             # My own implementation of kmeans--
             arr = self.dataframe.T.values.tolist()
             minmin = kmeans_minus_minus(arr, num_clust, self.num_outliers)
-            clusty_dict, outlier_list = minmin.cluster()
-            n_counter = pd.Series([0 for i in range(len(self.dataframe.columns))])
-            for k in clusty_dict.keys():
-                for va in clusty_dict[k]:
-                    n_counter[va] = k
+            clust_labels = minmin.cluster()
+            n_counter = pd.Series(clust_labels)
             
             self.outliers = []
-            for o in outlier_list:
+            for o in np.where(clust_labels == -1)[0]:
                 colo = self.dataframe.columns[o]
                 self.outliers.append(colo)
-                n_counter = n_counter.drop(o,axis=0)
+                #n_counter = n_counter.drop(o,axis=0)
 
         else:
             raise ValueError("cluster has no method '" + str(self.cluster_method) + "'")
@@ -173,20 +170,22 @@ class nmf_cluster(mat_opr):
 
         # Outputs a seaborn pairplot of the data where the clusters are colored accordingly
 
-        y_cluster = np.transpose(np.array(self.y_table.values.tolist()))
-
         for n in num_tries:
             n_counter = self.cluster(num_clust = n)
+            n_drop = n_counter
+            for o in n_counter.loc[n_counter == -1].index:
+                n_drop = n_drop.drop(o,axis=0)
 
-            #silhouette_avg = silhouette_score(y_cluster, n_counter)
-            #print("For n_clusters =", n, "The average silhouette_score is :", silhouette_avg)
             to_drop = []
             for o in self.outliers:
                 to_drop.append(self.dataframe.columns.get_loc(o))
 
-
-            n_cluster_df = self.y_table.drop(to_drop, axis=1).T
+            n_cluster_df = self.y_table.T
             n_cluster_df['cluster'] = n_counter 
+            n_drop_df = self.y_table.drop(to_drop, axis=1).T
+
+            silhouette_avg = silhouette_score(np.array(n_drop_df.values.tolist()), n_drop)
+            print("For n_clusters =", n, "The average silhouette_score is :", silhouette_avg)
 
             pp = seaborn.pairplot(n_cluster_df, hue="cluster", diag_kind="hist", height=2, aspect=1, palette='tab20')
             fig = pp.fig
@@ -203,6 +202,7 @@ class nmf_cluster(mat_opr):
     def pairwise_plotter(self, num_tries):
         # takes a number of clusters to try ex) pairwise plotter (6) outputs clustering for 2 - 6 clusters
         # ouptuts a heatmap of the pairwise distance matrix for the clustered input + clustered factor Y
+        # Note: this plot does not include any outliers
 
         # this one is designed to be used separately from the rest
         # It takes a while because I did the simple O(n^2) implementation
@@ -213,6 +213,8 @@ class nmf_cluster(mat_opr):
             fig, axes = plt.subplots(1, 2,figsize=(10,5))
 
             labels = self.cluster(num_clust = r)
+            for o in labels.loc[labels == -1].index:
+                labels = labels.drop(o,axis=0)
 
             input_pair_dist = self.pairwise_distance()
             input_pair_dist.columns = range(len(input_pair_dist.columns))
@@ -300,7 +302,7 @@ class nmf_cluster(mat_opr):
         bt = baser.min().min()
         for b in baser.columns:
             baser[b].plot(ax=axys[b], title = "Basis " + str(b))
-            axys[b].set_ylim([bt - (bt * 0.2) - 0.2, tp + (tp * 0.2)])
+            axys[b].set_ylim([bt - (bt * 0.2) - 0.02, tp + (tp * 0.2)])
 
 
 
@@ -320,7 +322,7 @@ class nmf_cluster(mat_opr):
 
         top = self.dataframe.max().max()
         bot = self.dataframe.min().min()
-        self.plot_cluster(self.dataframe, labels, mean=True, axer=axer1, ylabel="Normalized Cases",
+        self.plot_cluster(self.dataframe, labels, mean=True, axer=axer1, ylabel="Normalized Cases", legend=False,
             title = "-- Cumulative Cases", ylimit = [bot - (bot * 0.1), top + (top * 0.1)])
 
         new_case_frame = self.new_case_calc()
@@ -384,11 +386,13 @@ class nmf_cluster(mat_opr):
         state_map[state_map['NAME'].isin(['Alaska','Hawaii']) == False].plot(column='cluster',
             ax=sx1, legend=True, categorical=True, figsize=(60,60), cmap='summer')
 
-        state_map[state_map['NAME'] == 'Alaska'].plot(column='cluster', ax=sx2, legend=True, 
-            categorical=True, figsize=(30,30), cmap=color_dict[state_map.loc[state_map.NAME == 'Alaska', 'cluster'].to_list()[0]])
+        if 'Alaska' in self.dataframe.columns:
+            state_map[state_map['NAME'] == 'Alaska'].plot(column='cluster', ax=sx2, legend=True, 
+                categorical=True, figsize=(30,30), cmap=color_dict[state_map.loc[state_map.NAME == 'Alaska', 'cluster'].to_list()[0]])
 
-        state_map[state_map['NAME']=='Hawaii'].plot(column='cluster', ax=sx3, legend=True, 
-            categorical=True, figsize=(30,30), cmap=color_dict[state_map.loc[state_map.NAME == 'Hawaii', 'cluster'].to_list()[0]])
+        if 'Hawaii' in self.dataframe.columns:
+            state_map[state_map['NAME']=='Hawaii'].plot(column='cluster', ax=sx3, legend=True, 
+                categorical=True, figsize=(30,30), cmap=color_dict[state_map.loc[state_map.NAME == 'Hawaii', 'cluster'].to_list()[0]])
 
         if 'Puerto Rico' in self.dataframe.columns:
             sx4 = fig.add_subplot(grid[(start + spacing * 3):(start + spacing * 3 + spacing * 2):, 2]) # Puerto Rico
@@ -397,26 +401,99 @@ class nmf_cluster(mat_opr):
             cmap=color_dict[state_map.loc[state_map.NAME == 'Puerto Rico', 'cluster'].to_list()[0]])
 
 
+    
+
+
+
+
+    def state_map_basis(self):
+        # a function to make a plot of the US states colored by their factorization
+        for rows in self.y_table.index:
+            labels = self.y_table.loc[rows, :]
+            fig = plt.figure(constrained_layout=True, figsize=(20,10))
+            fig.suptitle(rows, size='x-large')
+            grid = fig.add_gridspec(ncols = 3, nrows = 5)
+            start = 0
+            spacing = 1
+
+            
+            cluster_by_state = {}
+            for c in labels.index:
+                s_name = self.dataframe.iloc[:,c].name
+                cluster_by_state[s_name] = labels[c]
+
+            # json file with geographic info for each state -- required for geopandas
+            state_map = gp.read_file("US_States_geojson.json")
+
+            cluster_col = []
+            for i in state_map["NAME"]:
+                try:
+                    cluster_col.append(cluster_by_state[i])
+                except:
+                    cluster_col.append(np.nan)
+
+            state_map['cluster'] = cluster_col
+
+            sx1 = fig.add_subplot(grid[start:(start + spacing * 3), 0:2]) #for most states
+
+            sx2 = fig.add_subplot(grid[(start + spacing * 3):(start + spacing * 3 + spacing * 2), 0]) # alaska
+            sx3 = fig.add_subplot(grid[(start + spacing * 3):(start + spacing * 3 + spacing * 2):, 1]) # Hawaii
+            sx2.set_xlim(-200,-100)
+            sx3.set_xlim(-165,-150)
+            sx3.set_ylim(18,24)
+
+            # specific color map "summer"
+            cmapper = matplotlib.cm.get_cmap('Blues')
+            cspace = np.linspace(0,0.99, 100)
+
+            maxer = labels.max().max()
+            minner = labels.min().min()
+
+            # plot using geopandas .plot()
+            state_map[state_map['NAME'].isin(['Alaska','Hawaii']) == False].plot(column='cluster',
+                ax=sx1, legend=True, figsize=(60,60), cmap='Blues')
+            
+            if 'Alaska' in self.dataframe.columns:
+                al_val = state_map.loc[state_map['NAME'] == 'Alaska']['cluster']
+                state_map[state_map['NAME'] == 'Alaska'].plot(column='cluster', ax=sx2, legend=False, figsize=(30,30), 
+                cmap=ListedColormap(cmapper(cspace[int((al_val - minner)/(maxer - minner) * 100) - 1])))
+
+            if 'Hawaii' in self.dataframe.columns:
+                h_val = state_map.loc[state_map['NAME'] == 'Hawaii']['cluster']
+                state_map[state_map['NAME']=='Hawaii'].plot(column='cluster', ax=sx3, legend=False, figsize=(30,30), cmap=
+                ListedColormap(cmapper(cspace[int((h_val - minner)/(maxer - minner) * 100) - 1])))
+
+            if 'Puerto Rico' in self.dataframe.columns:
+                p_val = state_map.loc[state_map['NAME'] == 'Puerto Rico']['cluster']
+                sx4 = fig.add_subplot(grid[(start + spacing * 3):(start + spacing * 3 + spacing * 2):, 2]) # Puerto Rico
+                sx4.set_xlim(-68,-64)
+                state_map[state_map['NAME']=='Puerto Rico'].plot(column='cluster', ax=sx4, legend=True, figsize=(30,30), 
+                cmap=ListedColormap(cmapper(cspace[int((p_val - minner)/(maxer - minner) * 100) - 1])))
+
+
 
         
     def results(self):
 
         # cluster
         cluster_labels = self.cluster()
+        non_outliers = cluster_labels
+        for o in cluster_labels.loc[cluster_labels == -1].index:
+                non_outliers = non_outliers.drop(o,axis=0)
 
         # first cluster plot
-        fig1 = plt.figure(constrained_layout=True, figsize=(12,9))
+        fig1 = plt.figure(constrained_layout=True, figsize=(12,20))
         nrows = np.lcm(self.clusters, self.rank)
         grid1 = fig1.add_gridspec(ncols=2, nrows=nrows)
-        self.basis_cluster(cluster_labels, fig1, grid1)
+        self.basis_cluster(non_outliers, fig1, grid1)
         fig1.suptitle("Initial Cluster on the Basis Vectors of Y", size='x-large')
         plt.show()
         print()
 
         # second cluster plot
-        fig2 = plt.figure(constrained_layout=True, figsize = (12,9))
+        fig2 = plt.figure(constrained_layout=True, figsize = (12,20))
         grid2 = fig2.add_gridspec(ncols = 2, nrows = self.clusters)
-        self.case_cluster(cluster_labels, fig2, grid2)
+        self.case_cluster(non_outliers, fig2, grid2)
         fig2.suptitle("Results of basis clustering applied to the original data", size='x-large')
         plt.show()
         print()

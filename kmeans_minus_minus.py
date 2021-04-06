@@ -1,11 +1,12 @@
 import numpy as np
 import pandas as pd
 import random
+from sklearn.cluster import _kmeans
 from copy import copy, deepcopy
 
 ###############################################################################################################
 
-# This is an attempt at implementing the kmeans-- algorithm 
+# This is an attempt at implementing the kmeans algorithm 
 #
 # which is outlined here: http://users.ics.aalto.fi/gionis/kmmm.pdf
 #
@@ -14,74 +15,101 @@ from copy import copy, deepcopy
 # k: desired number of clusters
 # l: number of outliers you expect
 # max_iter (optional): number of iterations
+# tol (optional): minimum change in cluster centers before declaring convergence 
 #
 # OUTPUT from .cluster()
-
-# clusters: a dictionary with structure -- {cluster # : [0, 2, ...]}
-#           where 0,2, etc. are the indexes of n-dimensional points in X  
-#           ex) {0: [1], 1:[0]} -- means X[1] is in cluster 0 and X[0] is in cluster 1
 #
-# outliers: a list of points that are considered as outliers and have been removed from the clusters dict
-#            ex) [1,3] -- means X[1] and X[3] are outliers
+# best_labels: A list of cluster labels for the original data
+#              ex) [0, 1, 0] would mean that X[0] and X[2] are in cluster 0 and X[1] is in cluster 1
+#
+#       Note: a label of -1 means the point is an outlier
+#              ex) [0, 1, 0, -1] would mean that X[3] is an outlier and has not been placed in a cluster
+# 
 
 ###############################################################################################################
 
 
 
 class kmeans_minus_minus():
-    def __init__(self, X, k, l, max_iter=500):
-        self.X = X
+    def __init__(self, X, k, l, max_iter=1000, tol = 1e-10):
+        self.X = np.array(X)
         self.k = k
         self.l = l
-        self.max_iter = 500
-        
+        self.max_iter = max_iter
+        self.tol = tol
+ 
 
-    def cluster(self):                                                                                                                                                          
-        # start by randomly generating a length k-set of d dimensional points
-        mini = np.amin(self.X)
-        maxi = np.amax(self.X)
+    def cluster(self):       
 
-        C = [random.sample(np.linspace(mini,maxi, num=len(self.X[0])*2).tolist(), len(self.X[0])) for i in range(self.k)]
-        M = list(range(len(self.X)))
+        # Use sklearn to get a kmeans++ initialization of cluster centers
+        try:
+            # for older version of sklearn
+            C = _kmeans._init_centroids(self.X, self.k, "k-means++")
+        except:
+            # Updated sklearn
+            C, oth = _kmeans.kmeans_plusplus(self.X, self.k)
+
+        best_labels = None
+        best_inertia = None
+        best_centers = C
 
         for i in range(self.max_iter):
-            clusters = {g:[] for g in range(self.k)} 
+            labels = np.array([np.nan for lab in range(len(self.X))])
 
             # for each point calculate the distance to its nearest cluster center
-            d = {r:np.nan for r in M}
-            for j in M:
-                ds = -1
-                clus = -1
+            # label each point with its closest cluster center
+            d = {}
+            for j in range(len(self.X)):
+                ds = None
+                clus = None
                 for c in range(len(C)):
                     mop = np.linalg.norm(np.array(self.X[j]) - np.array(C[c]))
-                    if mop < ds or ds == -1:
+                    if ds is None or mop < ds:
                         ds = mop
                         clus = c
                 d[j] = ds
-                clusters[clus].append(j)
-        
+                labels[j] = clus
+
+
             # Reorder the data points in X by decreasing order of 
             # distance to their nearest center
-            M = sorted(d, key=d.get)
-            M.reverse()
+            km = sorted(d, key=d.get)
+            km.reverse()
 
-            # take out l outliers before updating the centers:
-            L = M[:self.l]
-            Li = copy(L)
-            Mi = M[self.l:]
+            # take out l outliers before calculating inertia / updating the centers:
+            # (Kmeans minus minus step)
+            L = km[:self.l]
+            Mi = km[self.l:]
+            for l in L:
+                labels[l] = -1
 
-            # Update the centers:
+            # Calculate inertia 
+            inertia = 0
+            for m in Mi:
+                inertia += d[m] ** 2
+
+            if best_inertia is None or inertia < best_inertia:
+                best_labels = labels
+                best_inertia = inertia
+                best_centers = C
+
+
+            # Update the centers for next iteration:
+            old = C.copy()
             for h in range(self.k):
-                for out in Li:
-                    if out in clusters[h]:
-                        clusters[h].remove(out)
-                        Li.remove(out)
-
-                P = np.array([self.X[col] for col in clusters[h]])
+                ind = np.where(labels == h)[0]
+                P = np.array([self.X[col] for col in ind])
                 new_center = P.mean(axis=0)
                 C[h] = new_center
 
-        return clusters, L
+            # OR break if we've reached convergence:
+            shift = np.linalg.norm(C - old)
+            if shift <= self.tol:
+                break
+
+
+        return best_labels.astype(int)
+    
         
 
 
