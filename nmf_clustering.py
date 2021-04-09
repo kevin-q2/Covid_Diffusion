@@ -84,7 +84,7 @@ class nmf_cluster(mat_opr):
         if self.cluster_method is None or self.cluster_method == 'kmeans':
             # Normal scikit learn version of kmeans++
             y_clust = np.transpose(np.array(self.Y))
-            kmeans = KMeans(n_clusters=num_clust).fit(y_clust)
+            kmeans = KMeans(n_clusters=num_clust, max_iter = 1000, tol = 1e-9).fit(y_clust)
             n_counter = pd.Series(kmeans.labels_)
             self.outliers = []
 
@@ -481,8 +481,12 @@ class nmf_cluster(mat_opr):
         for o in cluster_labels.loc[cluster_labels == -1].index:
                 non_outliers = non_outliers.drop(o,axis=0)
 
+        height = 9
+        if self.clusters >= 5:
+            height = 20
+
         # first cluster plot
-        fig1 = plt.figure(constrained_layout=True, figsize=(12,20))
+        fig1 = plt.figure(constrained_layout=True, figsize=(12,height))
         nrows = np.lcm(self.clusters, self.rank)
         grid1 = fig1.add_gridspec(ncols=2, nrows=nrows)
         self.basis_cluster(non_outliers, fig1, grid1)
@@ -491,7 +495,7 @@ class nmf_cluster(mat_opr):
         print()
 
         # second cluster plot
-        fig2 = plt.figure(constrained_layout=True, figsize = (12,20))
+        fig2 = plt.figure(constrained_layout=True, figsize = (12,height))
         grid2 = fig2.add_gridspec(ncols = 2, nrows = self.clusters)
         self.case_cluster(non_outliers, fig2, grid2)
         fig2.suptitle("Results of basis clustering applied to the original data", size='x-large')

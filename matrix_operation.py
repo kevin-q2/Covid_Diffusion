@@ -214,14 +214,34 @@ class mat_opr:
                 norm[i] /= norm[i].iloc[-1]
 
         return mat_opr(norm)
-    """
+
+
+    
     def population_normalizer(self, pop_frame):
         #Normalized based on populations. i.e. for schools divide all cases by total enrollment
+        # AS input it takes a dictionary where each key is a column name
+        # and each value is the population to divide by 
+        # ex) {'Alaska':731545}
 
         norm = self.dataframe.copy(deep=True)
+        for i in norm.columns:
+            norm[i] /= pop_frame[i]
 
-        for i in norm.columns
-    """
+        return mat_opr(norm)
+    
+
+    def moving_average(self, period):
+        move = {}
+        for col in self.dataframe.columns:
+            move[col] = self.dataframe.loc[:,col].rolling(window=3).mean()
+
+        roller = pd.DataFrame.from_dict(move)
+        roller.index = self.dataframe.index
+
+        return mat_opr(roller)
+
+        
+
     def new_case_calc(self):
         # This method returns a new matrix object where the cases are considered based on daily increase
         # instead of a cumulative count
@@ -540,7 +560,7 @@ class mat_opr:
         # https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.NMF.html
 
         arr = np.array(self.array)
-        model = NMF(n_components= components, init=procedure, random_state=0, max_iter=1000)
+        model = NMF(n_components= components, init=procedure, random_state=0, max_iter=1000, tol=1e-10)
         W = model.fit_transform(arr)
         H = model.components_
 
