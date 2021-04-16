@@ -90,6 +90,10 @@ class state_data(mat_opr):
 
         return cumul
 
+
+
+
+
     def get_other_data(self):
         try:
             # if this is being imported as a module
@@ -146,6 +150,69 @@ class state_data(mat_opr):
         cumul = cumul.sort_index()
 
         return cumul
+
+
+
+        
+
+    def get_incidence_rate(self):
+        try:
+            # if this is being imported as a module
+            cwd = os.path.dirname(os.path.realpath(__file__))
+            par = os.path.dirname(cwd)
+            par = os.path.abspath(par)
+
+        except NameError:
+            # else if its being used in its original file location
+            cwd = os.getcwd()
+            par = os.path.join(cwd, os.pardir)
+            par = os.path.abspath(par)
+
+        # path to John Hopkins dataset
+        state_path = os.path.join(par, 'johns_hopkins', 'csse_covid_19_data', 'csse_covid_19_daily_reports_us', '')
+
+        fnames = sorted(glob.glob(state_path+'*.csv'))
+        ind = []
+        state_rates = {}
+        for f in range(len(fnames)):
+            date = re.search(r'\d{2}-\d{2}-\d{4}',fnames[f]).group(0)
+            ind.append(date)
+            try:
+                date_frame = pd.read_csv(fnames[f], index_col="Province_State")
+
+                for d in date_frame.index:
+                    if f == 0:
+                        state_rates[d] = []
+                    try:
+                        state_rates[d].append(date_frame.loc[d,"Incident_Rate"])
+                    except KeyError:
+                        pass
+            except:
+                print(fnames[f])
+
+
+        # Some locations not being considered for now
+        nos = ['Recovered', 'American Samoa', 'Diamond Princess', 'Grand Princess', 'Northern Mariana Islands',
+         'Virgin Islands', 'Guam', 'Wuhan Evacuee', 'Puerto Rico']
+        for lock in nos:
+            try:
+                state_rates.pop(lock)
+            except:
+                pass
+
+        cumul = pd.DataFrame(data=state_rates, index=ind)
+        
+        days = []
+        for ind in cumul.index:
+            days.append(dt.datetime.strptime(ind, "%m-%d-%Y"))
+        
+        cumul.index = days
+        cumul = cumul.sort_index()
+
+        return cumul
+
+
+
 
 
 # state_test_data is a class to import state testing rate data

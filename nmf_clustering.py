@@ -265,7 +265,34 @@ class nmf_cluster(mat_opr):
                 print(self.outliers)
 
 
+    def basis_vectors(self, comparer = None):
+        # plot basis vectors of X
+        if self.rank % 2 == 1:
+            square = (self.rank + 1)//2
+        else:
+            square = self.rank//2
 
+        fig, axys = plt.subplots(square, 2, figsize=(12,9),constrained_layout=True)
+
+        baser = pd.DataFrame(self.X)
+        baser.index = self.dataframe.index
+        tp = baser.max().max()
+        bt = baser.min().min()
+        for b in baser.columns:
+            if comparer is not None:
+                minner = 0
+                dister = -1
+                for c in comparer.columns:
+                    dist = np.linalg.norm(baser[b] - comparer[c])
+                    if dist < dister or dister == -1:
+                        dister = dist
+                        minner = c
+                comparer[minner].plot(ax=axys.flatten()[b])
+                
+            baser[b].plot(ax=axys.flatten()[b], title = "Basis " + str(b))
+
+            axys.flatten()[b].set_ylim([bt - (bt * 0.2) - 0.02, tp + (tp * 0.2)])
+            axys.flatten()[b].legend(['Original', 'After outlier removal'])
 
 
 
@@ -298,6 +325,7 @@ class nmf_cluster(mat_opr):
             taker += nrows_rank
 
         baser = pd.DataFrame(self.X)
+        baser.index = self.dataframe.index
         tp = baser.max().max()
         bt = baser.min().min()
         for b in baser.columns:
