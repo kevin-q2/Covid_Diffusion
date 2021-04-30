@@ -43,7 +43,7 @@ from kmeans_minus_minus import kmeans_minus_minus
 #################################################
 
 class nmf_cluster(mat_opr):
-    def __init__(self,data,rank,clusters, cluster_method, num_outliers):
+    def __init__(self,data,rank,clusters, cluster_method, num_outliers, w_init = None, h_init = None):
         if isinstance(data, pd.DataFrame):
             mat_opr.__init__(self,data)
         elif isinstance(data, dict):
@@ -56,8 +56,25 @@ class nmf_cluster(mat_opr):
         self.cluster_method = cluster_method
         self.num_outliers = num_outliers
 
+        # Note that this is an initialization of W in the equation X = W * H
+        # sckikit learn only allows customization of H so to customize W requires solving
+        # X^T = H^T * W^T
+        self.w_init = w_init
+        self.h_init = h_init
+
         # Non negative matrix factorization:
-        self.X,self.Y = self.sci_nmf(self.rank, separate=True)
+        self.X = None
+        self.Y = None
+        if w_init is None:
+            if h_init is None:
+                self.X,self.Y = self.sci_nmf(self.rank, separate=True)
+            else:
+                self.X, self.Y = self.sci_nmf(self.rank, separate=True, h_init = h_init)
+        else:
+           # self.X,self.Y = self.sci_nmf(self.rank, separate=True, w_init = w_init, h_init = h_init)
+            self.X,self.Y = self.sci_nmf(self.rank, separate=True, w_init = True, h_init = np.transpose(w_init))
+            
+
         dotted = pd.DataFrame(np.dot(self.X,self.Y))
         dotted.index = self.dataframe.index
         dotted.columns = self.dataframe.columns
@@ -265,7 +282,7 @@ class nmf_cluster(mat_opr):
                 print(self.outliers)
 
 
-    def basis_vectors(self, comparer = None):
+    def basis_vectors(self, comparer = None, label = ''):
         # plot basis vectors of X
         if self.rank % 2 == 1:
             square = (self.rank + 1)//2
@@ -275,7 +292,8 @@ class nmf_cluster(mat_opr):
         fig, axys = plt.subplots(square, 2, figsize=(12,9),constrained_layout=True)
 
         baser = pd.DataFrame(self.X)
-        baser.index = self.dataframe.index
+        baser.index = pd.to_datetime(self.dataframe.index)
+
         tp = baser.max().max()
         bt = baser.min().min()
         for b in baser.columns:
@@ -292,7 +310,7 @@ class nmf_cluster(mat_opr):
             baser[b].plot(ax=axys.flatten()[b], title = "Basis " + str(b))
 
             axys.flatten()[b].set_ylim([bt - (bt * 0.2) - 0.02, tp + (tp * 0.2)])
-            axys.flatten()[b].legend(['Original', 'After outlier removal'])
+            axys.flatten()[b].legend([label, 'Original'])
 
 
 
@@ -500,8 +518,93 @@ class nmf_cluster(mat_opr):
 
 
 
+
+
+
+# SAme thing but for US Counties
+    def county_map_basis(self):
+        # a function to make a plot of the US counties colored by their NMF factorization
+        vmax = self.y_table.max().max() 
+        vmin = self.y_table.min().min() 
+
+        for rows in self.y_table.index:
+            labels = self.y_table.loc[rows, :]
+            fig = plt.figure(constrained_layout=True, figsize=(20,10))
+            fig.suptitle(rows, size='x-large')
+            grid = fig.add_gridspec(ncols = 3, nrows = 5)
+            start = 0
+            spacing = 1
+
+            
+            cluster_by_state = {}
+            for c in labels.index:
+                s_name = self.dataframe.iloc[:,c].name
+                cluster_by_state[s_name] = labels[c]
+
+            # json file with geographic info for each state -- required for geopandas
+            state_map = gp.read_file("US_States_geojson.json")
+            county_map = gp.read_file("US-counties.geojson")
+
+            cluster_col = []
+            for i in county_map.index:
+                county = county_map.iloc[i,:]
+                county_name = county["NAME"]
+                state_num = county["STATE"]
+                state_name = state_map.loc[state_map.STATE == state_num].NAME
+                state_name = state_name.loc[state_name.index[0]]
+
+                try:
+                    cluster_col.append(cluster_by_state[(state_name, county_name)])
+                except:
+                    cluster_col.append(np.nan)
+
+            county_map['cluster'] = cluster_col
+
+            sx1 = fig.add_subplot(grid[start:(start + spacing * 3), 0:2]) #for most states
+
+            #sx2 = fig.add_subplot(grid[(start + spacing * 3):(start + spacing * 3 + spacing * 2), 0]) # alaska
+            #sx3 = fig.add_subplot(grid[(start + spacing * 3):(start + spacing * 3 + spacing * 2):, 1]) # Hawaii
+            #sx2.set_xlim(-200,-100)
+            #sx3.set_xlim(-165,-150)
+            #sx3.set_ylim(18,24)
+
+            # specific color map "summer"
+            cmapper = matplotlib.cm.get_cmap('inferno')
+            cspace = np.linspace(0,0.99, 100)
+
+            maxer = labels.max().max()
+            minner = labels.min().min()
+
+
+            # plot using geopandas .plot()
+            county_map[~county_map['STATE'].isin(['02','15','72'])].plot(column='cluster',
+                ax=sx1, legend=True, figsize=(60,60), cmap='inferno')#, vmax = vmax, vmin=vmin)
+            
+            '''
+            states = self.dataframe.columns.get_level_values("state").value_counts().index
+
+            if 'Alaska' in states:
+                al_val = county_map.loc[county_map['STATE'] == '02']['cluster']
+                county_map[county_map['STATE'] == '02'].plot(column='cluster', ax=sx2, legend=False, figsize=(30,30), 
+                cmap=ListedColormap(cmapper(cspace[int((al_val - minner)/(maxer - minner) * 100) - 1])))
+
+            if 'Hawaii' in self.dataframe.columns:
+                h_val = county_map.loc[state_map['NAME'] == 'Hawaii']['cluster']
+                state_map[state_map['NAME']=='Hawaii'].plot(column='cluster', ax=sx3, legend=False, figsize=(30,30), cmap=
+                ListedColormap(cmapper(cspace[int((h_val - minner)/(maxer - minner) * 100) - 1])))
+
+            if 'Puerto Rico' in self.dataframe.columns:
+                p_val = state_map.loc[state_map['NAME'] == 'Puerto Rico']['cluster']
+                sx4 = fig.add_subplot(grid[(start + spacing * 3):(start + spacing * 3 + spacing * 2):, 2]) # Puerto Rico
+                sx4.set_xlim(-68,-64)
+                state_map[state_map['NAME']=='Puerto Rico'].plot(column='cluster', ax=sx4, legend=True, figsize=(30,30), 
+                cmap=ListedColormap(cmapper(cspace[int((p_val - minner)/(maxer - minner) * 100) - 1])))
+            '''
+
+
+
         
-    def results(self):
+    def state_results(self):
 
         # cluster
         cluster_labels = self.cluster()

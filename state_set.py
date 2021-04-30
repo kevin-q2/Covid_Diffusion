@@ -289,7 +289,6 @@ class state_test_data(mat_opr):
         test_rates.pop('Northern Mariana Islands')
         test_rates.pop('Guam')
         test_rates.pop('Virgin Islands')
-        test_rates.pop('Puerto Rico')
         cumul = pd.DataFrame(data=test_rates, index=ind)
         
         days = []
@@ -354,3 +353,102 @@ class state_test_data(mat_opr):
         cumul = cumul.sort_index()
 
         return cumul
+
+
+
+
+
+
+class county_data(mat_opr):
+    def __init__(self, get_county_dat = False, saver = False):
+
+        # State Case data
+        if get_county_dat:
+            self.count_df = self.get_county_data()
+            if saver:
+                self.count_df.to_csv("county_dataset.csv")
+
+        else:
+            try:
+                # If this is being imported as a module
+                cwd = os.path.dirname(os.path.realpath(__file__))
+                combo = os.path.join(cwd, "county_dataset.csv")
+                self.count_df = pd.read_csv(combo, index_col = [1,0])
+    
+            except:
+                # If being used in the original file location
+                self.count_df = pd.read_csv("county_dataset.csv", index_col = [1,0])
+
+        # initialize within the matrix operation framework
+        self.county_cases = super().__init__(self.count_df)
+
+    def get_county_data(self):
+        try:
+            # if this is being imported as a module
+            cwd = os.path.dirname(os.path.realpath(__file__))
+            par = os.path.dirname(cwd)
+            par = os.path.abspath(par)
+
+        except NameError:
+            # else if its being used in its original file location
+            cwd = os.getcwd()
+            par = os.path.join(cwd, os.pardir)
+            par = os.path.abspath(par)
+
+        # path to John Hopkins dataset
+        state_path = os.path.join(par, 'johns_hopkins', 'csse_covid_19_data', 'csse_covid_19_daily_reports', '')
+
+        fnames = sorted(glob.glob(state_path+'*.csv'))
+        ind = []
+
+        # a recent set to help me get consistent county names
+        recent = pd.read_csv(state_path + "04-12-2021.csv")
+        us = recent.loc[recent.Country_Region == "US"]
+        nons = ["Recovered", "Diamond Princess", "Grand Princess", "Northern Mariana Islands", "Guam", "Virgin Islands"]
+
+        multi = []
+
+        for state in us.Province_State.value_counts().index:
+            if state in nons:
+                pass
+            else:
+                for county in us.loc[us.Province_State == state].Admin2:
+                    #if county != "Unassigned":
+                    multi.append((state,county))
+
+        locations = pd.MultiIndex.from_tuples(multi, names=["state", "county"])
+        count_cases = [[] for i in range(len(locations))]
+
+        for f in range(len(fnames)):
+            date = re.search(r'\d{2}-\d{2}-\d{4}',fnames[f]).group(0)
+
+            if dt.datetime.strptime(date, "%m-%d-%Y") >= dt.datetime(2020, 3, 22):
+                ind.append(date)
+                date_frame = pd.read_csv(fnames[f])
+                date_frame = date_frame.loc[date_frame.Country_Region == "US"]
+                
+                for d in range(len(locations)):
+                    try:
+                        stater = date_frame.loc[date_frame.Province_State == locations[d][0]]
+                        counter = stater.loc[stater.Admin2 == locations[d][1]]
+                        count_cases[d].append(counter.loc[counter.index[0],"Confirmed"])
+                    except:
+                        count_cases[d].append(np.nan)
+
+            else:
+                pass
+
+
+        cumul = pd.DataFrame(data=count_cases, index=locations, columns = ind)
+
+        days = []
+        for inder in cumul.columns:
+            days.append(dt.datetime.strptime(inder, "%m-%d-%Y"))
+        
+        cumul.columns = days
+        cumul = cumul.reindex(sorted(days), axis = 1)
+
+        return cumul
+
+if __name__ == "__main__":
+    counter = county_data(True, True)

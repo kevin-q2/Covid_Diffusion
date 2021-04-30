@@ -217,16 +217,27 @@ class mat_opr:
 
 
     
-    def population_normalizer(self, pop_frame):
+    def population_normalizer(self, pop_frame, helpers = None):
         #Normalized based on populations. i.e. for schools divide all cases by total enrollment
         # AS input it takes a dictionary where each key is a column name
         # and each value is the population to divide by 
         # ex) {'Alaska':731545}
 
         norm = self.dataframe.copy(deep=True)
+        droppers = []
         for i in norm.columns:
-            norm[i] /= pop_frame[i]
-
+            try:
+                norm[i] /= pop_frame[i]
+            except:
+                if helpers is not None:
+                    try:
+                        norm[i] /= pop_frame[helpers[i]]
+                    except:
+                        print(i)
+                        droppers.append(i)
+                else:
+                    pass
+        norm = norm.drop(droppers, axis = 1)                
         return mat_opr(norm)
     
 
@@ -554,15 +565,37 @@ class mat_opr:
 
         return X,Y,out
 
-    def sci_nmf(self, components = 2, procedure=None, separate = False, max_iter=1000):
+    def sci_nmf(self, components = 2, procedure=None, separate = False, max_iter=1000, w_init = False, h_init = None):
         # Performs non-negative matrix factorization
         # procedure takes one of the initial methods of approximation listed in the parameters for nmf here:
         # https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.NMF.html
 
+        # Sklearn only allows initalization of H in the equation X = W * H
+        # to initialize W, set w_init to true and pass W^T into h_init to solve the equation X^T = H^T * W^T
+
         arr = np.array(self.array)
-        model = NMF(n_components= components, init=procedure, random_state=0, max_iter=1000, tol=1e-10)
-        W = model.fit_transform(arr)
-        H = model.components_
+
+        W = None
+        H = None
+        if h_init is None:
+            model = NMF(n_components= components, init=procedure, random_state=0, max_iter=1000, tol=1e-10)
+            W = model.fit_transform(arr)
+            H = model.components_
+        else:
+            model = NMF(n_components= components, init=None, max_iter=1000, tol=1e-10) #, regularization = 'components')
+            model.n_components_ = components
+            #W = model.fit_transform(X = arr, W = w_init, H = h_init)
+            #H = model.components_
+
+            model.components_ = h_init
+            if w_init:
+                H_transpose = model.transform(X = np.transpose(arr))
+                W = np.transpose(model.components_)
+                H = np.transpose(H_transpose)
+            else: 
+                W = model.transform(X = arr)
+                H = model.components_
+            
 
         # Return either multiplied together as a new object OR as decomposed matrices
         if separate == False:
