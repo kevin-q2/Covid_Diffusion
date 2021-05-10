@@ -24,21 +24,23 @@ class state_data(mat_opr):
         if get_state_dat:
             self.state_df = self.get_state_data()
             if saver:
-                self.state_df.to_csv("state_dataset.csv")
+                self.state_df.to_csv("collected_data/state_dataset.csv")
 
         else:
             try:
                 # If this is being imported as a module
                 cwd = os.path.dirname(os.path.realpath(__file__))
-                combo = os.path.join(cwd, "state_dataset.csv")
+                combo = os.path.join(cwd, "collected_data/state_dataset.csv")
                 self.state_df = pd.read_csv(combo, index_col = 0)
                 print(combo)
             except:
                 # If being used in the original file location
-                self.state_df = pd.read_csv("state_dataset.csv", index_col = 0)
+                self.state_df = pd.read_csv("collected_data/state_dataset.csv", index_col = 0)
 
         # initialize within the matrix operation framework
         self.state_cases = super().__init__(self.state_df)
+
+
 
     def get_state_data(self):
         try:
@@ -78,7 +80,7 @@ class state_data(mat_opr):
         state_cases.pop('Northern Mariana Islands')
         state_cases.pop('Virgin Islands')
         state_cases.pop('Guam')
-        state_cases.pop('Puerto Rico')
+
         cumul = pd.DataFrame(data=state_cases, index=ind)
         
         days = []
@@ -133,7 +135,7 @@ class state_data(mat_opr):
 
         # Some locations not being considered for now
         nos = ['Recovered', 'American Samoa', 'Diamond Princess', 'Grand Princess', 'Northern Mariana Islands',
-         'Virgin Islands', 'Guam', 'Wuhan Evacuee', 'Puerto Rico']
+         'Virgin Islands', 'Guam', 'Wuhan Evacuee']
         for lock in nos:
             try:
                 state_cases.pop(lock)
@@ -193,7 +195,7 @@ class state_data(mat_opr):
 
         # Some locations not being considered for now
         nos = ['Recovered', 'American Samoa', 'Diamond Princess', 'Grand Princess', 'Northern Mariana Islands',
-         'Virgin Islands', 'Guam', 'Wuhan Evacuee', 'Puerto Rico']
+         'Virgin Islands', 'Guam', 'Wuhan Evacuee']
         for lock in nos:
             try:
                 state_rates.pop(lock)
@@ -230,17 +232,17 @@ class state_test_data(mat_opr):
         if get_test_dat:
             self.test_df = self.get_test_data()
             if saver:
-                self.test_df.to_csv("state_testing.csv")
+                self.test_df.to_csv("collected_data/state_testing.csv")
 
         else:
             try:
                 # If this is being imported as a module
                 cwd = os.path.dirname(os.path.realpath(__file__))
-                combo = os.path.join(cwd, "state_testing.csv")
+                combo = os.path.join(cwd, "collected_data/state_testing.csv")
                 self.test_df = pd.read_csv(combo, index_col = 0)
             except:
                 # If being used in the original file location
-                self.test_df = pd.read_csv("state_testing.csv", index_col = 0)
+                self.test_df = pd.read_csv("collected_data/state_testing.csv", index_col = 0)
 
 
         # initialize within the matrix operation framework
@@ -337,7 +339,7 @@ class state_test_data(mat_opr):
     
         # Some locations not being considered for now
         nos = ['Recovered', 'American Samoa', 'Diamond Princess', 'Grand Princess', 'Northern Mariana Islands',
-         'Virgin Islands', 'Guam', 'Wuhan Evacuee', 'Puerto Rico']
+         'Virgin Islands', 'Guam', 'Wuhan Evacuee']
         for lock in nos:
             try:
                 test_rates.pop(lock)
@@ -366,18 +368,18 @@ class county_data(mat_opr):
         if get_county_dat:
             self.count_df = self.get_county_data()
             if saver:
-                self.count_df.to_csv("county_dataset.csv")
+                self.count_df.to_csv("collected_data/county_dataset.csv")
 
         else:
             try:
                 # If this is being imported as a module
                 cwd = os.path.dirname(os.path.realpath(__file__))
-                combo = os.path.join(cwd, "county_dataset.csv")
+                combo = os.path.join(cwd, "collected_data/county_dataset.csv")
                 self.count_df = pd.read_csv(combo, index_col = [1,0])
     
             except:
                 # If being used in the original file location
-                self.count_df = pd.read_csv("county_dataset.csv", index_col = [1,0])
+                self.count_df = pd.read_csv("collected_data/county_dataset.csv", index_col = [1,0])
 
         # initialize within the matrix operation framework
         self.county_cases = super().__init__(self.count_df)
@@ -450,5 +452,11 @@ class county_data(mat_opr):
 
         return cumul
 
-if __name__ == "__main__":
-    counter = county_data(True, True)
+
+
+
+if __name__ == 'main':
+    # update the datasets.
+    state_data(True, True)
+    state_test_data(True, True)
+    county_data(True, True)
