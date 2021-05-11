@@ -217,7 +217,7 @@ class mat_opr:
 
 
     
-    def population_normalizer(self, pop_frame, helpers = None):
+    def population_normalizer(self, pop_frame, level = None):
         #Normalized based on populations. i.e. for schools divide all cases by total enrollment
         # AS input it takes a dictionary where each key is a column name
         # and each value is the population to divide by 
@@ -229,10 +229,10 @@ class mat_opr:
             try:
                 norm[i] /= pop_frame[i]
             except:
-                if helpers is not None:
+                if level is not None:
                     try:
-                        norm[i] /= pop_frame[helpers[i]]
-                    except:
+                        norm[i] /= pop_frame[i[level]]
+                    except KeyError:
                         print(i)
                         droppers.append(i)
                 else:

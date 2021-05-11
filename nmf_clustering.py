@@ -552,9 +552,10 @@ class nmf_cluster(mat_opr):
                 state_num = county["STATE"]
                 state_name = state_map.loc[state_map.STATE == state_num].NAME
                 state_name = state_name.loc[state_name.index[0]]
+                fips = int(county["id"])
 
                 try:
-                    cluster_col.append(cluster_by_state[(state_name, county_name)])
+                    cluster_col.append(cluster_by_state[(state_name, county_name,fips)])
                 except:
                     cluster_col.append(np.nan)
 
@@ -596,6 +597,7 @@ class nmf_cluster(mat_opr):
                 sx4 = fig.add_subplot(grid[(start + spacing * 3):(start + spacing * 3 + spacing * 2):, 2]) # Puerto Rico
                 sx4.set_xlim(-68,-64)
                 county_map[county_map['STATE']=='72'].plot(column='cluster', ax=sx4, legend=True, figsize=(30,30), cmap = 'inferno')
+            
             
 
 
