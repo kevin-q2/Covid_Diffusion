@@ -74,6 +74,49 @@ nmf_tests.ipynb
 
 county_distances.csv
 
+.vscode/
+MTurk_Data/
+MTurk_raw/
+MTurk_tests/
+My Project-43003d8d0689.json
+Older_tests/
+analysis/.vs/
+analysis/Big-10.ipynb
+analysis/Cross Validation.ipynb
+analysis/NY Times.ipynb
+analysis/NYT-Big10.ipynb
+
+analysis/completion_tests.ipynb
+analysis/matrix_completion.ipynb
+analysis/matrix_completion1.ipynb
+analysis/time_shift.ipynb
+automated_collection/last_scrape.txt
+
+collected_data/co-est2019-alldata.csv
+collected_data/state_census_estimate.csv
+
+dashboard_scraper.py
+dict.txt
+enrollment_search.py
+kmeans_minus_minus.py
+kmeansmm_testing.py
+nmf_method.py
+nmf_missing_env/
+normalized by population (1).pdf
+nyt_scrape.html
+puerto_rico_census.csv
+reopen_cleaning.py
+scraping/
+test.bat
+turk_approve.py
+turk_automater.py
+turk_collection.py
+turk_control.py
+turk_to_frame.py
+unused data/
+values.py
+
+
 UniversityCases/university_cases_01_01_21.csv
 UniversityCases/university_cases_01_02_21.csv
 UniversityCases/university_cases_01_03_21.csv
