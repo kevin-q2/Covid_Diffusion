@@ -1,4 +1,5 @@
 import os
+import sys
 import glob
 import re
 import pandas as pd
@@ -6,6 +7,12 @@ import datetime as dt
 import random
 import numpy as np
 import copy
+
+
+cwd = os.getcwd()
+par = os.path.dirname(cwd)
+parpar = os.path.dirname(par)
+sys.path.append(par)
 from matrix_operation import mat_opr
 
 # A few classes to import a cleaned/seperated version of the Johns Hopkins Case + Testing data
@@ -20,6 +27,7 @@ from matrix_operation import mat_opr
 class state_data(mat_opr):
     def __init__(self, get_state_dat = False, saver = False):
 
+        '''
         # State Case data
         if get_state_dat:
             self.state_df = self.get_state_data()
@@ -36,6 +44,15 @@ class state_data(mat_opr):
             except:
                 # If being used in the original file location
                 self.state_df = pd.read_csv("collected_data/state_dataset.csv", index_col = 0)
+        '''
+
+         # State Case data
+        if get_state_dat:
+            self.state_df = self.get_state_data()
+            if saver:
+                self.state_df.to_csv(os.path.join(par, "collected_data/state_dataset.csv"))
+        else:
+            self.state_df = pd.read_csv(os.path.join(par, "collected_data/state_dataset.csv"), index_col = 0)
 
         # initialize within the matrix operation framework
         self.state_cases = super().__init__(self.state_df)
@@ -43,6 +60,7 @@ class state_data(mat_opr):
 
 
     def get_state_data(self):
+        '''
         try:
             # if this is being imported as a module
             cwd = os.path.dirname(os.path.realpath(__file__))
@@ -54,9 +72,10 @@ class state_data(mat_opr):
             cwd = os.getcwd()
             par = os.path.join(cwd, os.pardir)
             par = os.path.abspath(par)
+        '''
 
         # path to John Hopkins dataset
-        state_path = os.path.join(par, 'johns_hopkins', 'csse_covid_19_data', 'csse_covid_19_daily_reports_us', '')
+        state_path = os.path.join(parpar, 'johns_hopkins', 'csse_covid_19_data', 'csse_covid_19_daily_reports_us', '')
 
         fnames = sorted(glob.glob(state_path+'*.csv'))
         ind = []
@@ -97,6 +116,7 @@ class state_data(mat_opr):
 
 
     def get_other_data(self):
+        '''
         try:
             # if this is being imported as a module
             cwd = os.path.dirname(os.path.realpath(__file__))
@@ -108,9 +128,10 @@ class state_data(mat_opr):
             cwd = os.getcwd()
             par = os.path.join(cwd, os.pardir)
             par = os.path.abspath(par)
+        '''
 
         # path to John Hopkins dataset
-        state_path = os.path.join(par, 'johns_hopkins', 'csse_covid_19_data', 'csse_covid_19_daily_reports', '')
+        state_path = os.path.join(parpar, 'johns_hopkins', 'csse_covid_19_data', 'csse_covid_19_daily_reports', '')
 
         fnames = sorted(glob.glob(state_path+'*.csv'))
         ind = []
@@ -158,6 +179,7 @@ class state_data(mat_opr):
         
 
     def get_incidence_rate(self):
+        '''
         try:
             # if this is being imported as a module
             cwd = os.path.dirname(os.path.realpath(__file__))
@@ -169,9 +191,10 @@ class state_data(mat_opr):
             cwd = os.getcwd()
             par = os.path.join(cwd, os.pardir)
             par = os.path.abspath(par)
+        '''
 
         # path to John Hopkins dataset
-        state_path = os.path.join(par, 'johns_hopkins', 'csse_covid_19_data', 'csse_covid_19_daily_reports_us', '')
+        state_path = os.path.join(parpar, 'johns_hopkins', 'csse_covid_19_data', 'csse_covid_19_daily_reports_us', '')
 
         fnames = sorted(glob.glob(state_path+'*.csv'))
         ind = []
@@ -228,6 +251,8 @@ class state_data(mat_opr):
 # setting saver to True allows saving of the datasets for updates
 class state_test_data(mat_opr):
     def __init__(self,get_test_dat=False, saver = False):
+
+        '''
         # State testing Rate Data
         if get_test_dat:
             self.test_df = self.get_test_data()
@@ -243,13 +268,21 @@ class state_test_data(mat_opr):
             except:
                 # If being used in the original file location
                 self.test_df = pd.read_csv("collected_data/state_testing.csv", index_col = 0)
-
+        '''
+        # State testing Rate Data
+        if get_test_dat:
+            self.test_df = self.get_test_data()
+            if saver:
+                self.test_df.to_csv(os.path.join("collected_data/state_testing.csv"))
+        else:
+            self.test_df = pd.read_csv(os.path.join(par, "collected_data/state_testing.csv"), index_col = 0)
 
         # initialize within the matrix operation framework
         self.state_testing = super().__init__(self.test_df)
 
     def get_test_data(self):
         # same process but with testing rates
+        '''
         try:
             # if this is being imported as a module
             cwd = os.path.dirname(os.path.realpath(__file__))
@@ -261,9 +294,10 @@ class state_test_data(mat_opr):
             cwd = os.getcwd()
             par = os.path.join(cwd, os.pardir)
             par = os.path.abspath(par)
+        '''
 
         #path to johns hopkins data
-        state_path = os.path.join(par, 'johns_hopkins', 'csse_covid_19_data', 'csse_covid_19_daily_reports_us', '')
+        state_path = os.path.join(parpar, 'johns_hopkins', 'csse_covid_19_data', 'csse_covid_19_daily_reports_us', '')
 
         fnames = sorted(glob.glob(state_path+'*.csv'))
         ind = []
@@ -304,6 +338,7 @@ class state_test_data(mat_opr):
 
     def get_positivity_rates(self):
         # same process but with testing rates
+        '''
         try:
             # if this is being imported as a module
             cwd = os.path.dirname(os.path.realpath(__file__))
@@ -315,9 +350,10 @@ class state_test_data(mat_opr):
             cwd = os.getcwd()
             par = os.path.join(cwd, os.pardir)
             par = os.path.abspath(par)
+        '''
 
         #path to johns hopkins data
-        state_path = os.path.join(par, 'johns_hopkins', 'csse_covid_19_data', 'csse_covid_19_daily_reports_us', '')
+        state_path = os.path.join(parpar, 'johns_hopkins', 'csse_covid_19_data', 'csse_covid_19_daily_reports_us', '')
 
         fnames = sorted(glob.glob(state_path+'*.csv'))
         ind = []
@@ -359,104 +395,7 @@ class state_test_data(mat_opr):
 
 
 
-
-
-class county_data(mat_opr):
-    def __init__(self, get_county_dat = False, saver = False):
-
-        # State Case data
-        if get_county_dat:
-            self.count_df = self.get_county_data()
-            if saver:
-                self.count_df.to_csv("collected_data/county_dataset.csv")
-
-        else:
-            try:
-                # If this is being imported as a module
-                cwd = os.path.dirname(os.path.realpath(__file__))
-                combo = os.path.join(cwd, "collected_data/county_dataset.csv")
-                self.count_df = pd.read_csv(combo, index_col = [1,0])
-    
-            except:
-                # If being used in the original file location
-                self.count_df = pd.read_csv("collected_data/county_dataset.csv", index_col = [1,0])
-
-        # initialize within the matrix operation framework
-        self.county_cases = super().__init__(self.count_df)
-
-    def get_county_data(self):
-        try:
-            # if this is being imported as a module
-            cwd = os.path.dirname(os.path.realpath(__file__))
-            par = os.path.dirname(cwd)
-            par = os.path.abspath(par)
-
-        except NameError:
-            # else if its being used in its original file location
-            cwd = os.getcwd()
-            par = os.path.join(cwd, os.pardir)
-            par = os.path.abspath(par)
-
-        # path to John Hopkins dataset
-        state_path = os.path.join(par, 'johns_hopkins', 'csse_covid_19_data', 'csse_covid_19_daily_reports', '')
-
-        fnames = sorted(glob.glob(state_path+'*.csv'))
-        ind = []
-
-        # a recent set to help me get consistent county names
-        recent = pd.read_csv(state_path + "04-12-2021.csv")
-        us = recent.loc[recent.Country_Region == "US"]
-        nons = ["Recovered", "Diamond Princess", "Grand Princess", "Northern Mariana Islands", "Guam", "Virgin Islands"]
-
-        multi = []
-
-        for state in us.Province_State.value_counts().index:
-            if state in nons:
-                pass
-            else:
-                for county in us.loc[us.Province_State == state].Admin2:
-                    #if county != "Unassigned":
-                    multi.append((state,county))
-
-        locations = pd.MultiIndex.from_tuples(multi, names=["state", "county"])
-        count_cases = [[] for i in range(len(locations))]
-
-        for f in range(len(fnames)):
-            date = re.search(r'\d{2}-\d{2}-\d{4}',fnames[f]).group(0)
-
-            if dt.datetime.strptime(date, "%m-%d-%Y") >= dt.datetime(2020, 3, 22):
-                ind.append(date)
-                date_frame = pd.read_csv(fnames[f])
-                date_frame = date_frame.loc[date_frame.Country_Region == "US"]
-                
-                for d in range(len(locations)):
-                    try:
-                        stater = date_frame.loc[date_frame.Province_State == locations[d][0]]
-                        counter = stater.loc[stater.Admin2 == locations[d][1]]
-                        count_cases[d].append(counter.loc[counter.index[0],"Confirmed"])
-                    except:
-                        count_cases[d].append(np.nan)
-
-            else:
-                pass
-
-
-        cumul = pd.DataFrame(data=count_cases, index=locations, columns = ind)
-
-        days = []
-        for inder in cumul.columns:
-            days.append(dt.datetime.strptime(inder, "%m-%d-%Y"))
-        
-        cumul.columns = days
-        cumul = cumul.reindex(sorted(days), axis = 1)
-
-        return cumul
-
-
-
-
-if __name__ == 'main':
+if __name__ == '__main__':
     # update the datasets.
-    state_data(True, True)
-    state_test_data(True, True)
-    county_data(True, True)
+    state_data(True, False)
+    state_test_data(True, False)

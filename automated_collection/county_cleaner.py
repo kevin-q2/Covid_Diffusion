@@ -6,21 +6,23 @@ import datetime as dt
 import random
 import numpy as np
 import copy
-from matrix_operation import mat_opr
-#from fuzzywuzzy import process
 
 
 # a few functions related to cleaning the county level data
 
 def county_cases(saver = False):
-    # this is an object which can be imported to get a nice version of county case data
+    # this is a function which can be used to get a nice version of county case data
 
     # this will update the data If you do a git pull from Johns hopkins beforehand
     # and setting saver to true will save the updated dataset.
 
     # Unfortunately this takes quite a bit of time because it is alot of data to sort through
     # I might look into making it faster in the future
+    cwd = os.getcwd()
+    par = os.path.dirname(cwd)
+    parpar = os.path.dirname(par)
 
+    '''
     try:
         # if this is being imported as a module
         cwd = os.path.dirname(os.path.realpath(__file__))
@@ -32,9 +34,10 @@ def county_cases(saver = False):
         cwd = os.getcwd()
         par = os.path.join(cwd, os.pardir)
         par = os.path.abspath(par)
+    '''
 
     # path to John Hopkins dataset
-    johns_path = os.path.join(par, 'johns_hopkins', 'csse_covid_19_data', 'csse_covid_19_daily_reports', '')
+    johns_path = os.path.join(parpar, 'johns_hopkins', 'csse_covid_19_data', 'csse_covid_19_daily_reports', '')
 
     fnames = sorted(glob.glob(johns_path+'*.csv'))
     ind = []
@@ -85,7 +88,6 @@ def county_cases(saver = False):
         else:
             pass
 
-    print(tot)
     cumul = pd.DataFrame(data=count_cases, index=locations, columns = ind)
 
     days = []
@@ -103,14 +105,13 @@ def county_cases(saver = False):
         if ind[1] in uns or ind[1] == 'Unassigned':
             to_drop.append(ind)
 
-    print(to_drop)
     cumul = cumul.drop(to_drop,axis=0)
 
     # fill NaN + only considering the timeframe from 4/12/20 - present
     cumul = cumul.fillna(0)
 
     if saver:
-        cumul.to_csv("collected_data/county_dataset.csv")
+        cumul.to_csv(os.path.join(par, "collected_data/county_dataset.csv"))
 
     return cumul
 
@@ -118,45 +119,16 @@ def county_cases(saver = False):
 
 
 
-def county_census():
+def county_census(saver = False):
     # to clean up the census data for use
+    cwd = os.getcwd()
+    par = os.path.dirname(cwd)
+    parpar = os.path.dirname(par)
 
-    county_case = pd.read_csv("collected_data/county_dataset.csv", index_col = [0,1,2])
+    county_case = pd.read_csv(os.path.join(par, "collected_data/county_dataset.csv"), index_col = [0,1,2])
     #opener = pd.read_excel("collected_data/co-est2019-alldata.xlsx")
-    opener = pd.read_csv("collected_data/co-est2019-alldata.csv", engine = 'python')
-    puerto = pd.read_csv("collected_data/puerto_rico_census.csv", index_col = 0)
-
-    """
-    rel = opener.iloc[4:3146]
-
-    rel.columns = ['County','Census','Estimates Base','2010',
-    '2011','2012','2013','2014','2015','2016','2017','2018','2019']
-
-    rel.index = range(len(rel.index))
-
-
-    # change up the counties
-    counts = []
-    drops = []
-    for count in rel.County:
-        rep = count[1:]
-        rep = rep.lstrip()
-        splot = rep.split(", ")
-        
-        
-        reppers = [" County", " city", " Parish", " Municipality", " and", 
-        " Borough", "Census Area"]
-        for r in reppers:
-            splot[0] = splot[0].replace(r, '')
-
-        state_match = county_case.loc[splot[1].strip(),:].index.get_level_values(0).to_list()
-        match = process.extractOne(splot[0], state_match)
-        if match[1] >= 85:
-            counts.append((splot[1], match[0], county_case.loc[(splot[1], match[0]),:].index[0]))
-        else:
-            print(splot[0], match)
-            drops.append(rel.loc[rel.County == count].index[0])
-    """
+    opener = pd.read_csv(os.path.join(par, "collected_data/co-est2019-alldata.csv"), engine = 'python')
+    puerto = pd.read_csv(os.path.join(par, "collected_data/puerto_rico_census.csv"), index_col = 0)
 
     rel = opener['POPESTIMATE2019']
     counts = []
@@ -197,12 +169,12 @@ def county_census():
     rel = pd.concat([rel, puerto])
     #rel.columns = ['Population Estimate']
 
-
-    print(rel)
-    rel.to_csv("collected_data/county_census.csv")
+    if saver:
+        rel.to_csv(os.path.join(par, "collected_data/county_census.csv"))
     return rel
 
 
-#def county_adjacency():
 
-
+if __name__ == "__main__":
+    county_cases()
+    county_census()
