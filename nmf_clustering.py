@@ -15,9 +15,6 @@ import matplotlib.gridspec as gridspec
 from matplotlib.colors import ListedColormap
 import matplotlib.cm
 from matrix_operation import mat_opr
-from Dataset import dataset
-from state_set import state_data
-from state_set import state_test_data
 import kmeans_minus_minus
 import importlib
 importlib.reload(kmeans_minus_minus)
@@ -454,6 +451,9 @@ class nmf_cluster(mat_opr):
 
     def state_map_basis(self):
         # a function to make a plot of the US states colored by their factorization
+        g_max = self.y_table.max().max() 
+        g_min = self.y_table.min().min() 
+
         for rows in self.y_table.index:
             labels = self.y_table.loc[rows, :]
             fig = plt.figure(constrained_layout=True, figsize=(20,10))
@@ -488,33 +488,102 @@ class nmf_cluster(mat_opr):
             sx3.set_xlim(-165,-150)
             sx3.set_ylim(18,24)
 
-            # specific color map "summer"
-            cmapper = matplotlib.cm.get_cmap('Blues')
+            # specific color map "Blues"
+            cmapper = matplotlib.cm.get_cmap('inferno')
             cspace = np.linspace(0,0.99, 100)
 
-            maxer = labels.max().max()
-            minner = labels.min().min()
+            #maxer = labels.max().max()
+            #minner = labels.min().min()
+
 
             # plot using geopandas .plot()
-            state_map[state_map['NAME'].isin(['Alaska','Hawaii']) == False].plot(column='cluster',
-                ax=sx1, legend=True, figsize=(60,60), cmap='Blues')
+            state_map[state_map['NAME'].isin(['Alaska','Hawaii', 'Puerto Rico']) == False].plot(column='cluster',
+                ax=sx1, legend=True, vmax = g_max,vmin = g_min, figsize=(60,60), cmap='inferno')
+            
             
             if 'Alaska' in self.dataframe.columns:
                 al_val = state_map.loc[state_map['NAME'] == 'Alaska']['cluster']
-                state_map[state_map['NAME'] == 'Alaska'].plot(column='cluster', ax=sx2, legend=False, figsize=(30,30), 
-                cmap=ListedColormap(cmapper(cspace[int((al_val - minner)/(maxer - minner) * 100) - 1])))
+                state_map[state_map['NAME'] == 'Alaska'].plot(column='cluster', ax=sx2, legend=False, figsize=(30,30), cmap = 'inferno', vmax = g_max, vmin = g_min)
+                #cmap=ListedColormap(cmapper(cspace[int((al_val - g_min)/(g_max - g_min) * 100) - 1])))
 
             if 'Hawaii' in self.dataframe.columns:
                 h_val = state_map.loc[state_map['NAME'] == 'Hawaii']['cluster']
-                state_map[state_map['NAME']=='Hawaii'].plot(column='cluster', ax=sx3, legend=False, figsize=(30,30), cmap=
-                ListedColormap(cmapper(cspace[int((h_val - minner)/(maxer - minner) * 100) - 1])))
+                state_map[state_map['NAME']=='Hawaii'].plot(column='cluster', ax=sx3, legend=False, figsize=(30,30), cmap = 'inferno', vmax = g_max, vmin = g_min)
+                #cmap=ListedColormap(cmapper(cspace[int((h_val - g_min)/(g_max - g_min) * 100) - 1])))
 
             if 'Puerto Rico' in self.dataframe.columns:
                 p_val = state_map.loc[state_map['NAME'] == 'Puerto Rico']['cluster']
                 sx4 = fig.add_subplot(grid[(start + spacing * 3):(start + spacing * 3 + spacing * 2):, 2]) # Puerto Rico
                 sx4.set_xlim(-68,-64)
-                state_map[state_map['NAME']=='Puerto Rico'].plot(column='cluster', ax=sx4, legend=False, figsize=(30,30), 
-                cmap=ListedColormap(cmapper(cspace[int((p_val - minner)/(maxer - minner) * 100) - 1])))
+                state_map[state_map['NAME']=='Puerto Rico'].plot(column='cluster', ax=sx4, legend=False, figsize=(30,30), cmap = 'inferno', vmax = g_max, vmin = g_min)
+                #cmap=ListedColormap(cmapper(cspace[int((p_val - g_min)/(g_max - g_min) * 100) - 1])))
+
+
+    def state_per_capita(self):
+        # similar to the above functions but just for graphing US map once
+        # This is bad coding but I'm going to leave it for now.
+
+        us_norm = self.dataframe
+
+        cluster_by_state = {}
+        for c in us_norm.columns:
+            cluster_by_state[c] = us_norm.loc[:,c].sum()
+
+        g_max = max(cluster_by_state.values())
+        g_min = min(cluster_by_state.values())
+
+        # json file with geographic info for each state -- required for geopandas
+        state_map = gp.read_file("US_States_geojson.json")
+
+        cluster_col = []
+        for i in state_map["NAME"]:
+            try:
+                cluster_col.append(cluster_by_state[i])
+            except:
+                cluster_col.append(np.nan)
+
+        state_map['cluster'] = cluster_col
+
+        fig = plt.figure(constrained_layout=True, figsize=(20,10))
+        fig.suptitle("US Cumulative Cases per capita", size='x-large')
+        grid = fig.add_gridspec(ncols = 3, nrows = 5)
+        start = 0
+        spacing = 1
+
+        sx1 = fig.add_subplot(grid[start:(start + spacing * 3), 0:2]) #for most states
+
+        sx2 = fig.add_subplot(grid[(start + spacing * 3):(start + spacing * 3 + spacing * 2), 0]) # alaska
+        sx3 = fig.add_subplot(grid[(start + spacing * 3):(start + spacing * 3 + spacing * 2):, 1]) # Hawaii
+        sx2.set_xlim(-200,-100)
+        sx3.set_xlim(-165,-150)
+        sx3.set_ylim(18,24)
+
+        # specific color map "Inferno"
+        cmapper = matplotlib.cm.get_cmap('inferno')
+        cspace = np.linspace(0,0.99, 100)
+
+        # plot using geopandas .plot()
+        state_map[state_map['NAME'].isin(['Alaska','Hawaii', 'Puerto Rico']) == False].plot(column='cluster',
+            ax=sx1, legend=True, vmax = g_max,vmin = g_min, figsize=(60,60), cmap='inferno')
+        
+        
+        if 'Alaska' in self.dataframe.columns:
+            al_val = state_map.loc[state_map['NAME'] == 'Alaska']['cluster']
+            state_map[state_map['NAME'] == 'Alaska'].plot(column='cluster', ax=sx2, legend=False, figsize=(30,30), cmap = 'inferno', vmax = g_max, vmin = g_min)
+            #cmap=ListedColormap(cmapper(cspace[int((al_val - g_min)/(g_max - g_min) * 100) - 1])))
+
+        if 'Hawaii' in self.dataframe.columns:
+            h_val = state_map.loc[state_map['NAME'] == 'Hawaii']['cluster']
+            state_map[state_map['NAME']=='Hawaii'].plot(column='cluster', ax=sx3, legend=False, figsize=(30,30), cmap='inferno',vmax = g_max, vmin = g_min)
+            #ListedColormap(cmapper(cspace[int((h_val - g_min)/(g_max - g_min) * 100)])))
+
+        if 'Puerto Rico' in self.dataframe.columns:
+            p_val = state_map.loc[state_map['NAME'] == 'Puerto Rico']['cluster']
+            sx4 = fig.add_subplot(grid[(start + spacing * 3):(start + spacing * 3 + spacing * 2):, 2]) # Puerto Rico
+            sx4.set_xlim(-68,-64)
+            state_map[state_map['NAME']=='Puerto Rico'].plot(column='cluster', ax=sx4, legend=False, figsize=(30,30), cmap = 'inferno', vmax = g_max, vmin = g_min)
+
+
 
 
 
@@ -569,34 +638,26 @@ class nmf_cluster(mat_opr):
             sx3.set_xlim(-165,-150)
             sx3.set_ylim(18,24)
 
-            # specific color map "inferno"
-            cmapper = matplotlib.cm.get_cmap('inferno')
-            cspace = np.linspace(0,0.99, 100)
-
-            maxer = labels.max().max()
-            minner = labels.min().min()
-
-
 
             # plot using geopandas .plot()
             county_map[~county_map['STATE'].isin(['02','15','72'])].plot(column='cluster',
-                ax=sx1, legend=True, figsize=(60,60), cmap='inferno')#, vmax = vmax, vmin=vmin)
+                ax=sx1, legend=True, figsize=(60,60), cmap='inferno', vmax = vmax, vmin=vmin)
 
             
             states = self.dataframe.columns.get_level_values("state").value_counts().index
             #county_map[['cluster']] = county_map[['cluster']].fillna(0)
             
             if 'Alaska' in states:
-                county_map.loc[county_map['STATE'] == '02'].dropna().plot(column='cluster', ax=sx2, legend=True, figsize=(30,30), cmap='inferno') 
+                county_map.loc[county_map['STATE'] == '02'].dropna().plot(column='cluster', ax=sx2, legend=False, figsize=(30,30), cmap='inferno', vmax = vmax, vmin=vmin) 
 
             if 'Hawaii' in states:
-                county_map.loc[county_map['STATE']=='15'].dropna().plot(column='cluster', ax=sx3, legend=True, figsize=(30,30), cmap='inferno')
+                county_map.loc[county_map['STATE']=='15'].dropna().plot(column='cluster', ax=sx3, legend=False, figsize=(30,30), cmap='inferno', vmax = vmax, vmin=vmin)
             
             
             if 'Puerto Rico' in states:
                 sx4 = fig.add_subplot(grid[(start + spacing * 3):(start + spacing * 3 + spacing * 2):, 2]) # Puerto Rico
                 sx4.set_xlim(-68,-64)
-                county_map[county_map['STATE']=='72'].plot(column='cluster', ax=sx4, legend=True, figsize=(30,30), cmap = 'inferno')
+                county_map[county_map['STATE']=='72'].plot(column='cluster', ax=sx4, legend=False, figsize=(30,30), cmap = 'inferno', vmax = vmax, vmin=vmin)
             
             
 
