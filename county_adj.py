@@ -1,8 +1,9 @@
 import os
 import pandas as pd
+from adj_list import *
 
 # graph stuff: (adjacency list)
-
+'''
 class Node:
     def __init__(self,name, geo):
         self.name = name
@@ -16,16 +17,23 @@ class Node:
         
     def get_adj(self):
         return self.neighbors.keys()
+
     
-    def get_weight(self, neighbor):
-        return self.neighbors[neighbor]
-
-
+class Edge:
+    def __init__(self, v1, v2, w):
+        # First Node
+        self.v1 = v1
+        # Second Node
+        self.v2 = v2
+        # Weight
+        self.w = w
 
 class Graph:
-    def __init__(self, vertices):
+    def __init__(self, vertices, edges):
         # vertices should be a dict of known vertices or an empty dict
         self.V = vertices
+        # edges is just represented as a list of edges or initialized w/ empty list
+        self.E = edges
 
     def add_node(self, node, geo):
         self.V[node] = Node(node, geo)
@@ -34,7 +42,13 @@ class Graph:
         try:
             return self.V[name]
         except KeyError: 
-            return None  
+            return None
+
+    def get_edge(self, v1, v2):
+        for e in self.E:
+            if e.v1 == v1 and e.v2 == v2:
+                return e
+        
 
     def add_edge(self, v1, v2, w = 0, geo1 = None, geo2 = None):
         if v1 not in self.V.keys():
@@ -43,6 +57,8 @@ class Graph:
             self.add_node(v2, geo2)
 
         self.V[v1].add_neighbor(self.V[v2], w)
+        self.E.append(Edge(v1,v2,w))
+'''
 
 
 us_state_abbrev = {
@@ -130,13 +146,14 @@ def read_county_adj(path, graph, county_dist, county_case):
             try:
                 # county lookup from county case data
                 name1 = county_case.loc[int(mod[1]),:].index[0]
-                graph.add_node(name1, int(mod[1]))
-                curr = curr = (int(mod[1]), name1)
-            except:
+                graph.add_node(name1, geo_id = int(mod[1]))
+                curr = (int(mod[1]), name1)
+            except KeyError:
                 curr = None
 
             
-            if int(mod[1]) != int(mod[3]):
+            #if int(mod[1]) != int(mod[3]):
+            if curr is not None and int(mod[3]) != curr[0]:
                 try:
                     #distance lookup from distance dataset
                     lookup = county_dist.loc[county_dist.county1 == int(mod[1])]
@@ -146,7 +163,10 @@ def read_county_adj(path, graph, county_dist, county_case):
                     #ab_frame.append(lookup.values.tolist()[0])
 
                     w_i = float(lookup.mi_to_county)
-                    graph.add_edge(v1 = name1, v2 = name2, w = w_i, geo2 = int(mod[3]))
+
+                    name2 = county_case.loc[int(mod[3]),:].index[0]
+                    graph.add_node(name2, int(mod[3]))
+                    graph.add_edge(v1 = name1, v2 = name2, w = w_i) #, geo2 = int(mod[3]))
 
                 except:
                     #print(name1, " and ", name2)
@@ -165,7 +185,8 @@ def read_county_adj(path, graph, county_dist, county_case):
                     #ab_frame.append(lookup.values.tolist()[0])
 
                     w_i = float(lookup.mi_to_county)
-                    graph.add_edge(v1 = curr[1], v2 = name2, w = w_i, geo2 = int(mod[3]))
+                    graph.add_node(name2, int(mod[3]))
+                    graph.add_edge(v1 = curr[1], v2 = name2, w = w_i) #, geo2 = int(mod[3]))
                 except:
                     #print(curr, " and ", name2)
                     pass
@@ -178,7 +199,7 @@ def read_county_adj(path, graph, county_dist, county_case):
 
 def make_graph(): 
     if __name__ == '__main__':
-        graph = Graph({})
+        graph = Graph({}, [])
         county_distance = pd.read_csv('collected_data/adj_county_distances.csv')
         county_case = pd.read_csv("collected_data/county_dataset.csv", index_col = [2,0,1])
         read_county_adj('collected_data/county_adjacency.txt', graph, county_distance, county_case)
@@ -190,7 +211,7 @@ def make_graph():
         filer1 = os.path.join(cwd, 'collected_data/county_adjacency.txt')
         filer2 = os.path.join(cwd, 'collected_data/adj_county_distances.csv')
         filer3 = os.path.join(cwd, 'collected_data/county_dataset.csv')
-        graph = Graph({})
+        graph = Graph({}, [])
         county_distance = pd.read_csv(filer2)
         county_case = pd.read_csv(filer3, index_col = [2,0,1])
         read_county_adj(filer1, graph, county_distance, county_case)

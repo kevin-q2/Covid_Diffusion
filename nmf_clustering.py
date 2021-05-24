@@ -307,7 +307,7 @@ class nmf_cluster(mat_opr):
             baser[b].plot(ax=axys.flatten()[b], title = "Basis " + str(b))
 
             axys.flatten()[b].set_ylim([bt - (bt * 0.2) - 0.02, tp + (tp * 0.2)])
-            axys.flatten()[b].legend([label, 'Original'])
+            axys.flatten()[b].legend([label, 'County'])
 
 
 
