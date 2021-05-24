@@ -93,7 +93,6 @@ analysis/time_shift.ipynb
 automated_collection/last_scrape.txt
 
 collected_data/co-est2019-alldata.csv
-collected_data/state_census_estimate.csv
 
 dashboard_scraper.py
 dict.txt
