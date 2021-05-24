@@ -2,7 +2,10 @@ import pandas as pd
 import numpy as np
 import math
 import random
+import os
+import sys
 from graph_operation import *
+from matrix_operation import mat_opr
 
 
 
@@ -150,6 +153,50 @@ def links_initiators(M, steps, runs):
     G0 = G0.replace(np.nan, 0)
     G,N = average_runs(M,G0,N0,steps,runs)
     return G,N
+
+
+
+
+if __name__ == '__main__':
+    cwd = os.getcwd()
+    par = os.path.dirname(cwd)
+    sys.path.append(par)
+
+    state_dset = pd.read_csv('collected_data/state_dataset.csv', index_col = 0)
+    state_dset = mat_opr(state_dset)
+    population = pd.read_csv('collected_data/state_census_estimate.csv', index_col = 'NAME')
+
+    state_iso = state_dset.known_iso()
+    pop_dict = {}
+    for col in state_iso.dataframe.columns:
+        pop_dict[col] = population.loc[col,'POP']
+        
+    state_norm = state_iso.population_normalizer(pop_dict)
+
+    # first idea: for every location give 0s to dates which have values less than average
+    #             and 1s to dates greater than average
+    zro = []
+    for h in state_norm.dataframe.columns:
+        arr = []
+        locat = state_norm.dataframe.loc[:,h]
+        start = locat.loc[locat>=locat.mean()].index[0]
+        for g in locat.index:
+            if g < start:
+                arr.append(0)
+            else:
+                arr.append(1)
+        zro.append(arr)
+
+    binry = pd.DataFrame(zro).T
+    binry.columns = state_norm.dataframe.columns
+    binry.index = state_norm.dataframe.index
+
+    g,n = links_initiators(binry,1000,5)
+
+    g.to_csv("average_g.csv")
+    n.to_csv("average_n.csv")
+
+
 
 
 
