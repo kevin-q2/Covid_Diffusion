@@ -131,14 +131,14 @@ def average_runs(M,g0,n0,steps,runs):
     
     for col in g_avg.columns:
         for ind in g_avg.index:
-            if g_avg.loc[ind,col] > 0.2:
+            if g_avg.loc[ind,col] >= 0.3:
                 g_avg.loc[ind,col] = 1
             else:
                 g_avg.loc[ind,col] = 0
                 
     for col in n_avg.columns:
         for ind in n_avg.index:
-            if n_avg.loc[ind,col] > 0.2:
+            if n_avg.loc[ind,col] >= 0.3:
                 n_avg.loc[ind,col] = 1
             else:
                 n_avg.loc[ind,col] = 0
@@ -191,7 +191,7 @@ if __name__ == '__main__':
     binry.columns = state_norm.dataframe.columns
     binry.index = state_norm.dataframe.index
 
-    g,n = links_initiators(binry,1000,5)
+    g,n = links_initiators(binry,10000,10)
 
     g.to_csv("average_g.csv")
     n.to_csv("average_n.csv")
