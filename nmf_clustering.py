@@ -449,13 +449,18 @@ class nmf_cluster(mat_opr):
 
 
 
-    def state_map_basis(self):
+    def state_map_basis(self, in_frame = None):
         # a function to make a plot of the US states colored by their factorization
-        g_max = self.y_table.max().max() 
-        g_min = self.y_table.min().min() 
+        # can take an input frame instead of the standard y-table 
 
-        for rows in self.y_table.index:
-            labels = self.y_table.loc[rows, :]
+        if in_frame is None:
+            in_frame = self.y_table
+
+        g_max = in_frame.max().max() 
+        g_min = in_frame.min().min() 
+
+        for rows in in_frame.index:
+            labels = in_frame.loc[rows, :]
             fig = plt.figure(constrained_layout=True, figsize=(20,10))
             fig.suptitle(rows, size='x-large')
             grid = fig.add_gridspec(ncols = 3, nrows = 5)
@@ -702,6 +707,28 @@ class nmf_cluster(mat_opr):
         plt.show()
 
 
+
+"""
+
+def state_mapper(in_frame):
+    mx = in_frame.max().max()
+    mn = in_frame.min().min()
+    
+    for row in in_frame.index:
+        fig,ax = plt.subplots(figsize = (30,30))
+        state_map = gp.read_file("US_States_geojson.json")
+
+        cluster_col = []
+        for i in state_map.NAME:
+            try:
+                cluster_col.append(in_frame.loc[row, i])
+            except:
+                cluster_col.append(np.nan)
+                
+        state_map['cluster'] = cluster_col
+        state_map.plot(column = 'cluster', ax = ax, legend = True, vmax = mx, vmin = mn, cmap = 'inferno', figsize = (30,30))
+        ax.set_xlim(-200,-50)
+"""
 
 
 
