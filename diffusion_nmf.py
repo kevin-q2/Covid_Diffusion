@@ -213,10 +213,10 @@ class DiffusionNMF:
                 # because H is not constrained
                 num = np.multiply(self.V, np.dot(self.X.T, np.dot(self.D, self.K.T)))
                 denom = np.dot(self.X.T, np.dot(self.X, np.dot(self.V, np.dot(self.K, self.K.T)))) + 1e-9 # add 1e-9 to make sure its not 0?
-                self.H = np.divide(num, denom)
+                self.V = np.divide(num, denom)
 
                 # re - normalize
-                norms = (sum(np.transpose(self.H) ** 2)) ** 0.5 # l2 norm along rows of H
+                norms = (sum(np.transpose(self.V) ** 2)) ** 0.5 # l2 norm along rows of H
 
                 # rows of H keep constant energy 
                 # W is scaled up to accomodate
