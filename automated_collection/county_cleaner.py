@@ -176,5 +176,5 @@ def county_census(saver = False):
 
 
 if __name__ == "__main__":
-    county_cases()
+    county_cases(True)
     county_census()

@@ -273,7 +273,7 @@ class state_test_data(mat_opr):
         if get_test_dat:
             self.test_df = self.get_test_data()
             if saver:
-                self.test_df.to_csv(os.path.join("collected_data/state_testing.csv"))
+                self.test_df.to_csv(os.path.join(par, "collected_data/state_testing.csv"))
         else:
             self.test_df = pd.read_csv(os.path.join(par, "collected_data/state_testing.csv"), index_col = 0)
 
@@ -397,5 +397,5 @@ class state_test_data(mat_opr):
 
 if __name__ == '__main__':
     # update the datasets.
-    state_data(True, False)
-    state_test_data(True, False)
+    state_data(True, True)
+    state_test_data(True, True)
