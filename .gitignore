@@ -114,6 +114,9 @@ turk_control.py
 turk_to_frame.py
 unused data/
 values.py
+Dataset.py
+bimodal_test.py
+matrix_factorization.py
 
 
 UniversityCases/university_cases_01_01_21.csv
