@@ -228,7 +228,7 @@ class DiffusionNMF:
                 change = O - np.linalg.norm(self.D - np.dot(self.X, np.dot(self.V,self.K)))
                 O = np.linalg.norm(self.D - np.dot(self.X, np.dot(self.V,self.K)))
                 if change < self.tol:
-                    return
+                    v_done = True
 
 
 
@@ -278,8 +278,11 @@ class DiffusionNMF:
                 change = O - np.linalg.norm(self.D - np.dot(self.X, np.dot(self.V,self.K)))
                 O = np.linalg.norm(self.D - np.dot(self.X, np.dot(self.V,self.K)))
                 if change < self.tol:
-                    return
+                    x_done = True
 
+            if v_done and x_done:
+                return
+                
             iteri -= 1
 
 
