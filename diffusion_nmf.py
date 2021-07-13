@@ -44,7 +44,7 @@ from scipy.sparse import random
 
 
 class DiffusionNMF:
-    def __init__(self, D, K, ncomponents, sparseV = None, sparseX = None, iterations = 500, tol = 1e-10):
+    def __init__(self, D, K, ncomponents, sparseV = None, sparseX = None, iterations = 500, tol = 1e-10, x_init = None, v_init = None, proj = False):
         if np.any(np.array(D) < 0):
             raise ValueError('Input array is negative')
 
@@ -55,6 +55,9 @@ class DiffusionNMF:
         self.sparseX = sparseX
         self.iterations = iterations
         self.tol = tol
+        self.x_init = x_init
+        self.v_init = v_init
+        self.proj = proj
     
 
 
@@ -66,11 +69,13 @@ class DiffusionNMF:
         # This is the main muscle for making sure that V is sparse in the output
 
         # More details can be found within the original paper (link above)
-
+        s = np.array(s)
         N = len(s)
 
         # project to the sum constraint:
         v = s + (k1 - sum(s))/N
+        #print(s)
+        #print(v)
 
         zerocoeff = []
 
@@ -83,27 +88,50 @@ class DiffusionNMF:
                     midpoints.append(0)
                 else:
                     midpoints.append(k1/(N - len(zerocoeff)))
+            midpoints = np.array(midpoints)
 
             w = v - midpoints
 
+            '''
             a = sum(w**2)
             b = 2*np.dot(w,v)  
             c = sum(v**2) - k2
+            '''
+
+            a = sum(w**2)
+            b = 2*np.dot(midpoints, w)
+            c = sum(midpoints**2)  - k2
+            
 
             roots  = np.roots([a,b,c])
 
-            if np.isreal(roots[0]) and np.isreal(roots[1]):
-                alpha = max(roots)
-            elif np.isreal(roots[0]):
-                alpha = roots[0]
-            elif np.isreal(roots[1]):
-                alpha = roots[1]
-            else:
-                alpha = max(np.real(roots))
+            try:
+                if np.isreal(roots[0]) and np.isreal(roots[1]):
+                    alpha = max(roots)
+                elif np.isreal(roots[0]):
+                    alpha = roots[0]
+                elif np.isreal(roots[1]):
+                    alpha = roots[1]
+                else:
+                    alpha = max(np.real(roots))
 
 
-            # project to closest point on the joint constraint hypershpere
-            v = alpha*w + v
+                # project to closest point on the joint constraint hypershpere
+                #v = alpha*w + v
+                v = midpoints + alpha * w
+
+            except IndexError:
+                # if no roots:
+                # normalize based on the L2 constraint manually
+                print("weird error")
+                print("V:")
+                print(v)
+                print("Midpoints")
+                print(midpoints)
+
+                #if np.linalg.norm(v) > k2:
+                #    v = (v / np.linalg.norm(v)) * k2
+                v = midpoints
 
             # if our new vector is non-negative then we are dont
             negs = v < 0
@@ -132,20 +160,27 @@ class DiffusionNMF:
         vdim = self.D.shape[0]
         samples = self.D.shape[1]
 
-        # Initialize W and H as random matrices
-        self.X = np.random.rand(len(self.D), self.ncomponents)
-        self.V = np.random.rand(self.ncomponents, len(self.D[0]))
+        # initialize X and V
+        if self.x_init is None:
+             self.X = np.random.rand(len(self.D), self.ncomponents)
+        else:
+            self.X = self.x_init
+
+        if self.v_init is None:
+            self.V = np.random.rand(self.ncomponents, len(self.D[0]))
+        else:
+            self.V = self.v_init
 
         # Normalize the L2 norm for each row of H
         self.V = normalize(self.V, norm = 'l2', axis = 0) # NOT SURE IF I CAN just use the scipy normalize or not ...
 
         # Adjust for sparseness 
         # (based on the sparseness equation in the paper)
-
         if self.sparseV is not None:
             L1s = math.sqrt(samples) - (math.sqrt(samples) - 1)*self.sparseV
             for i in range(self.V.shape[0]):
                 self.V[i,:] = self.projection(self.V[i,:], L1s, 1)
+
 
         if self.sparseX is not None:
             L1a = math.sqrt(vdim) - (math.sqrt(vdim) - 1)*self.sparseX
@@ -154,23 +189,22 @@ class DiffusionNMF:
 
 
         # initial objective (cost function)
-        #O = 0.5 * ((self.X - np.dot(self.W,self.H)) ** 2).sum()
         O = np.linalg.norm(self.D - np.dot(self.X, np.dot(self.V,self.K)))
  
         # initial step sizes
         x_step = 1
         v_step = 1
-        v_done = False
-        x_done = False
+
         iteri = self.iterations
-        while iteri > 0 and not (v_done and x_done):
+        while iteri > 0:
             # save previous values
             x_old = self.X 
             v_old = self.V
+            old_dist = O
 
 
             # Update V    
-            if self.sparseV is not None and v_done == False:
+            if self.sparseV is not None:
                 grad1 = np.dot(self.X.T, np.dot(self.D, self.K.T))
                 grad2 = np.dot(self.X.T, np.dot(self.X, np.dot(self.V, np.dot(self.K, self.K.T))))
                 dV = grad1 - grad2
@@ -194,27 +228,26 @@ class DiffusionNMF:
                         self.V = v_new
                         break
 
-                    # else decrease the stepsize and try again
+                    # decrease step size until distance decreases or we've converged on a solution
                     else:
-                        v_step = v_step / 2
+                        v_step /= 2
+                        if v_step < 1e-100:
+                            #print("V Algorithm Converged")
+                            #v_done = True
+                            break
+                            #return
 
-                    # If the stepsize is small enough then we've converged on a solution
-                    
-                    if v_step < 1e-200:
-                        print("V Algorithm Converged")
-                        v_done = True
-                        break
-                        #return
                     
 
 
-            elif v_done == False:
+            else:
                 # standard NMF update step
                 # because H is not constrained
                 num = np.multiply(self.V, np.dot(self.X.T, np.dot(self.D, self.K.T)))
                 denom = np.dot(self.X.T, np.dot(self.X, np.dot(self.V, np.dot(self.K, self.K.T)))) + 1e-9 # add 1e-9 to make sure its not 0?
                 self.V = np.divide(num, denom)
 
+                
                 # re - normalize
                 norms = (sum(np.transpose(self.V) ** 2)) ** 0.5 # l2 norm along rows of H
 
@@ -224,17 +257,18 @@ class DiffusionNMF:
                     self.V[n,:] /= norms[n]
                     self.X[:,n] *= norms[n]
 
-                #O = 0.5 * ((self.X - np.dot(self.W,self.H)) ** 2).sum()
-                change = O - np.linalg.norm(self.D - np.dot(self.X, np.dot(self.V,self.K)))
+                # project to closest sparse counterpoint
+                if self.proj == True:
+                    for r in range(self.V.shape[0]):
+                        self.V[r,:] = self.projection(self.V[r,:], L1s, 1)
+
                 O = np.linalg.norm(self.D - np.dot(self.X, np.dot(self.V,self.K)))
-                if change < self.tol:
-                    v_done = True
 
 
 
             # Update X
             # sparse nmf update step
-            if self.sparseX is not None and x_done == False:
+            if self.sparseX is not None: # and x_done == False:
                 # gradient step
                 dX = np.dot(self.D, np.dot(self.K.T, self.V.T)) - np.dot(self.X, np.dot(self.V, np.dot(self.K, np.dot(self.K.T, self.V.T))))
 
@@ -260,29 +294,72 @@ class DiffusionNMF:
                     else:
                         x_step /= 2
 
-                    
-                    if x_step < 1e-200:
-                        print("X Algorithm Converged")
-                        x_done = True
-                        break
+                        if x_step < 1e-100:
+                            break
+
 
             # standard NMF update step
             # because W is not constrained
-            elif x_done == False:
+            else: #elif x_done == False:
                 num = np.dot(self.D, np.dot(self.K.T, self.V.T))
                 denom = np.dot(self.X, np.dot(self.V, np.dot(self.K, np.dot(self.K.T, self.V.T)))) + 1e-9
                 lr = np.divide(num, denom)
                 self.X = np.multiply(self.X, lr)
 
-                #O = 0.5 * ((self.X - np.dot(self.W,self.H)) ** 2).sum()
-                change = O - np.linalg.norm(self.D - np.dot(self.X, np.dot(self.V,self.K)))
-                O = np.linalg.norm(self.D - np.dot(self.X, np.dot(self.V,self.K)))
+                change = abs(O - np.linalg.norm(self.D - np.dot(self.X, np.dot(self.V,self.K))))
                 if change < self.tol:
                     x_done = True
 
-            if v_done and x_done:
+                O = np.linalg.norm(self.D - np.dot(self.X, np.dot(self.V,self.K)))
+
+
+            # calculate change in cost and return if its small enough
+            O =  np.linalg.norm(self.D - np.dot(self.X, np.dot(self.V,self.K)))
+            change = abs(old_dist - O)
+            if change < self.tol:
                 return
-                
+
+            iteri -= 1
+
+
+
+    
+    def least_square_solver(self, beta, eta):
+        # solves the factorization with an alternating least squares solution
+
+        # initialize X and V
+        if self.x_init is None:
+             self.X = np.random.rand(len(self.D), self.ncomponents)
+        else:
+            self.X = self.x_init
+
+
+
+        iteri = self.iterations
+        while iteri > 0:
+
+            # Solve for V
+
+            # stack matrices for sparsity constraint
+            e = [[math.sqrt(beta)]*self.ncomponents]
+            x_stack = np.append(self.X, e, axis = 0)
+
+            zer_array = [[0]*self.D.shape[1]]
+            d_stack = np.append(self.D, zer_array, axis = 0)
+
+            # Least squares solution
+            self.V = np.dot(np.linalg.lstsq(x_stack, d_stack)[0], np.linalg.inv(self.K))
+
+            # Solve for X
+            I = np.identity(self.ncomponents) * math.sqrt(eta)
+            kht_stack = np.append(np.dot(self.K.T, self.V.T), I, axis = 0)
+
+            zer_mat = np.zeros((self.ncomponents, self.D.shape[0]))
+            dt_stack = np.append(self.D.T, zer_mat, axis = 0)
+
+            # least squares solution:
+            self.X = np.linalg.lstsq(kht_stack, dt_stack)[0].T
+
             iteri -= 1
 
 

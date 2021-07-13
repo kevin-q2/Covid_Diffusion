@@ -65,11 +65,19 @@ class SparseNMF:
                 else:
                     midpoints.append(k1/(N - len(zerocoeff)))
 
+            midpoints = np.array(midpoints)
             w = v - midpoints
 
+
+            
             a = sum(w**2)
-            b = 2*np.dot(w,v)  
+            b = 2*np.dot(w, v)  
             c = sum(v**2) - k2
+            '''
+            a = sum(w**2)
+            b = 2*np.dot(midpoints, w)
+            c = sum(midpoints**2)  - k2
+            '''
 
             roots  = np.roots([a,b,c])
 
@@ -85,6 +93,7 @@ class SparseNMF:
 
             # project to closest point on the joint constraint hypershpere
             v = alpha*w + v
+            #v = midpoints + alpha * w
 
             # if our new vector is non-negative then we are dont
             negs = v < 0
