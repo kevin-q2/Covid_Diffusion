@@ -29,7 +29,7 @@ import scipy.stats as stats
 
 
 class SparseNMF:
-    def __init__(self, X, ncomponents, iterations = 500, sW = None, sH = None):
+    def __init__(self, X, ncomponents, iterations = 500, sW = None, sH = None, tol = 1e-10):
         if np.any(np.array(X) < 0):
             raise ValueError('Input array is negative')
 
@@ -38,6 +38,7 @@ class SparseNMF:
         self.iterations = iterations
         self.sW = sW
         self.sH = sH
+        self.tol = tol
     
 
 
@@ -255,6 +256,73 @@ class SparseNMF:
             iteri -= 1
         
         #self.W = self.W * self.scaler
+
+
+    def hoyer_solver(self, lambda_sparse):
+        # solves based on Hoyer's original paper on sparse coding 
+        # https://arxiv.org/pdf/cs/0202009.pdf
+        # But slightly modified to include the diffusion Kernel
+        # the parameter lambda_sparse controls the level of sparseness in the output
+        vdim = self.X.shape[0]
+        samples = self.X.shape[1]
+
+
+        self.W = np.random.rand(len(self.X), self.ncomponents)
+        self.H = np.random.rand(self.ncomponents, len(self.X[0]))
+
+        O = np.linalg.norm(self.X - np.dot(self.W, self.H))
+        iteri = self.iterations
+        w_step = 1
+        while iteri > 0:
+            w_old = self.W 
+            h_old = self.H
+            old_dist = O
+
+            # Update X by modifying the step size until cost decreases
+            dW = np.dot(self.X, self.H.T) - np.dot(self.W, np.dot(self.H, self.H.T))
+
+            # loop until we decrease the objective
+            while True:
+                w_new = self.W + w_step*dW
+                
+                # set negative values to 0
+                # and normalize columns of x
+                #w_new[w_new < 0] = 0
+                #w_new = normalize(w_new, axis = 0)
+
+                # check if we've improved the distance
+                #dist = 0.5 * ((self.X - np.dot(w_new,self.H)) ** 2).sum()
+                dist = np.linalg.norm(self.X - np.dot(w_new, self.H))
+
+                if dist <= O:
+                    self.W = w_new
+                    O = dist
+                    w_step = w_step * 1.2
+                    break
+
+                else:
+                    w_step /= 2
+
+                    if w_step < 1e-100:
+                        break
+
+            self.W[self.W < 0] = 0
+            #self.W = normalize(self.W, norm = 'l1', axis = 0)
+            # Update V
+            # Multiplicative update step modified to include sparseness
+            # because H is not constrained
+            num = np.multiply(self.H, np.dot(self.W.T, self.X))
+            denom = np.dot(self.W.T, np.dot(self.W, self.H)) + lambda_sparse + 1e-9 # add 1e-9 to make sure its not 0?
+            self.H = np.divide(num, denom)
+            #self.H = normalize(self.H, norm = 'l2',axis = 1)
+
+
+            O = np.linalg.norm(self.X - np.dot(self.W, self.H))
+            change = abs(old_dist - O)
+            if change < self.tol:
+                return
+
+            iteri -= 1
 
 
 
