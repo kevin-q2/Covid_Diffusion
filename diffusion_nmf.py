@@ -118,17 +118,13 @@ class DiffusionNMF:
                 v = midpoints + alpha * w
 
             except IndexError:
-                # if no roots:
+                # if no roots (v == midpoints):
                 # normalize based on the L2 constraint manually
-                print("weird error")
-                print("V:")
-                print(v)
-                print("Midpoints")
-                print(midpoints)
+                #print("weird error")
 
-                #if np.linalg.norm(v) > k2:
-                #    v = (v / np.linalg.norm(v)) * k2
-                v = midpoints
+                if np.linalg.norm(v) > k2:
+                    v = (v / np.linalg.norm(v)) * k2
+                #v = midpoints
 
             # if our new vector is non-negative then we are dont
             negs = v < 0
@@ -219,7 +215,7 @@ class DiffusionNMF:
 
 
     def HoyerSparse(self, lambda_sparse):
-
+        self.X = normalize(self.X, axis = 0)
         # Update X by modifying the step size until cost decreases
         dX = np.dot(self.D, np.dot(self.K.T, self.V.T)) - np.dot(self.X, np.dot(self.V, np.dot(self.K, np.dot(self.K.T, self.V.T))))
 
@@ -248,7 +244,7 @@ class DiffusionNMF:
                     break
         
         self.X[self.X < 0] = 0
-        #self.X = normalize(self.X, axis = 0)
+        self.X = normalize(self.X, axis = 0)
         
         # Update V
         # Multiplicative update step modified to include sparseness
@@ -368,6 +364,7 @@ class DiffusionNMF:
                 # standard multiplicative update
                 self.MultUpdate()
 
+            #self.V = normalize(self.V, norm = 'l1', axis = 1)
             # calculate change in cost and return if its small enough
             O =  np.linalg.norm(self.D - np.dot(self.X, np.dot(self.V,self.K)))
             change = abs(old_dist - O)
