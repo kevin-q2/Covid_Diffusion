@@ -86,6 +86,7 @@ analysis/Cross Validation.ipynb
 analysis/NY Times.ipynb
 analysis/NYT-Big10.ipynb
 analysis/School_Clustering_enrollment.ipynb
+analysis/mult_grid_search.csv
 
 analysis/completion_tests.ipynb
 analysis/matrix_completion.ipynb
