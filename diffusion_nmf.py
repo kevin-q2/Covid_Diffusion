@@ -28,6 +28,7 @@ from scipy.sparse import random
 # D : The original n x m data matrix
 # K : m x m diffusion matrix
 # ncomponents: desired number of basis vectors
+# M : Mask for known values (matrix with 0's corresponding to unknowns and 1's for knowns)
 # sparseness : desired level of sparseness for V
 #             (1 being totally sparse and 0 being a totally full matrix)
 # iterations : max number of iterations to run through before landing on a solution
@@ -44,13 +45,19 @@ from scipy.sparse import random
 
 
 class DiffusionNMF:
-    def __init__(self, D, K, ncomponents, iterations = 500, tol = 1e-10, x_init = None, v_init = None):
+    def __init__(self, D, K, ncomponents, M = None, iterations = 500, tol = 1e-10, x_init = None, v_init = None):
         if np.any(np.array(D) < 0):
             raise ValueError('Input array is negative')
 
         self.D = np.array(D)
         self.K = np.array(K)
         self.ncomponents = ncomponents
+        self.masking = True
+        if M is None:
+            self.M = np.ones(np.shape(D))
+            self.masking = False
+        else:
+            self.M = np.array(M)
         self.iterations = iterations
         self.tol = tol
         self.x_init = x_init
@@ -149,33 +156,55 @@ class DiffusionNMF:
     def MultUpdate(self):
         # Update based on standard multiplicative update rules
 
+        # Adjust for Masked Values:
+        #masked_d = self.D
+        #masked_xvk = np.dot(self.X, np.dot(self.V, self.K))
+        #if self.masking:
+
+        masked_d = np.multiply(self.M, self.D)
+        masked_xvk = np.multiply(self.M, (np.dot(self.X, np.dot(self.V, self.K))))
+
         # Update X
-        num_x = np.dot(self.D, np.dot(self.K.T, self.V.T))
-        denom_x = np.dot(self.X, np.dot(self.V, np.dot(self.K, np.dot(self.K.T, self.V.T)))) + 1e-9
+        num_x = np.dot(masked_d, np.dot(self.K.T, self.V.T))
+        denom_x = np.dot(masked_xvk, np.dot(self.K.T, self.V.T)) + 1e-9
+        #num_x = np.dot(self.D, np.dot(self.K.T, self.V.T))
+        #denom_x = np.dot(self.X, np.dot(self.V, np.dot(self.K, np.dot(self.K.T, self.V.T)))) + 1e-9
         lr = np.divide(num_x, denom_x)
         self.X = np.multiply(self.X, lr)
+        masked_xvk = np.multiply(self.M, (np.dot(self.X, np.dot(self.V, self.K))))
+
 
         # Update V
-        num_v = np.multiply(self.V, np.dot(self.X.T, np.dot(self.D, self.K.T)))
-        denom_v = np.dot(self.X.T, np.dot(self.X, np.dot(self.V, np.dot(self.K, self.K.T)))) + 1e-9 # add 1e-9 to make sure its not 0?
-        self.V = np.divide(num_v, denom_v)
+        num_v = np.dot(self.X.T, np.dot(masked_d, self.K.T))
+        denom_v = np.dot(self.X.T, np.dot(masked_xvk, self.K.T)) + 1e-9 # add 1e-9 to make sure its not 0?
+        #num_v = np.dot(self.X.T, np.dot(self.D, self.K.T))
+        #denom_v = np.dot(self.X.T, np.dot(self.X, np.dot(self.V, np.dot(self.K, self.K.T)))) + 1e-9
+        lrv = np.divide(num_v, denom_v)
+        self.V = np.multiply(self.V, lrv)
 
 
     def HoyerProjection(self, sparseness):
         # Update with a modified version of Hoyer's NMF with sparseness constraints 
         #   https://www.jmlr.org/papers/volume5/hoyer04a/hoyer04a.pdf
 
+        # Adjust for Masked Values:
+        masked_d = self.D
+        masked_xvk = np.dot(self.X, np.dot(self.V, self.K))
+        if self.masking:
+            masked_d *= self.M
+            masked_xvk *= self.M
+
         # Update X
         # standard multiplicative update (Dont need X to be sparse)
-        num_x = np.dot(self.D, np.dot(self.K.T, self.V.T))
-        denom_x = np.dot(self.X, np.dot(self.V, np.dot(self.K, np.dot(self.K.T, self.V.T)))) + 1e-9
+        num_x = np.dot(masked_d, np.dot(self.K.T, self.V.T))
+        denom_x = np.dot(masked_xvk, np.dot(self.K.T, self.V.T)) + 1e-9
         lr = np.divide(num_x, denom_x)
         self.X = np.multiply(self.X, lr)
 
         # Update V
         # projected sparseness update
-        grad1 = np.dot(self.X.T, np.dot(self.D, self.K.T))
-        grad2 = np.dot(self.X.T, np.dot(self.X, np.dot(self.V, np.dot(self.K, self.K.T))))
+        grad1 = np.dot(self.X.T, np.dot(masked_d, self.K.T))
+        grad2 = np.dot(self.X.T, np.dot(masked_xvk, self.K.T))
         dV = grad1 - grad2
 
         # gradient descent until we've taken a sufficient step
@@ -188,8 +217,8 @@ class DiffusionNMF:
                 v_new[r,:] = self.projection(v_new[r,:], sparseness, 1)
 
             # check if we've improved the distance
-            curr_dist = np.linalg.norm(self.D - np.dot(self.X, np.dot(self.V,self.K)))
-            new_dist = np.linalg.norm(self.D - np.dot(self.X, np.dot(v_new,self.K)))
+            curr_dist = np.linalg.norm(self.M * (self.D - np.dot(self.X, np.dot(self.V,self.K))))
+            new_dist = np.linalg.norm(self.M * self.D - np.dot(self.X, np.dot(v_new,self.K)))
 
             if new_dist < curr_dist:
                 # if we have then break
@@ -331,10 +360,11 @@ class DiffusionNMF:
             L1s = math.sqrt(samples) - (math.sqrt(samples) - 1)*sparseness
             for i in range(self.V.shape[0]):
                 self.V[i,:] = self.projection(self.V[i,:], L1s, 1)
+        
 
 
         # initial objective (cost function)
-        O = np.linalg.norm(self.D - np.dot(self.X, np.dot(self.V,self.K)))
+        O = np.linalg.norm(self.M * (self.D - np.dot(self.X, np.dot(self.V,self.K))))
 
         # step sizes for iterating in projected gradient descent
         self.x_step = 1
@@ -366,7 +396,7 @@ class DiffusionNMF:
 
             #self.V = normalize(self.V, norm = 'l1', axis = 1)
             # calculate change in cost and return if its small enough
-            O =  np.linalg.norm(self.D - np.dot(self.X, np.dot(self.V,self.K)))
+            O =  np.linalg.norm(self.M * (self.D - np.dot(self.X, np.dot(self.V,self.K))))
             change = abs(old_dist - O)
             if change < self.tol:
                 return
