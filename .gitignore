@@ -75,11 +75,12 @@ nmf_tests.ipynb
 county_distances.csv
 
 .vscode/
+mturk/
 MTurk_Data/
 MTurk_raw/
 MTurk_tests/
 My Project-43003d8d0689.json
-Older_tests/
+Older_code/
 analysis/.vs/
 analysis/Big-10.ipynb
 analysis/Cross Validation.ipynb
