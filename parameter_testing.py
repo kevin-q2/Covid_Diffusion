@@ -105,16 +105,6 @@ def avg_train_test(d = None, w = None, h = None, K_true = None, laplacian = None
         
         results.append(mult_grid_train_avg)
         results.append(mult_grid_test_avg)
-
-    if saver:
-        if len(train_err.shape) > 2:
-            reshaped_tr = train_err.reshape(train_err.shape[0], -1)
-            np.savetxt("hoyer_grid_train" + str(K_true) +".csv", reshaped_tr, delimiter = ',')
-            reshaped_tst = test_err.reshape(test_err.shape[0], -1)
-            np.savetxt("hoyer_grid_test" + str(K_true) + ".csv", reshaped_tst, delimiter = ',')
-        else:
-            np.savetxt("multup_grid_train" + str(K_true) + ".csv", train_err, delimiter = ',')
-            np.savetxt("multup_grid_test" + str(K_true) + ".csv", test_err, delimiter = ',')
         
     return np.array(results)
 

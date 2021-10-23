@@ -1,5 +1,7 @@
 import sys
 import os
+import numpy as np
+import pandas as pd
 from parameter_testing import *
 
 cwd = os.getcwd()
@@ -29,13 +31,12 @@ if __name__ == "__main__":
         
     state_norm = state_iso.population_normalizer(pop_dict)
 
-    error_results = avg_train_test(np.array(state_norm.array), laplacian = state_L)
+    error_results = avg_train_test(np.array(state_norm.array), laplacian = state_L, test_list = [0.5, 0.1, 0.2], runs = 10, 
+                        rank_list=range(1,15), beta_list=range(1,15))
     
-    if saver:
-        reshaped_error = error_results.reshape(error_results.shape[0], -1)
-        np.savetxt("parameter_results.csv", reshaped_error, delimiter = ',')
-        f = open("error_shape.txt", "w+")
-        f.write(str(error_results.shape))
-        f.close()
-
-    print(avg_train_test(np.array(state_norm.array), laplacian = state_L))
+    
+    reshaped_error = error_results.reshape(error_results.shape[0], -1)
+    np.savetxt("parameter_results.csv", reshaped_error, delimiter = ',')
+    f = open("error_shape.txt", "w+")
+    f.write(str(error_results.shape))
+    f.close()
