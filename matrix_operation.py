@@ -8,7 +8,7 @@ import copy
 #from NonnegMFPy import nmf
 
 # Note lmafit.py needs to be in the same directory for now
-from lmafit import lmafit_mc_adp
+#from lmafit import lmafit_mc_adp
 
 # A class that performs some matrix operations and methods specifically on
 # Pandas dataframes
@@ -538,6 +538,7 @@ class mat_opr:
 
         return ranker
 
+    '''
     def lmafitter(self, rank = None, val=0):
         # Perfroms low-rank matrix completion using the methods from lmafit.py
         # val takes the value of unknowns ex) either 0 or None
@@ -564,6 +565,7 @@ class mat_opr:
         X,Y,out = lmafit_mc_adp(len(self.array),len(self.array[0]),rank,known_indices,known_values)
 
         return X,Y,out
+    '''
 
     def sci_nmf(self, components = 2, procedure=None, separate = False, max_iter=1000, w_init = False, h_init = None):
         # Performs non-negative matrix factorization
