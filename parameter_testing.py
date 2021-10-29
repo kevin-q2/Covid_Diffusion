@@ -30,34 +30,34 @@ def grid_search(dd, data_mask, laplacian, algorithm, rank_list=range(1,11), beta
         # rows are ranks, columns are beta
         train_err = np.empty((len(rank_list), len(beta_list)))
         test_err = np.empty((len(rank_list), len(beta_list)))
-        for rk in rank_list:
-            for bt in beta_list:
-                kb = np.linalg.inv(I + bt * laplacian)
-                differ = DiffusionNMF(dd, kb, M = data_mask, ncomponents = rk, iterations = 1000, tol = 1e-20)
+        for rk in range(len(rank_list)):
+            for bt in range(len(beta_list)):
+                kb = np.linalg.inv(I + beta_list[bt] * laplacian)
+                differ = DiffusionNMF(dd, kb, M = data_mask, ncomponents = rank_list[rk], iterations = 1000, tol = 1e-20)
                 differ.solver('MultUpdate')
                 
                 anti_mask = 1 - data_mask
                 trn = np.linalg.norm(data_mask * (dd - np.dot(differ.X, np.dot(differ.V, kb)))) / np.linalg.norm(data_mask * dd)
                 tst = np.linalg.norm(anti_mask * (dd - np.dot(differ.X, np.dot(differ.V, kb)))) / np.linalg.norm(anti_mask * dd)
 
-                train_err[rk - 1,bt - 1] = trn
-                test_err[rk - 1,bt - 1] = tst
+                train_err[rk,bt] = trn
+                test_err[rk,bt] = tst
                 
     else:
         train_err = np.empty((len(rank_list), len(beta_list), len(sparse_list)))
         test_err = np.empty((len(rank_list), len(beta_list), len(sparse_list)))
-        for rk in rank_list:
-            for bt in beta_list:
+        for rk in range(len(rank_list)):
+            for bt in range(len(beta_list)):
                 for sp in range(len(sparse_list)):
-                    kb = np.linalg.inv(I + bt * state_L)
-                    differ = DiffusionNMF(dd, kb, M = data_mask, ncomponents = rk, iterations = 1000, tol = 1e-20)
+                    kb = np.linalg.inv(I + beta_list[bt] * laplacian)
+                    differ = DiffusionNMF(dd, kb, M = data_mask, ncomponents = rank_list[rk], iterations = 1000, tol = 1e-20)
                     differ.solver('HoyerP', sparseness = sparse_list[sp])
                     
                     anti_mask = 1 - data_mask
                     trn = np.linalg.norm(data_mask * (dd - np.dot(differ.X, np.dot(differ.V, kb)))) / np.linalg.norm(data_mask * dd)
                     tst = np.linalg.norm(anti_mask * (dd - np.dot(differ.X, np.dot(differ.V, kb)))) / np.linalg.norm(anti_mask * dd)
-                    train_err[rk - 1,bt - 1, sp] = trn
-                    test_err[rk - 1,bt - 1, sp] = tst
+                    train_err[rk,bt, sp] = trn
+                    test_err[rk,bt, sp] = tst
     
 
     return train_err, test_err  
