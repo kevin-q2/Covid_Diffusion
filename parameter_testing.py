@@ -69,7 +69,7 @@ def grid_search(dd, data_mask, laplacian, algorithm, rank_list=range(1,11), beta
 
 # perfrom average over the grid searches
 def avg_train_test(d = None, w = None, h = None, K_true = None, laplacian = None, algorithm = "MultUpdate", test_list = [0.1], runs = 10, 
-                        rank_list=range(1,11), beta_list=range(1,11),sparse_list = np.linspace(0,1,11)[5:], saver = False):
+                        rank_list=range(1,11), beta_list=range(1,11),sparse_list = np.linspace(0.1,1,10), saver = False):
 
     if laplacian is None:
         print("Need laplacian graph for input!")
