@@ -32,6 +32,11 @@ from scipy.sparse import random
 # sparseness : desired level of sparseness for V
 #             (1 being totally sparse and 0 being a totally full matrix)
 # iterations : max number of iterations to run through before landing on a solution
+# tol : level of error at which convergence can be declared
+# x_init : initial solution of X
+# v_init : initial solution of V
+# prog : prints progress reports if true
+
 
 # OUTPUT:
 # X : n x k basis vector matrix
@@ -45,7 +50,7 @@ from scipy.sparse import random
 
 
 class DiffusionNMF:
-    def __init__(self, D, K, ncomponents, M = None, iterations = 500, tol = 1e-10, x_init = None, v_init = None):
+    def __init__(self, D, K, ncomponents, M = None, iterations = 500, tol = 1e-10, x_init = None, v_init = None, prog = False):
         if np.any(np.array(D) < 0):
             raise ValueError('Input array is negative')
 
@@ -62,6 +67,11 @@ class DiffusionNMF:
         self.tol = tol
         self.x_init = x_init
         self.v_init = v_init
+        self.prog = prog
+
+        # to keep of how errors change over iterations
+        self.errors = []
+        self.error_change = []
     
         
 
@@ -314,6 +324,11 @@ class DiffusionNMF:
         self.V[self.V<0] = 0
 
 
+    def print_progress(self, current_iteration):
+        percent_done = (100 * current_iteration/self.iterations)
+        print("Iterations finished: " + str(current_iteration) + " -- " + str(percent_done) + r"% -- Error Change = " + str(self.error_change[-1]))
+
+
 
     def solver(self, algorithm = 'MultUpdate', sparseness = None, lambda_v = None, beta = None, eta = None):
         # solves the Diffusion NMF problem with various different algorithms
@@ -369,9 +384,9 @@ class DiffusionNMF:
         # step sizes for iterating in projected gradient descent
         self.x_step = 1
         self.v_step = 1
-        iteri = self.iterations
+        iteri = 0
 
-        while iteri > 0:
+        while iteri < self.iterations:
             x_old = self.X 
             v_old = self.V
             old_dist = O
@@ -398,10 +413,20 @@ class DiffusionNMF:
             # calculate change in cost and return if its small enough
             O =  np.linalg.norm(self.M * (self.D - np.dot(self.X, np.dot(self.V,self.K))))
             change = abs(old_dist - O)
-            if change < self.tol:
-                return
+            
+            if self.prog:
+                self.errors.append(O)
+                self.error_change.append(change)
+                if (100 * iteri/self.iterations % 10) == 0:
+                    self.print_progress(iteri)
 
-            iteri -= 1
+
+            if change < self.tol:
+                break
+
+            iteri += 1
+        
+        #self.print_progress(iteri)
 
 
         

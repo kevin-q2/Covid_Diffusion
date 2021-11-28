@@ -33,7 +33,7 @@ def grid_search(dd, data_mask, laplacian, algorithm, rank_list=range(1,11), beta
         for rk in range(len(rank_list)):
             for bt in range(len(beta_list)):
                 kb = np.linalg.inv(I + beta_list[bt] * laplacian)
-                differ = DiffusionNMF(dd, kb, M = data_mask, ncomponents = rank_list[rk], iterations = 1000, tol = 1e-20)
+                differ = DiffusionNMF(dd, kb, M = data_mask, ncomponents = rank_list[rk], iterations = 100000, tol = 1e-9)
                 differ.solver('MultUpdate')
                 
                 anti_mask = 1 - data_mask
@@ -50,7 +50,7 @@ def grid_search(dd, data_mask, laplacian, algorithm, rank_list=range(1,11), beta
             for bt in range(len(beta_list)):
                 for sp in range(len(sparse_list)):
                     kb = np.linalg.inv(I + beta_list[bt] * laplacian)
-                    differ = DiffusionNMF(dd, kb, M = data_mask, ncomponents = rank_list[rk], iterations = 1000, tol = 1e-20)
+                    differ = DiffusionNMF(dd, kb, M = data_mask, ncomponents = rank_list[rk], iterations = 100000, tol = 1e-9)
                     differ.solver('HoyerP', sparseness = sparse_list[sp])
                     
                     anti_mask = 1 - data_mask
