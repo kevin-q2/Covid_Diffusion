@@ -6,13 +6,14 @@ from diffusionNMF import diffusionNMF
 
 
 class gridSearcher:
-    def __init__(self, X, laplacian, max_iter = 100000, tolerance = 1e-9, percent_hide = 0.2, validate = 5):
+    def __init__(self, X, laplacian, max_iter = 100000, tolerance = 1e-9, percent_hide = 0.2, validate = 5, saver = None):
         self.X = X
         self.laplacian = laplacian
         self.max_iter = max_iter
         self.tolerance = tolerance
         self.percent_hide = percent_hide
         self.validate = validate
+        self.saver = saver
 
     def kernelize(self, beta):
         I = np.identity(self.laplacian.shape[0])
@@ -40,8 +41,18 @@ class gridSearcher:
         W,H = dSolver.fit_transform(self.X)
         
         rel_error = self.relative_error(W,H,K,M)
-        return rel_error
+        return rank, beta, rel_error
     
+    
+    def post_process(self, results):
+        res_frame = pd.DataFrame(results)
+        res_frame.columns = ["rank", "beta", "relative error"]
+        res_frame = res_frame.groupby(["rank","beta"], as_index = False).mean()
+        
+        if not self.saver is None:
+            res_frame.to_csv(self.saver)
+            
+        return res_frame
     
     def grid_search(self, rank_list, beta_list):
         trials = []
@@ -54,7 +65,7 @@ class gridSearcher:
                 
         res = Parallel(n_jobs = -1)(delayed(self.param_solver)(r,b) for (r,b) in trials)
         
-        return res
+        return self.post_process(res)
     
 
     
