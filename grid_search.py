@@ -30,8 +30,8 @@ class gridSearcher:
         return mask
     
     def relative_error(self, W, H, K, mask):
-        error = np.linalg.norm(mask * (self.X - np.dot(W, np.dot(H, K))))
-        baseline = np.linalg.norm(mask * self.X)
+        error = np.linalg.norm((1 - mask) * (self.X - np.dot(W, np.dot(H, K))))
+        baseline = np.linalg.norm((1 - mask) * self.X)
         return error/baseline
     
     def param_solver(self, rank, beta):
