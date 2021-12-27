@@ -73,4 +73,36 @@ def gen_decomposition(n, m, rank, state = None):
 def gen_laplacian(size, p_edge = 0.1, state = None):
     graph = nx.generators.random_graphs.erdos_renyi_graph(n = size, p = 0.1, seed = state)
     laplacian = nx.linalg.laplacianmatrix.laplacian_matrix(graph)
-    return laplacian.toarray()
+    return graph, laplacian.toarray()
+
+
+
+################################################################################
+# Very simple function for adding random noise to synthetic data
+# By iterating over every element and adding a sample from the 
+# normal distribution with mean: 0 and standard deviation: std_dev
+#
+# input:
+#   data - numpy array representing synthetic data matrix
+#   std_dev - standard of deviation used for random sampling
+#
+# output:
+#   matr - numpy array of data with random noise added 
+#
+################################################################################
+
+def add_noise(data, std_dev = None):
+    matr = np.matrix.copy(data)
+    if std_dev is None:
+        std_dev = matr.std() / 100
+
+    for rower in range(matr.shape[0]):
+        for coler in range(matr.shape[1]):
+            noisy = np.random.normal(scale = std_dev)
+            if matr[rower, coler] + noisy < 0:
+                matr[rower, coler] = 0
+            else:
+                matr[rower, coler] += noisy
+    
+            
+    return matr
