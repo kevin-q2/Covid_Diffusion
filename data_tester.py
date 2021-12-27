@@ -18,7 +18,7 @@ random_state = 1729
 W,H = gen_decomposition(n,m,rank, state=random_state)
 G, laplacian = gen_laplacian(m, state=random_state)
 K = np.linalg.inv(np.identity(m) + beta * laplacian)
-D = W @ H @ K
+D = np.dot(W, np.dot(H, K))
 noise_D = add_noise(D, 0.001)
 
 # grid search over selected list of parameters to find the best
