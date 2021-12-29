@@ -2,16 +2,20 @@ import numpy as np
 import pandas as pd
 from joblib import Parallel, delayed
 import diffusionNMF
+import nmf
 from diffusionNMF import diffusionNMF
+from nmf import nmf
 
 
 class gridSearcher:
-    def __init__(self, X, laplacian, max_iter = 100000, tolerance = 1e-9, percent_hide = 0.2, validate = 5, saver = None):
+    def __init__(self, X, laplacian = None, algorithm = "diffusion", max_iter = 100000, tolerance = 1e-9, percent_hide = 0.2, noise = None, validate = 5, saver = None):
         self.X = X
         self.laplacian = laplacian
+        self.algorithm = algorithm 
         self.max_iter = max_iter
         self.tolerance = tolerance
         self.percent_hide = percent_hide
+        self.noise = noise
         self.validate = validate
         self.saver = saver
 
@@ -29,16 +33,44 @@ class gridSearcher:
 
         return mask
     
+    def add_noise(self, data, std_dev = None):
+        matr = np.matrix.copy(data)
+        if std_dev is None:
+            return matr
+
+        else:
+            for rower in range(matr.shape[0]):
+                for coler in range(matr.shape[1]):
+                    noisy = np.random.normal(scale = std_dev)
+                    if matr[rower, coler] + noisy < 0:
+                        matr[rower, coler] = 0
+                    else:
+                        matr[rower, coler] += noisy
+            
+            return matr
+    
     def relative_error(self, W, H, K, mask):
-        error = np.linalg.norm((1 - mask) * (self.X - np.dot(W, np.dot(H, K))))
-        baseline = np.linalg.norm((1 - mask) * self.X)
+        if self.algorithm == "nmf":
+            error = np.linalg.norm((1 - mask) * (self.X - np.dot(W,H)))
+            baseline = np.linalg.norm((1 - mask) * self.X)
+        else:
+            error = np.linalg.norm((1 - mask) * (self.X - np.dot(W, np.dot(H, K))))
+            baseline = np.linalg.norm((1 - mask) * self.X)
+            
         return error/baseline
     
     def param_solver(self, rank, beta):
-        K = self.kernelize(beta)
         M = self.train_mask()
-        dSolver = diffusionNMF(n_components = rank, kernel = K, mask = M, n_iter = self.max_iter, tol = self.tolerance)
-        W,H = dSolver.fit_transform(self.X)
+        K = None
+        noisy = self.add_noise(self.X, self.noise)
+        
+        if self.algorithm == "nmf":
+            nSolver = nmf(n_components = rank, mask = M, n_iter = self.max_iter, tol = self.tolerance)
+            W,H = nSolver.fit_transform(noisy)
+        else:
+            K = self.kernelize(beta)
+            dSolver = diffusionNMF(n_components = rank, kernel = K, mask = M, n_iter = self.max_iter, tol = self.tolerance)
+            W,H = dSolver.fit_transform(noisy)
         
         rel_error = self.relative_error(W,H,K,M)
         return rank, beta, rel_error

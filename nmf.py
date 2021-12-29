@@ -29,76 +29,131 @@ import pandas as pd
 
 ####################################################################################################################
 
+def MultUpdate(X, W, H, mask):
+    # Update based on standard multiplicative update rules + adjusting for masked values
+
+    # Mask unknown values if any
+    masked_X = np.multiply(mask, X)
+    masked_WH = np.multiply(mask, np.dot(W, H))
+
+    # Update W
+    num_w = np.dot(masked_X, H.T)
+    denom_w = np.dot(masked_WH, H.T) + 1e-9 # add 1e-9 to make sure no 0s in the denominator
+    lrw = np.divide(num_w, denom_w)
+    W = np.multiply(W, lrw)
+
+    # re-apply mask after updating W
+    masked_WH = np.multiply(mask, np.dot(W, H))
+
+    # Update H
+    num_h = np.dot(W.T, masked_X)
+    denom_h = np.dot(W.T, masked_WH) + 1e-9 
+    lrh = np.divide(num_h, denom_h)
+    H = np.multiply(H, lrh)
+    
+    return W, H
+
+
+def solver(X, W, H, mask, max_iter, tol):
+    # initial objective (cost function)
+    O = np.linalg.norm((mask ** (1/2)) * (X - np.dot(W, H)))
+
+    iteri = 0
+
+    while iteri < max_iter:
+        old_dist = O
+
+        W, H = MultUpdate(X, W, H, mask)
+
+        # calculate change in cost and return if its small enough
+        O = np.linalg.norm((mask ** (1/2)) * (X - np.dot(W, H)))
+        change = abs(old_dist - O)
+
+        if change < tol:
+            break
+
+        iteri += 1
+        
+    
+    return W, H, iteri
+
+
+
 class nmf:
-    def __init__(self, X, ncomponents, M = None, iterations = 200, tol = 1e-10, w_init = None, h_init = None):
-        if np.any(np.array(X) < 0):
-            raise ValueError('Input array is negative')
-
-        self.X = np.array(X)
-        self.ncomponents = ncomponents
-        if M is None:
-            self.M = np.ones(np.shape(X))
-        else:
-            self.M = np.array(M)
-        self.iterations = iterations
+    def __init__(self, n_components = None, mask = None, n_iter = 200, tol = 1e-5):
+        self.n_components = n_components
+        self.mask = mask
+        self.n_iter = n_iter
         self.tol = tol
-        self.W = w_init
-        self.H = h_init
 
 
+    def _check_params(self, X):
+        # method to check all initial input parameters
+        
+        # Check input data
+        if X.min() < 0:
+            raise ValueError("all elements of input data must be positive")
+            
+        
+        # check mask input:
+        if self.mask is None:
+            self.mask = np.ones(X.shape)
+        else:
+            if self.mask.shape != X.shape:
+                raise ValueError("Input mask must match the size of the data")
+        
+        
+        # Check rank parameter 
+        if not isinstance(self.n_components, int) or self.n_components <= 0:
+            raise ValueError("Rank must be a positive integer")
+        
+        # check iterations 
+        if not isinstance(self.n_iter, int) or self.n_iter <= 0:
+            raise ValueError("Number of iterations must be a positive integer")
+        
+        
+        # check tolerance level
+        if not isinstance(self.tol, float) or self.tol <= 0:
+            raise ValueError("Tolerance level must be positive floating point value")
+        
+        
 
-
-    def MultUpdate(self):
-        # Update based on standard multiplicative update rules + adjusting for masked values
-
-        # Mask unknown values if any
-        masked_X = np.multiply(self.M, self.X)
-        masked_WH = np.multiply(self.M, np.dot(self.W, self.H))
-
-        # Update W
-        num_w = np.dot(masked_X, self.H.T)
-        denom_w = np.dot(masked_WH, self.H.T) + 1e-9 # add 1e-9 to make sure no 0s in the denominator
-        lrw = np.divide(num_w, denom_w)
-        self.W = np.multiply(self.W, lrw)
-
-        # re-apply mask after updating W
-        masked_WH = np.multiply(self.M, np.dot(self.W, self.H))
-
-        # Update H
-        num_h = np.dot(self.W.T, masked_X)
-        denom_h = np.dot(self.W.T, masked_WH) + 1e-9 
-        lrh = np.divide(num_h, denom_h)
-        self.H = np.multiply(self.H, lrh)
-
-
-    def solver(self):
-        samples = self.X.shape[0]
-        features = self.X.shape[1]
-
-        # initialize W and H
-        if self.W is None:
-             self.W = np.random.rand(samples, self.ncomponents)
-
-        if self.H is None:
-            self.H = np.random.rand(self.ncomponents, features)
-
-        # initial objective (cost function)
-        O = np.linalg.norm((self.M ** (1/2)) * (self.X - np.dot(self.W, self.H)))
-
-        # iterate and update W and H
-        iteri = self.iterations
-        while iteri > 0:
-            #w_old = self.W 
-            #h_old = self.H
-            old_dist = O
-
-            self.MultUpdate()
-
-            # Compute change in overall cost function and return if its small enough
-            O = np.linalg.norm((self.M ** (1/2)) * (self.X - np.dot(self.W, self.H)))
-            change = abs(old_dist - O)
-            if change < self.tol:
-                return
-
-            iteri -= 1
+        
+    def check_w_h(self, X, W, H):
+        if W is None:
+            W = np.random.rand(len(X), self.n_components)
+        else:
+            if W.shape != (len(X), self.n_components):
+                raise ValueError("W input should be of size " + str((len(X), self.n_components)))
+            
+        if H is None:
+            H = np.random.rand(self.n_components, X.shape[1])
+        else:
+            if H.shape != (self.n_components, X.shape[1]):
+                raise ValueError("H input should be of size " + str((self.n_components, X.shape[1])))
+            
+        return W,H
+        
+        
+        
+    def fit_transform(self, X, W = None, H = None):
+        # initialize X and V
+        
+        #X = self._validate_data(X, dtype=[np.float64, np.float32])
+        try:
+            X = np.array(X)
+        except:
+            raise ValueError("Input data must be array-like")
+        
+        W,H = self.check_w_h(X, W, H)
+        
+        self._check_params(X)
+        
+        
+        W,H, n_iters = solver(X, W, H, self.mask, self.n_iter, self.tol)
+        
+        if n_iters == self.n_iter:
+            print("Max iterations reached, increase to converge on given tolerance")
+        
+        return W,H
 
