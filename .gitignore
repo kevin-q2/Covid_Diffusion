@@ -13,7 +13,12 @@ push.sh
 update.sh
 test.bat
 
+diffusion_nmf.py
+nmf_clustering.py
+parameter_testing.py
 automated_collection/last_scrape.txt
+automated_collection/add_counties.py
+automated_collection/nytimes_scraper.py
 collected_data/county_distances.csv
 collected_data/co-est2019-alldata.csv
 
