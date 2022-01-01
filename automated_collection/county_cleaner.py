@@ -7,8 +7,17 @@ import random
 import numpy as np
 import copy
 
-
-# a few functions related to cleaning the county level data
+###################################################################################################################
+#
+#
+# A set of functions used to clean and save John's Hopkins COUNTY LEVEL Case data
+# Note that this is specifically designed on my file system, I haven't yet extended it to a more general case
+# In my case, I have the John's hopkins git hub repository cloned (https://github.com/CSSEGISandData/COVID-19)
+# And I need to pull from it before updating everything here
+#
+# MORE TO BE DONE HERE CURRENTLY NOT USEABLE outside my own file system
+#
+###################################################################################################################
 
 def county_cases(saver = False):
     # this is a function which can be used to get a nice version of county case data
@@ -21,20 +30,6 @@ def county_cases(saver = False):
     cwd = os.getcwd()
     par = os.path.dirname(cwd)
     parpar = os.path.dirname(par)
-
-    '''
-    try:
-        # if this is being imported as a module
-        cwd = os.path.dirname(os.path.realpath(__file__))
-        par = os.path.dirname(cwd)
-        par = os.path.abspath(par)
-
-    except NameError:
-        # else if its being used in its original file location
-        cwd = os.getcwd()
-        par = os.path.join(cwd, os.pardir)
-        par = os.path.abspath(par)
-    '''
 
     # path to John Hopkins dataset
     johns_path = os.path.join(parpar, 'johns_hopkins', 'csse_covid_19_data', 'csse_covid_19_daily_reports', '')

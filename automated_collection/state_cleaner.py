@@ -15,36 +15,29 @@ parpar = os.path.dirname(par)
 sys.path.append(par)
 from matrix_operation import mat_opr
 
-# A few classes to import a cleaned/seperated version of the Johns Hopkins Case + Testing data
+
+###################################################################################################################
 #
-
+#
+# A set of classes with methods used to clean and save John's Hopkins STATE LEVEL Case data
+# Note that this is specifically designed on my file system, I haven't yet extended it to a more general case
+# In my case, I have the John's hopkins git hub repository cloned (https://github.com/CSSEGISandData/COVID-19)
+# And I need to pull from it before updating everything here
+#
 # state_data is a class to import state case data
-
+#
 # state_df contains the case data and get_state_data() collects and cleans it
 # Setting get_state_dat to True allows this collecting/cleaning process to happen
 # otherwise it will just read a preloaded version
+# 
+#
+# MORE WORK TO BE DONE ONCE I GENERALIZE THIS
+#
+###################################################################################################################
 
 class state_data(mat_opr):
     def __init__(self, get_state_dat = False, saver = False):
 
-        '''
-        # State Case data
-        if get_state_dat:
-            self.state_df = self.get_state_data()
-            if saver:
-                self.state_df.to_csv("collected_data/state_dataset.csv")
-
-        else:
-            try:
-                # If this is being imported as a module
-                cwd = os.path.dirname(os.path.realpath(__file__))
-                combo = os.path.join(cwd, "collected_data/state_dataset.csv")
-                self.state_df = pd.read_csv(combo, index_col = 0)
-                print(combo)
-            except:
-                # If being used in the original file location
-                self.state_df = pd.read_csv("collected_data/state_dataset.csv", index_col = 0)
-        '''
 
          # State Case data
         if get_state_dat:
@@ -60,19 +53,6 @@ class state_data(mat_opr):
 
 
     def get_state_data(self):
-        '''
-        try:
-            # if this is being imported as a module
-            cwd = os.path.dirname(os.path.realpath(__file__))
-            par = os.path.dirname(cwd)
-            par = os.path.abspath(par)
-
-        except NameError:
-            # else if its being used in its original file location
-            cwd = os.getcwd()
-            par = os.path.join(cwd, os.pardir)
-            par = os.path.abspath(par)
-        '''
 
         # path to John Hopkins dataset
         state_path = os.path.join(parpar, 'johns_hopkins', 'csse_covid_19_data', 'csse_covid_19_daily_reports_us', '')
@@ -116,19 +96,6 @@ class state_data(mat_opr):
 
 
     def get_other_data(self):
-        '''
-        try:
-            # if this is being imported as a module
-            cwd = os.path.dirname(os.path.realpath(__file__))
-            par = os.path.dirname(cwd)
-            par = os.path.abspath(par)
-
-        except NameError:
-            # else if its being used in its original file location
-            cwd = os.getcwd()
-            par = os.path.join(cwd, os.pardir)
-            par = os.path.abspath(par)
-        '''
 
         # path to John Hopkins dataset
         state_path = os.path.join(parpar, 'johns_hopkins', 'csse_covid_19_data', 'csse_covid_19_daily_reports', '')
@@ -179,19 +146,6 @@ class state_data(mat_opr):
         
 
     def get_incidence_rate(self):
-        '''
-        try:
-            # if this is being imported as a module
-            cwd = os.path.dirname(os.path.realpath(__file__))
-            par = os.path.dirname(cwd)
-            par = os.path.abspath(par)
-
-        except NameError:
-            # else if its being used in its original file location
-            cwd = os.getcwd()
-            par = os.path.join(cwd, os.pardir)
-            par = os.path.abspath(par)
-        '''
 
         # path to John Hopkins dataset
         state_path = os.path.join(parpar, 'johns_hopkins', 'csse_covid_19_data', 'csse_covid_19_daily_reports_us', '')
@@ -252,23 +206,6 @@ class state_data(mat_opr):
 class state_test_data(mat_opr):
     def __init__(self,get_test_dat=False, saver = False):
 
-        '''
-        # State testing Rate Data
-        if get_test_dat:
-            self.test_df = self.get_test_data()
-            if saver:
-                self.test_df.to_csv("collected_data/state_testing.csv")
-
-        else:
-            try:
-                # If this is being imported as a module
-                cwd = os.path.dirname(os.path.realpath(__file__))
-                combo = os.path.join(cwd, "collected_data/state_testing.csv")
-                self.test_df = pd.read_csv(combo, index_col = 0)
-            except:
-                # If being used in the original file location
-                self.test_df = pd.read_csv("collected_data/state_testing.csv", index_col = 0)
-        '''
         # State testing Rate Data
         if get_test_dat:
             self.test_df = self.get_test_data()
@@ -282,19 +219,6 @@ class state_test_data(mat_opr):
 
     def get_test_data(self):
         # same process but with testing rates
-        '''
-        try:
-            # if this is being imported as a module
-            cwd = os.path.dirname(os.path.realpath(__file__))
-            par = os.path.dirname(cwd)
-            par = os.path.abspath(par)
-
-        except NameError:
-            # else if its being used in its original file location
-            cwd = os.getcwd()
-            par = os.path.join(cwd, os.pardir)
-            par = os.path.abspath(par)
-        '''
 
         #path to johns hopkins data
         state_path = os.path.join(parpar, 'johns_hopkins', 'csse_covid_19_data', 'csse_covid_19_daily_reports_us', '')
@@ -338,19 +262,6 @@ class state_test_data(mat_opr):
 
     def get_positivity_rates(self):
         # same process but with testing rates
-        '''
-        try:
-            # if this is being imported as a module
-            cwd = os.path.dirname(os.path.realpath(__file__))
-            par = os.path.dirname(cwd)
-            par = os.path.abspath(par)
-
-        except NameError:
-            # else if its being used in its original file location
-            cwd = os.getcwd()
-            par = os.path.join(cwd, os.pardir)
-            par = os.path.abspath(par)
-        '''
 
         #path to johns hopkins data
         state_path = os.path.join(parpar, 'johns_hopkins', 'csse_covid_19_data', 'csse_covid_19_daily_reports_us', '')
@@ -398,4 +309,4 @@ class state_test_data(mat_opr):
 if __name__ == '__main__':
     # update the datasets.
     state_data(True, True)
-    state_test_data(True, True)
+    #state_test_data(True, True)
