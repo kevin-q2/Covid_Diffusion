@@ -6,6 +6,7 @@ from data_generator import gen_decomposition, gen_laplacian, add_noise
 import time
 
 # a quick program used for running tests on different randomly generated datasets
+# simply starts and saves a run of the grid search process
 
 # true parameters to define
 n = 200

@@ -7,6 +7,46 @@ from diffusionNMF import diffusionNMF
 from nmf import nmf
 
 
+#########################################################################################################
+#
+# Class to help with the search for correct paramters to use as input for 
+# Diffusion NMF. In particular this will perform a grid search over a given
+# input space of parameters and report the error corresponding to each point 
+# on the grid
+#
+# INPUT:
+#   X - data matrix (numpy array)
+#   laplacian - graph laplacian used to make the diffusion kernel (numpy array)
+#   algorithm - "diffusion" for diffusion NMF or "nmf" for standard NMF
+#   max_iter - max iterations for which to run the factorization algorithm
+#   tolerance - tolerance level at which to run the factorization algorithm
+#   percent_hide - percent of entries to mask (for train/test purposes)
+#   noise - standard deviation of random noise to add to the data
+#   validate - number of trials to run for each point on the parameter grid
+#   saver - filename to save results to
+#
+# METHODS:
+#   kernelize(beta) 
+#       - given a beta value, use the laplacian attribute to compute the diffusion kernel
+#   train_mask()
+#       - create a random 0/1 matrix (0 = hidden, 1 = non hidden) using percent_hide attribute
+#   add_noise(data, std_dev)
+#       - given a set of data and a std_dev value, add samples from a normal(0, std_dev) distribution to
+#            each element of the data
+#   relative_error(W,H,K,mask)
+#       - given the data, its factorization, the kernel, and the mask, compute the relative error on the hidden
+#        (test) entries
+#   param_solver(rank, beta)
+#       - for a given rank and beta, dispatch a run of diffusion NMF or NMF from which we can then compute error
+#   post_process(results)
+#       - for internal use only, just takes the outputs and puts them into a pandas dataframe
+#   
+#   **grid_search(rank_list, beta_list)
+#       - Where the magic happens! to begin a grid search pass in a list of ranks and beta values to sample from
+#         this method dispatches trials in parallel and will return results in a nice pandas dataframe!
+#
+##########################################################################################################
+
 class gridSearcher:
     def __init__(self, X, laplacian = None, algorithm = "diffusion", max_iter = 100000, tolerance = 1e-9, percent_hide = 0.2, noise = None, validate = 5, saver = None):
         self.X = X
