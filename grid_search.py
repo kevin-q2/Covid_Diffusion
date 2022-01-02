@@ -74,11 +74,11 @@ class gridSearcher:
         return mask
     
     def add_noise(self, data, std_dev = None):
-        matr = np.matrix.copy(data)
         if std_dev is None:
-            return matr
+            return data
 
         else:
+            matr = np.matrix.copy(data)
             for rower in range(matr.shape[0]):
                 for coler in range(matr.shape[1]):
                     noisy = np.random.normal(scale = std_dev)
