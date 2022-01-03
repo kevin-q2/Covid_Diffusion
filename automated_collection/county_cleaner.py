@@ -43,6 +43,11 @@ def county_cases(saver = False):
 
     # some locations not being considered
     nons = ["Recovered", "Diamond Princess", "Grand Princess", "Northern Mariana Islands", "Guam", "Virgin Islands"]
+    
+    # and data from adjacency, population to compare with
+    county_adj = pd.read_csv(os.path.join(par, "collected_data/adj_county_distances.csv"), index_col = 0)
+    county_pop = pd.read_csv(os.path.join(par, "collected_data/county_census.csv"), index_col = 0)
+    
 
     multi = []
 
@@ -56,9 +61,13 @@ def county_cases(saver = False):
                 fips = fips[fips.index[0]]
 
                 if not np.isnan(fips):
-                    multi.append((state,county,int(fips)))
+                    fips = int(fips)
+                    if len(county_adj.loc[county_adj.county1 == fips]) != 0:
+                        if len(county_pop.loc[county_pop.fips == fips]) != 0:
+                            multi.append((state,county,int(fips)))
 
     locations = pd.MultiIndex.from_tuples(multi, names=["state", "county", "fips"])
+    locations = locations.sortlevel("fips")[0]
     count_cases = [[] for i in range(len(locations))]
 
     tot = 0
@@ -169,7 +178,38 @@ def county_census(saver = False):
     return rel
 
 
+def county_laplacian():
+    cwd = os.getcwd()
+    par = os.path.dirname(cwd)
+    
+    county_data = pd.read_csv(os.path.join(par, 'collected_data/county_dataset.csv'), index_col = [0,1,2])
+    county_data.index = county_data.index.get_level_values("fips")
+    county_data = county_data.T
+    
+    cadj = pd.read_csv(os.path.join(par, "collected_data/adj_county_distances.csv"), index_col = 0)
+    
+    countyLaplacian = np.zeros((len(county_data.columns), len(county_data.columns)))
+    indexer = {county_data.columns[i] : i for i in range(len(county_data.columns))}
+    for c in range(len(county_data.columns)):
+        adjs = cadj.loc[cadj.county1 == county_data.columns[c]]
+        countyLaplacian[c,c] = len(adjs)
+        for a in adjs.county2:
+            try:
+                ind = indexer[int(a)]
+                countyLaplacian[c, ind] = -1
+                countyLaplacian[ind, c] = -1
+            except:
+                countyLaplacian[c,c] -= 1
+                
+    county_Laplacian = pd.DataFrame(countyLaplacian, index = county_data.columns, columns = county_data.columns)
+    county_Laplacian.to_csv(os.path.join(par, "collected_data/countyLaplacian.csv"))
+    
+    return
+    
+    
+
 
 if __name__ == "__main__":
     county_cases(True)
-    county_census()
+    #county_laplacian()
+    #county_census()
