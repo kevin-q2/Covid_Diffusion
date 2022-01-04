@@ -22,7 +22,7 @@ state_dset = mat_opr(state_dset)
 population = pd.read_csv('./collected_data/state_census_estimate.csv', index_col = 'NAME')
 
 # clean + normalize
-state_iso = state_dset.known_iso()
+state_iso = state_dset.iso()
 pop_dict = {}
 for col in state_iso.dataframe.columns:
     pop_dict[col] = population.loc[col,'POP']
