@@ -35,7 +35,7 @@ state_L = pd.read_csv("./collected_data/state_laplacian.csv", index_col = 0).to_
 
 # grid search over selected list of parameters to find the best
 ranks = list(range(1,20))
-betas = np.linspace(0.01,5,50)
+betas = np.linspace(0.001,1,50)
 
 start = time.time()
 G = gridSearcher(state_norm.dataframe, laplacian = state_L, algorithm = "diffusion", max_iter = 20000, tolerance = 1e-8, saver = "./analysis/testing_data/covid_state_grid_search.csv")
