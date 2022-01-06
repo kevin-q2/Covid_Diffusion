@@ -1,3 +1,4 @@
+import os
 import numpy as np
 import pandas as pd
 import grid_search
@@ -14,31 +15,48 @@ import time
 ###########################################
 
 # case counts 
-#state_dset = pd.read_csv(os.path.join(par, 'collected_data/state_dataset.csv'), index_col = 0)
-state_dset = pd.read_csv('./collected_data/state_dataset.csv', index_col = 0)
-state_dset = mat_opr(state_dset)
 
-# population data
+# STATE LEVEL
+'''
+dset = pd.read_csv('./collected_data/state_dataset.csv', index_col = 0)
+dset = mat_opr(dset)
+#population data
 population = pd.read_csv('./collected_data/state_census_estimate.csv', index_col = 'NAME')
+# adjacency Laplacian
+lapl = pd.read_csv("./collected_data/state_laplacian.csv", index_col = 0).to_numpy()
+colname = 'POP'
+'''
+
+
+# COUNTY LEVEL
+county_data = pd.read_csv(os.path.join(par, 'collected_data/county_dataset.csv'), index_col = [0,1,2])
+county_data.index = county_data.index.get_level_values("fips")
+county_data = county_data.T
+dset = mat_opr(county_data)
+# county census data for normalization
+population = pd.read_csv("./collected_data/county_census.csv", index_col = "fips")
+# adjacency laplacian
+lapl = pd.read_csv("./collected_data/countyLaplacian.csv", index_col = 0).to_numpy()
+colname = 'Population Estimate'
 
 # clean + normalize
-state_iso = state_dset.iso()
+iso = dset.iso()
 pop_dict = {}
-for col in state_iso.dataframe.columns:
+for col in iso.dataframe.columns:
     pop_dict[col] = population.loc[col,'POP']
 
-state_norm = state_iso.population_normalizer(pop_dict)
+norm = iso.population_normalizer(pop_dict)
 
-
-# adjacency Laplacian
-state_L = pd.read_csv("./collected_data/state_laplacian.csv", index_col = 0).to_numpy()
 
 # grid search over selected list of parameters to find the best
-ranks = list(range(1,20))
-betas = np.linspace(0.001,1,50)
+ranks = list(range(1,30))
+betas = np.linspace(0.1,10,20)
+iters = 10000
+tol = 1e-8
+save = "./analysis/testing_data/covid_county_grid_search"
 
 start = time.time()
-G = gridSearcher(state_norm.dataframe, laplacian = state_L, algorithm = "diffusion", max_iter = 20000, tolerance = 1e-8, saver = "./analysis/testing_data/covid_state_grid_search.csv")
+G = gridSearcher(norm.dataframe, laplacian = lapl, algorithm = "diffusion", max_iter = iters, tolerance = tol, saver = "./analysis/testing_data/covid_state_grid_search.csv")
 G.grid_search(ranks, betas)
 end = time.time()
 
