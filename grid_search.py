@@ -119,7 +119,11 @@ class gridSearcher:
     def post_process(self, results):
         res_frame = pd.DataFrame(results)
         res_frame.columns = ["rank", "beta", "relative error"]
-        res_frame = res_frame.groupby(["rank","beta"], as_index = False).mean()
+        m = res_frame.groupby(["rank","beta"]).mean()
+        s = res_frame.groupby(["rank","beta"]).std()
+        s.columns = ["std error"]
+        
+        res_frame = pd.concat([m,s], axis = 1)
         
         if not self.saver is None:
             res_frame.to_csv(self.saver)
@@ -135,7 +139,7 @@ class gridSearcher:
                     trials.append((r,b))
                 
                 
-        res = Parallel(n_jobs = -1)(delayed(self.param_solver)(r,b) for (r,b) in trials)
+        res = Parallel(n_jobs = -1, verbose = 1)(delayed(self.param_solver)(r,b) for (r,b) in trials)
         
         return self.post_process(res)
     
