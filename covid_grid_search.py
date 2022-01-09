@@ -55,10 +55,10 @@ betas = np.linspace(0.1,10,20)
 iters = 50000
 tol = 1e-9
 hidden = 0.8
-save = "./analysis/testing_data/covid_county_grid_search"
+save = "./analysis/testing_data/covid_state_grid_search_hidden.csv"
 
 start = time.time()
-G = gridSearcher(norm.dataframe, laplacian = lapl, algorithm = "diffusion", max_iter = iters, tolerance = tol, percent_hide = hidden, saver = "./analysis/testing_data/covid_state_grid_search.csv")
+G = gridSearcher(norm.dataframe, laplacian = lapl, algorithm = "diffusion", max_iter = iters, tolerance = tol, percent_hide = hidden, saver = save)
 G.grid_search(ranks, betas)
 end = time.time()
 
