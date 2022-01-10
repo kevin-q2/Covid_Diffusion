@@ -50,11 +50,11 @@ norm = iso.population_normalizer(pop_dict)
 
 
 # grid search over selected list of parameters to find the best
-ranks = list(range(1,30))
-betas = np.linspace(0.1,10,20)
-iters = 50000
+ranks = list(range(1,20))
+betas = np.linspace(0.001,10,40)
+iters = 25000
 tol = 1e-9
-hidden = 0.8
+hidden = 0.5
 save = "./analysis/testing_data/covid_state_grid_search_hidden.csv"
 
 start = time.time()
