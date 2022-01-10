@@ -82,12 +82,13 @@ def gen_laplacian(size, H, p_edge = 0.05, state = None):
         graph[i][j]['width'] = 0.5
         
     # assign new colors and larger weights to important edges (relevancy determined by H matrix)
+    '''
     for basis in range(H.shape[0]):
         row = H.iloc[basis,:]
         rels = list(row[row > 0].index)
         pairs = [(a,b, {'color':palette[basis], 'width': 3}) for idx, a in enumerate(rels) for b in rels[idx + 1:]]
         graph.add_edges_from(pairs)
-    
+    '''
     laplacian = nx.linalg.laplacianmatrix.laplacian_matrix(graph)
     return graph, laplacian.toarray()
 
