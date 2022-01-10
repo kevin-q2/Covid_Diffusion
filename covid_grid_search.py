@@ -50,12 +50,12 @@ norm = iso.population_normalizer(pop_dict)
 
 
 # grid search over selected list of parameters to find the best
-ranks = list(range(1,20))
-betas = np.linspace(0.001,10,40)
+ranks = list(range(1,25))
+betas = np.linspace(0,3,40)
 iters = 25000
 tol = 1e-9
 hidden = 0.5
-save = "./analysis/testing_data/covid_state_grid_search_hidden.csv"
+save = "./analysis/testing_data/covid_state_grid_search_hidden2.csv"
 
 start = time.time()
 G = gridSearcher(norm.dataframe, laplacian = lapl, algorithm = "diffusion", max_iter = iters, tolerance = tol, percent_hide = hidden, saver = save)
