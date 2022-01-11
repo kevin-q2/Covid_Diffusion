@@ -18,6 +18,7 @@ noise_base = None
 
 # generate data using true paramters 
 W,H = gen_decomposition(n,m,rank, state=random_state)
+W,H = gen_decomposition(n,m,rank, state=random_state)
 G, laplacian = gen_laplacian(size = m, H = H, p_edge = 0.05, state=random_state)
 K = np.linalg.inv(np.identity(m) + beta * laplacian)
 D = np.dot(W, np.dot(H, K))
@@ -28,7 +29,7 @@ ranks = list(range(1,50))
 betas = np.linspace(1,20,40)
 
 start = time.time()
-G = gridSearcher(noise_D, laplacian = laplacian, algorithm = "diffusion", max_iter = 50000, tolerance = 1e-9, noise = noise_base, validate = 10, saver = "./analysis/testing_data/grid_search_" + str(rank) + "_" + str(beta) + ".csv")
+G = gridSearcher(noise_D, laplacian = laplacian, algorithm = "diffusion", max_iter = 25000, tolerance = 1e-9, noise = noise_base, validate = 10, saver = "./analysis/testing_data/grid_search_" + str(rank) + "_" + str(beta) + "_2.csv")
 G.grid_search(ranks, betas)
 end = time.time()
 
