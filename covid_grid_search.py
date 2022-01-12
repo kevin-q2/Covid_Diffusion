@@ -17,7 +17,7 @@ import time
 # case counts 
 
 # STATE LEVEL
-
+'''
 dset = pd.read_csv('./collected_data/state_dataset.csv', index_col = 0)
 dset = mat_opr(dset)
 #population data
@@ -25,6 +25,7 @@ population = pd.read_csv('./collected_data/state_census_estimate.csv', index_col
 # adjacency Laplacian
 lapl = pd.read_csv("./collected_data/state_laplacian.csv", index_col = 0).to_numpy()
 colname = 'POP'
+'''
 
 
 '''
@@ -40,6 +41,14 @@ lapl = pd.read_csv("./collected_data/countyLaplacian.csv", index_col = 0).to_num
 colname = 'Population Estimate'
 '''
 
+# World Level
+world_data = pd.read_csv('collected_data/world_dataset.csv', index_col = 0)
+dset = mat_opr(world_data)
+population = pd.read_csv('collected_data/world_population.csv', index_col = "Country")
+lapl = pd.read_csv('collected_data/worldLaplacian.csv', index_col = 0).to_numpy()
+colname = "Population"
+
+
 # clean + normalize
 iso = dset.iso()
 pop_dict = {}
@@ -50,12 +59,12 @@ norm = iso.population_normalizer(pop_dict)
 
 
 # grid search over selected list of parameters to find the best
-ranks = list(range(1,25))
+ranks = list(range(1,20))
 betas = np.linspace(0,3,40)
 iters = 25000
 tol = 1e-9
-hidden = 0.5
-save = "./analysis/testing_data/covid_state_grid_search_hidden2.csv"
+hidden = 0.2
+save = "./analysis/testing_data/covid_world_grid_search.csv"
 
 start = time.time()
 G = gridSearcher(norm.dataframe, laplacian = lapl, algorithm = "diffusion", max_iter = iters, tolerance = tol, percent_hide = hidden, saver = save)
