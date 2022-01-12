@@ -242,6 +242,26 @@ def make_laplacian(world):
 
     laplacian.to_csv(os.path.join(par, "collected_data/worldLaplacian.csv"))
     
+    
+def population(world):
+    pop_frame = pd.read_csv(os.path.join(par, "collected_data/country_population_data.csv"), skiprows = 4)
+    
+    manual_population = {"TWN" : 23570000, "ERI": 6081000}
+    
+    pops = []
+    for c in world.columns:
+        lookup = pop_frame.loc[pop_frame["Country Code"] == c]
+        try:
+            pops.append(manual_population[c])
+        except:
+            pops.append(lookup["2020"].values[0])
+        
+    clean_pop_frame = pd.DataFrame([world.columns, pops]).T
+    clean_pop_frame.columns = ["Country", "Population"]
+    print(clean_pop_frame)
+    clean_pop_frame.to_csv(os.path.join(par, "collected_data/world_population.csv"))
+        
+    
         
     
         
@@ -262,5 +282,5 @@ case_frame.to_csv(os.path.join(par, "collected_data/world_dataset.csv"))
 
 abbrevs = pd.read_csv(os.path.join(par, "collected_data/country_codes.csv"), index_col = 0)
 case_frame = pd.read_csv(os.path.join(par, "collected_data/world_dataset.csv"), index_col = 0)
-make_laplacian(case_frame)
+population(case_frame)
 
