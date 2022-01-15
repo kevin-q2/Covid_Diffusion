@@ -25,11 +25,11 @@ D = np.dot(W, np.dot(H, K))
 noise_D = add_noise(D, 0.001)
 
 # grid search over selected list of parameters to find the best
-ranks = list(range(1,25))
-betas = np.linspace(1,20,30)
+ranks = list(range(1,20))
+betas = np.linspace(1,15,30)
 
 start = time.time()
-G = gridSearcher(noise_D, laplacian = laplacian, algorithm = "diffusion", max_iter = 100000, tolerance = 1e-9, noise = noise_base, validate = 10, saver = "./analysis/testing_data/grid_search_" + str(rank) + "_" + str(beta) + "_2.csv")
+G = gridSearcher(noise_D, laplacian = laplacian, algorithm = "diffusion", max_iter = 100000, tolerance = 1e-9, noise = noise_base, validate = 10, saver = "./analysis/testing_data/grid_search_" + str(rank) + "_" + str(beta) + "_4.csv")
 G.grid_search(ranks, betas)
 end = time.time()
 
