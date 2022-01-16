@@ -30,7 +30,7 @@ ranks = list(range(1,20))
 betas = np.linspace(1,20,20)
 
 start = time.time()
-G = gridSearcher(noise_D, laplacian = laplacian, algorithm = "diffusion", max_iter = 100000, tolerance = 1e-9, noise = noise_base, validate = 10, saver = "./analysis/testing_data/grid_search_" + str(rank) + "_" + str(beta) + "_4.csv")
+G = gridSearcher(noise_D, laplacian = laplacian, algorithm = "diffusion", max_iter = 100000, tolerance = 1e-9, noise = noise_base, validate = 10, saver = "./analysis/testing_data/grid_search_" + str(rank) + "_" + str(beta) + "_6.csv")
 G.grid_search(ranks, betas)
 end = time.time()
 
