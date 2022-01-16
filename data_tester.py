@@ -11,8 +11,8 @@ import time
 # true parameters to define
 n = 250
 m = 50
-rank = 10
-beta = 10
+rank = 4
+beta = 5
 random_state = 1729
 noise_base = None
 
