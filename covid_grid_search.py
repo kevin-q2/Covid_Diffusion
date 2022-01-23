@@ -63,7 +63,7 @@ norm = iso.population_normalizer(pop_dict)
 # grid search over selected list of parameters to find the best
 ranks = list(range(1,20))
 betas = np.linspace(0,5,20)
-iters = 25000
+iters = 20000
 tol = 1e-8
 hidden = 0.2
 #save = "./analysis/testing_data/covid_world_grid_search.csv"
@@ -77,29 +77,29 @@ hrs = (end - start) / 60**2
 print("made it! Time : " + str(hrs) + " hrs")
 '''
 
-'''
+
 ranks1 = list(range(1,5))
-betas1 = np.linspace(0,1.25,5)
+betas1 = np.linspace(0,5,10)
 save1 = "./analysis/testing_data/covid_county_grid_search1.csv"
 G = gridSearcher(norm.dataframe, laplacian = lapl, algorithm = "diffusion", max_iter = iters, tolerance = tol, percent_hide = hidden, saver = save1)
 G.grid_search(ranks1, betas1)
 
 
 ranks2 = list(range(5,10))
-betas2 = np.linspace(1.25,2.5,5)
+betas2 = np.linspace(0,5,10)
 save2 = "./analysis/testing_data/covid_county_grid_search2.csv"
 G = gridSearcher(norm.dataframe, laplacian = lapl, algorithm = "diffusion", max_iter = iters, tolerance = tol, percent_hide = hidden, saver = save2)
 G.grid_search(ranks2, betas2)
-'''
+
 
 ranks3 = list(range(10,15))
-betas3 = np.linspace(2.5,3.75,5)
+betas3 = np.linspace(0,5,10)
 save3 = "./analysis/testing_data/covid_county_grid_search3.csv"
 G = gridSearcher(norm.dataframe, laplacian = lapl, algorithm = "diffusion", max_iter = iters, tolerance = tol, percent_hide = hidden, saver = save3)
 G.grid_search(ranks3, betas3)
 
 ranks4 = list(range(15,20))
-betas4 = np.linspace(3.75,5,5)
+betas4 = np.linspace(0,5,10)
 save4 = "./analysis/testing_data/covid_county_grid_search4.csv"
 G = gridSearcher(norm.dataframe, laplacian = lapl, algorithm = "diffusion", max_iter = iters, tolerance = tol, percent_hide = hidden, saver = save4)
 G.grid_search(ranks4, betas4)

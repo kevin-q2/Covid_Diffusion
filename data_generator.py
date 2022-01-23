@@ -72,23 +72,17 @@ def gen_decomposition(n, m, rank, state = None):
 # And outputs the corresponding laplacian matrix of the graph
 ########################################################################
 
-def gen_laplacian(size, H, p_edge = 0.05, state = None):
-    graph = nx.generators.random_graphs.erdos_renyi_graph(n = size, p = p_edge, seed = state)
-    palette = sns.color_palette(n_colors = H.shape[0])
+def gen_laplacian(size, radius = 1, state = None):
+    graph = nx.generators.geometric.random_geometric_graph(n = size, radius = radius, seed = state)
     
-    # assign initial colors/weights 
+    #palette = sns.color_palette(n_colors = H.shape[0])
+    # assign initial colors/weights
+    ''' 
     for i,j in graph.edges:
         graph[i][j]['color'] = (0,0,0)
         graph[i][j]['width'] = 0.5
+    '''
         
-    # assign new colors and larger weights to important edges (relevancy determined by H matrix)
-    '''
-    for basis in range(H.shape[0]):
-        row = H.iloc[basis,:]
-        rels = list(row[row > 0].index)
-        pairs = [(a,b, {'color':palette[basis], 'width': 3}) for idx, a in enumerate(rels) for b in rels[idx + 1:]]
-        graph.add_edges_from(pairs)
-    '''
     laplacian = nx.linalg.laplacianmatrix.laplacian_matrix(graph)
     return graph, laplacian.toarray()
 
