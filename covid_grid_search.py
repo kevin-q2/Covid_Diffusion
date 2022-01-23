@@ -77,6 +77,7 @@ hrs = (end - start) / 60**2
 print("made it! Time : " + str(hrs) + " hrs")
 '''
 
+'''
 ranks1 = list(range(1,5))
 betas1 = np.linspace(0,1.25,5)
 save1 = "./analysis/testing_data/covid_county_grid_search1.csv"
@@ -89,6 +90,7 @@ betas2 = np.linspace(1.25,2.5,5)
 save2 = "./analysis/testing_data/covid_county_grid_search2.csv"
 G = gridSearcher(norm.dataframe, laplacian = lapl, algorithm = "diffusion", max_iter = iters, tolerance = tol, percent_hide = hidden, saver = save2)
 G.grid_search(ranks2, betas2)
+'''
 
 ranks3 = list(range(10,15))
 betas3 = np.linspace(2.5,3.75,5)
