@@ -50,6 +50,9 @@ cali.index = cali.index.get_level_values("fips")
 cali = cali.T
 dset = mat_opr(cali)
 
+lapl = pd.read_csv("./collected_data/countyLaplacian.csv", index_col = 0)
+lapl.columns = lapl.columns.astype("int")
+
 lapl = lapl.loc[cali.columns,cali.columns].to_numpy()
 population = population.loc[cali.columns, :]
 
