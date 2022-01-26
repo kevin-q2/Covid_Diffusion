@@ -30,15 +30,29 @@ colname = 'POP'
 
 
 # COUNTY LEVEL
+'''
 county_data = pd.read_csv('collected_data/county_dataset.csv', index_col = [0,1,2])
 county_data.index = county_data.index.get_level_values("fips")
 county_data = county_data.T
 dset = mat_opr(county_data)
+'''
+
 # county census data for normalization
 population = pd.read_csv("./collected_data/county_census.csv", index_col = "fips")
 # adjacency laplacian
 lapl = pd.read_csv("./collected_data/countyLaplacian.csv", index_col = 0).to_numpy()
 colname = 'Population Estimate'
+
+# California Counties
+cali = pd.read_csv('collected_data/county_dataset.csv', index_col = [0,1,2])
+cali = cali.loc[cali.index.get_level_values("state").isin(["California"])]
+cali.index = cali.index.get_level_values("fips")
+cali = cali.T
+dset = mat_opr(cali)
+
+lapl = lapl.loc[cali.columns,cali.columns].to_numpy()
+population = population.loc[cali.columns, :]
+
 
 
 '''
@@ -61,23 +75,23 @@ norm = iso.population_normalizer(pop_dict)
 
 
 # grid search over selected list of parameters to find the best
-ranks = list(range(1,20))
+ranks = list(range(1,10))
 betas = np.linspace(0,5,20)
-iters = 20000
-tol = 1e-8
+iters = 100000
+tol = 1e-9
 hidden = 0.2
-#save = "./analysis/testing_data/covid_world_grid_search.csv"
+save = "./analysis/testing_data/california_grid_search.csv"
 
-'''
+
 start = time.time()
 G = gridSearcher(norm.dataframe, laplacian = lapl, algorithm = "diffusion", max_iter = iters, tolerance = tol, percent_hide = hidden, saver = save)
 G.grid_search(ranks, betas)
 end = time.time()
 hrs = (end - start) / 60**2
 print("made it! Time : " + str(hrs) + " hrs")
+
+
 '''
-
-
 ranks1 = list(range(1,5))
 betas1 = np.linspace(0,5,10)
 save1 = "./analysis/testing_data/covid_county_grid_search1.csv"
@@ -103,5 +117,6 @@ betas4 = np.linspace(0,5,10)
 save4 = "./analysis/testing_data/covid_county_grid_search4.csv"
 G = gridSearcher(norm.dataframe, laplacian = lapl, algorithm = "diffusion", max_iter = iters, tolerance = tol, percent_hide = hidden, saver = save4)
 G.grid_search(ranks4, betas4)
+'''
 
 
