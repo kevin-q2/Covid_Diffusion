@@ -48,7 +48,7 @@ lapl = pd.read_csv("./collected_data/countyLaplacian.csv", index_col = 0)
 lapl.columns = lapl.columns.astype("int")
 
 # California Counties
-'''
+
 cali = pd.read_csv('collected_data/county_dataset.csv', index_col = [0,1,2])
 cali = cali.loc[cali.index.get_level_values("state").isin(["California"])]
 cali.index = cali.index.get_level_values("fips")
@@ -57,9 +57,10 @@ dset = mat_opr(cali)
 
 lapl = lapl.loc[cali.columns,cali.columns].to_numpy()
 population = population.loc[cali.columns, :]
-'''
+
 
 # New England Columns
+'''
 new_eng = pd.read_csv('collected_data/county_dataset.csv', index_col = [0,1,2])
 new_eng = new_eng.loc[new_eng.index.get_level_values("state").isin(["New York", "Connecticut", "Maine", "Vermont",
                                                        "Massachusetts", "New Hampshire", "Rhode Island"])]
@@ -69,7 +70,7 @@ dset = mat_opr(new_eng)
 
 lapl = lapl.loc[new_eng.columns,new_eng.columns].to_numpy()
 population = population.loc[new_eng.columns, :]
-
+'''
 
 
 '''
@@ -101,7 +102,7 @@ save = "./analysis/testing_data/california_grid_search.csv"
 
 
 start = time.time()
-G = gridSearcher(norm.dataframe, laplacian = lapl, algorithm = "diffusion", max_iter = iters, tolerance = tol, percent_hide = hidden, saver = save)
+G = gridSearcher(norm.dataframe, laplacian = lapl, algorithm = "diffusion", max_iter = iters, validate = 10, tolerance = tol, percent_hide = hidden, saver = save)
 G.grid_search(ranks, betas)
 end = time.time()
 hrs = (end - start) / 60**2
