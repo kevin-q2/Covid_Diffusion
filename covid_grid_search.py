@@ -43,18 +43,32 @@ population = pd.read_csv("./collected_data/county_census.csv", index_col = "fips
 lapl = pd.read_csv("./collected_data/countyLaplacian.csv", index_col = 0).to_numpy()
 colname = 'Population Estimate'
 
+# For smaller portions of counties
+lapl = pd.read_csv("./collected_data/countyLaplacian.csv", index_col = 0)
+lapl.columns = lapl.columns.astype("int")
+
 # California Counties
+'''
 cali = pd.read_csv('collected_data/county_dataset.csv', index_col = [0,1,2])
 cali = cali.loc[cali.index.get_level_values("state").isin(["California"])]
 cali.index = cali.index.get_level_values("fips")
 cali = cali.T
 dset = mat_opr(cali)
 
-lapl = pd.read_csv("./collected_data/countyLaplacian.csv", index_col = 0)
-lapl.columns = lapl.columns.astype("int")
-
 lapl = lapl.loc[cali.columns,cali.columns].to_numpy()
 population = population.loc[cali.columns, :]
+'''
+
+# New England Columns
+new_eng = pd.read_csv('collected_data/county_dataset.csv', index_col = [0,1,2])
+new_eng = new_eng.loc[new_eng.index.get_level_values("state").isin(["New York", "Connecticut", "Maine", "Vermont",
+                                                       "Massachusetts", "New Hampshire", "Rhode Island"])]
+new_eng.index = new_eng.index.get_level_values("fips")
+new_eng = new_eng.T
+dset = mat_opr(new_eng)
+
+lapl = lapl.loc[new_eng.columns,new_eng.columns].to_numpy()
+population = population.loc[new_eng.columns, :]
 
 
 
