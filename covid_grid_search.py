@@ -17,16 +17,21 @@ import time
 # case counts 
 
 # STATE LEVEL
-'''
+
 dset = pd.read_csv('./collected_data/state_dataset.csv', index_col = 0)
-dset = mat_opr(dset)
+#dset = mat_opr(dset)
 #population data
 population = pd.read_csv('./collected_data/state_census_estimate.csv', index_col = 'NAME')
 # adjacency Laplacian
-lapl = pd.read_csv("./collected_data/state_laplacian.csv", index_col = 0).to_numpy()
+lapl = pd.read_csv("./collected_data/state_laplacian.csv", index_col = 0)
 colname = 'POP'
-'''
 
+lapl = lapl.drop(["Alaska", "Hawaii", "Puerto Rico"], axis = 1)
+lapl = lapl.drop(["Alaska", "Hawaii", "Puerto Rico"], axis = 0)
+lapl = lapl.to_numpy()
+
+dset = dset.drop(["Alaska", "Hawaii", "Puerto Rico"], axis = 1)
+dset = mat_opr(dset)
 
 
 # COUNTY LEVEL
@@ -37,6 +42,7 @@ county_data = county_data.T
 dset = mat_opr(county_data)
 '''
 
+'''
 # county census data for normalization
 population = pd.read_csv("./collected_data/county_census.csv", index_col = "fips")
 # adjacency laplacian
@@ -57,7 +63,7 @@ dset = mat_opr(cali)
 
 lapl = lapl.loc[cali.columns,cali.columns].to_numpy()
 population = population.loc[cali.columns, :]
-
+'''
 
 # New England Columns
 '''
@@ -98,7 +104,7 @@ betas = np.linspace(0,5,20)
 iters = 100000
 tol = 1e-9
 hidden = 0.2
-save = "./analysis/testing_data/california_grid_search.csv"
+save = "./analysis/testing_data/state_grid_search_adj.csv"
 
 
 start = time.time()
