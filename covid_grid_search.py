@@ -99,12 +99,12 @@ norm = iso.population_normalizer(pop_dict)
 
 
 # grid search over selected list of parameters to find the best
-ranks = list(range(1,10))
-betas = np.linspace(0,5,20)
+ranks = list(range(1,20))
+betas = np.linspace(0,1,10)
 iters = 100000
 tol = 1e-9
 hidden = 0.2
-save = "./analysis/testing_data/state_grid_search_adj.csv"
+save = "./analysis/testing_data/state_grid_search_adj2.csv"
 
 
 start = time.time()
