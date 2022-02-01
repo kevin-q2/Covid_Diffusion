@@ -17,7 +17,7 @@ import time
 # case counts 
 
 # STATE LEVEL
-
+'''
 dset = pd.read_csv('./collected_data/state_dataset.csv', index_col = 0)
 #dset = mat_opr(dset)
 #population data
@@ -32,7 +32,7 @@ lapl = lapl.to_numpy()
 
 dset = dset.drop(["Alaska", "Hawaii", "Puerto Rico"], axis = 1)
 dset = mat_opr(dset)
-
+'''
 
 # COUNTY LEVEL
 '''
@@ -42,7 +42,7 @@ county_data = county_data.T
 dset = mat_opr(county_data)
 '''
 
-'''
+
 # county census data for normalization
 population = pd.read_csv("./collected_data/county_census.csv", index_col = "fips")
 # adjacency laplacian
@@ -53,6 +53,7 @@ colname = 'Population Estimate'
 lapl = pd.read_csv("./collected_data/countyLaplacian.csv", index_col = 0)
 lapl.columns = lapl.columns.astype("int")
 
+'''
 # California Counties
 
 cali = pd.read_csv('collected_data/county_dataset.csv', index_col = [0,1,2])
@@ -66,7 +67,7 @@ population = population.loc[cali.columns, :]
 '''
 
 # New England Columns
-'''
+
 new_eng = pd.read_csv('collected_data/county_dataset.csv', index_col = [0,1,2])
 new_eng = new_eng.loc[new_eng.index.get_level_values("state").isin(["New York", "Connecticut", "Maine", "Vermont",
                                                        "Massachusetts", "New Hampshire", "Rhode Island"])]
@@ -76,7 +77,7 @@ dset = mat_opr(new_eng)
 
 lapl = lapl.loc[new_eng.columns,new_eng.columns].to_numpy()
 population = population.loc[new_eng.columns, :]
-'''
+
 
 
 '''
@@ -100,11 +101,11 @@ norm = iso.population_normalizer(pop_dict)
 
 # grid search over selected list of parameters to find the best
 ranks = list(range(1,20))
-betas = np.linspace(0,1,10)
+betas = np.linspace(0,2,10)
 iters = 100000
 tol = 1e-9
 hidden = 0.2
-save = "./analysis/testing_data/state_grid_search_adj2.csv"
+save = "./analysis/testing_data/new_eng_grid2.csv"
 
 
 start = time.time()
