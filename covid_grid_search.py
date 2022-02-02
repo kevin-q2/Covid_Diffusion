@@ -53,7 +53,7 @@ colname = 'Population Estimate'
 lapl = pd.read_csv("./collected_data/countyLaplacian.csv", index_col = 0)
 lapl.columns = lapl.columns.astype("int")
 
-'''
+
 # California Counties
 
 cali = pd.read_csv('collected_data/county_dataset.csv', index_col = [0,1,2])
@@ -64,10 +64,10 @@ dset = mat_opr(cali)
 
 lapl = lapl.loc[cali.columns,cali.columns].to_numpy()
 population = population.loc[cali.columns, :]
-'''
+
 
 # New England Columns
-
+'''
 new_eng = pd.read_csv('collected_data/county_dataset.csv', index_col = [0,1,2])
 new_eng = new_eng.loc[new_eng.index.get_level_values("state").isin(["New York", "Connecticut", "Maine", "Vermont",
                                                        "Massachusetts", "New Hampshire", "Rhode Island"])]
@@ -77,7 +77,7 @@ dset = mat_opr(new_eng)
 
 lapl = lapl.loc[new_eng.columns,new_eng.columns].to_numpy()
 population = population.loc[new_eng.columns, :]
-
+'''
 
 
 '''
@@ -105,7 +105,7 @@ betas = np.linspace(0,2,10)
 iters = 100000
 tol = 1e-9
 hidden = 0.2
-save = "./analysis/testing_data/new_eng_grid2.csv"
+save = "./analysis/testing_data/california_grid2.csv"
 
 
 start = time.time()
