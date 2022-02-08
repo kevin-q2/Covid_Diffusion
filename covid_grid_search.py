@@ -101,16 +101,21 @@ norm = iso.population_normalizer(pop_dict)
 
 # grid search over selected list of parameters to find the best
 ranks = list(range(1,20))
-betas = np.linspace(0,2,10)
+#betas = np.linspace(0,2,10)
+betas = [1]
 iters = 100000
 tol = 1e-9
 hidden = 0.2
-save = "./analysis/testing_data/california_grid2.csv"
-
+save1 = "./analysis/testing_data/california_diff.csv"
+save2 = "./analysis/testing_data/california_nmf.csv"
 
 start = time.time()
-G = gridSearcher(norm.dataframe, laplacian = lapl, algorithm = "diffusion", max_iter = iters, validate = 10, tolerance = tol, percent_hide = hidden, saver = save)
+G = gridSearcher(norm.dataframe, laplacian = lapl, algorithm = "diffusion", max_iter = iters, validate = 10, tolerance = tol, percent_hide = hidden, saver = save1)
 G.grid_search(ranks, betas)
+
+G = gridSearcher(norm.dataframe, laplacian = lapl, algorithm = "nmf", max_iter = iters, validate = 10, tolerance = tol, percent_hide = hidden, saver = save2)
+G.grid_search(ranks, betas)
+
 end = time.time()
 hrs = (end - start) / 60**2
 print("made it! Time : " + str(hrs) + " hrs")
