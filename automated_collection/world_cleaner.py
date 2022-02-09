@@ -63,7 +63,10 @@ def get_abbreviations():
     for l in lis:
         clist = l.text.replace(",", "").replace("\xa0\xa0", ",").split(",")
         ab_dict[clist[1]] = clist[0]
-        
+    
+    # Manual Insertion of Kosovo
+    ab_dict["Kosovo"] = "KOS"
+      
     abbs = pd.DataFrame.from_dict(ab_dict, orient = "index")
     
     return abbs
@@ -241,10 +244,11 @@ def make_laplacian(world):
     laplacian = pd.DataFrame(laplacian, index = world.columns, columns = world.columns)
 
     laplacian.to_csv(os.path.join(par, "collected_data/worldLaplacian.csv"))
+    return laplacian
     
     
 def population(world):
-    pop_frame = pd.read_csv(os.path.join(par, "collected_data/country_population_data.csv"), skiprows = 4)
+    pop_frame = pd.read_csv(os.path.join(par, "collected_data/country_population_data.csv"), index_col = 0)
     
     manual_population = {"TWN" : 23570000, "ERI": 6081000}
     
@@ -260,13 +264,14 @@ def population(world):
     clean_pop_frame.columns = ["Country", "Population"]
     print(clean_pop_frame)
     clean_pop_frame.to_csv(os.path.join(par, "collected_data/world_population.csv"))
+    return clean_pop_frame
         
     
         
     
         
     
-'''
+
 case_frame = case_extrapolate()
 #abbrevs = get_abbreviations()
 #abbrevs = match_codes(abbrevs, case_frame)
@@ -277,10 +282,29 @@ abbrevs = pd.read_csv(os.path.join(par, "collected_data/country_codes.csv"), ind
 case_frame = match_data(abbrevs, case_frame)
 case_frame = drop_irrelevant(case_frame)
 case_frame.to_csv(os.path.join(par, "collected_data/world_dataset.csv"))
-'''
+pop = population(case_frame)
+lapl = make_laplacian(case_frame)
+
     
 
 abbrevs = pd.read_csv(os.path.join(par, "collected_data/country_codes.csv"), index_col = 0)
 case_frame = pd.read_csv(os.path.join(par, "collected_data/world_dataset.csv"), index_col = 0)
-population(case_frame)
 
+
+
+
+europe = ["Russian Federation", "Ukraine", "France", "Spain", "Sweden", "Norway", "Kazakhstan", "Germany",
+          "Finland", "Poland", "Italy", "United Kingdom of Great Britain and Northern Ireland", "Romania", "Belarus", "Greece", "Bulgaria",
+          "Hungary", "Portugal", "Austria", "Czechia", "Serbia", "Ireland", "Lithuania",
+          "Latvia", "Croatia", "Bosnia and Herzegovina", "Slovakia", "Estonia", "Denmark", "Switzerland",
+          "Netherlands", "Moldova Republic of", "Belgium", "Albania", "North Macedonia", "Turkey", "Slovenia", "Montenegro",
+          "Kosovo", "Azerbaijan", "Luxembourg", "Georgia", "Andorra", "Malta", "Liechtenstein", "San Marino",
+          "Monaco", "Cyprus", "Armenia"]
+
+european_abbrevs = []
+
+for country in europe:
+    try:
+        european_abbrevs.append(abbrevs.loc[country,"abbrev"])
+    except:
+        print(country)

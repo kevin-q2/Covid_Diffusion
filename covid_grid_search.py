@@ -42,7 +42,7 @@ county_data = county_data.T
 dset = mat_opr(county_data)
 '''
 
-
+'''
 # county census data for normalization
 population = pd.read_csv("./collected_data/county_census.csv", index_col = "fips")
 # adjacency laplacian
@@ -52,10 +52,10 @@ colname = 'Population Estimate'
 # For smaller portions of counties
 lapl = pd.read_csv("./collected_data/countyLaplacian.csv", index_col = 0)
 lapl.columns = lapl.columns.astype("int")
-
+'''
 
 # California Counties
-
+'''
 cali = pd.read_csv('collected_data/county_dataset.csv', index_col = [0,1,2])
 cali = cali.loc[cali.index.get_level_values("state").isin(["California"])]
 cali.index = cali.index.get_level_values("fips")
@@ -64,7 +64,7 @@ dset = mat_opr(cali)
 
 lapl = lapl.loc[cali.columns,cali.columns].to_numpy()
 population = population.loc[cali.columns, :]
-
+'''
 
 # New England Columns
 '''
@@ -90,6 +90,23 @@ colname = "Population"
 '''
 
 
+# European Countries:
+eu_countries = ['RUS', 'UKR', 'FRA', 'ESP', 'SWE', 'NOR', 'KAZ', 'DEU', 'FIN', 'POL', 'ITA', 'GBR', 'ROU', 'BLR', 'GRC', 'BGR', 'HUN', 'PRT', 'AUT', 
+                'CZE', 'SRB', 'IRL', 'LTU', 'LVA', 'HRV', 'BIH', 'SVK', 'EST', 'DNK', 'CHE', 'NLD', 'MDA', 'BEL', 'ALB', 'MKD', 'TUR', 'SVN', 'MNE', 'KOS',
+                'AZE', 'LUX', 'GEO', 'AND', 'MLT', 'LIE', 'SMR', 'MCO', 'CYP', 'ARM']
+
+world_data = pd.read_csv('collected_data/world_dataset.csv', index_col = 0)
+europe_data = world_data[eu_countries]
+dset = mat_opr(europe_data)
+population = pd.read_csv('collected_data/world_population.csv', index_col = "Country")
+population = population.loc[population.index.isin(eu_countries)]
+lapl = pd.read_csv('collected_data/worldLaplacian.csv', index_col = 0)
+lapl = lapl.loc[eu_countries, eu_countries].to_numpy()
+colname = "Population"
+
+
+
+
 # clean + normalize
 iso = dset.iso()
 pop_dict = {}
@@ -100,21 +117,21 @@ norm = iso.population_normalizer(pop_dict)
 
 
 # grid search over selected list of parameters to find the best
-ranks = list(range(1,20))
-#betas = np.linspace(0,2,10)
-betas = [1]
+ranks = list(range(1,10))
+betas = np.linspace(0,5,20)
+#betas = [1]
 iters = 100000
 tol = 1e-9
 hidden = 0.2
-save1 = "./analysis/testing_data/california_diff.csv"
-save2 = "./analysis/testing_data/california_nmf.csv"
+save1 = "./analysis/testing_data/europe_grid.csv"
+#save2 = "./analysis/testing_data/california_nmf.csv"
 
 start = time.time()
 G = gridSearcher(norm.dataframe, laplacian = lapl, algorithm = "diffusion", max_iter = iters, validate = 10, tolerance = tol, percent_hide = hidden, saver = save1)
 G.grid_search(ranks, betas)
 
-G = gridSearcher(norm.dataframe, laplacian = lapl, algorithm = "nmf", max_iter = iters, validate = 10, tolerance = tol, percent_hide = hidden, saver = save2)
-G.grid_search(ranks, betas)
+#G = gridSearcher(norm.dataframe, laplacian = lapl, algorithm = "nmf", max_iter = iters, validate = 10, tolerance = tol, percent_hide = hidden, saver = save2)
+#G.grid_search(ranks, betas)
 
 end = time.time()
 hrs = (end - start) / 60**2
