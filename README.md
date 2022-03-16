@@ -1,4 +1,4 @@
-# Covid_Project
+# Covid Diffusion
 Data mining project to analyze the spread of COVID-19 across the US. Much of the work so far has focused on using NMF to deconstruct cumulative case counts into different patterns or waves. Graphs and detailed descriptions of our methods are written up here: [nmf report](papers/urop_report.pdf) 
 
 ### Diffusion NMF:
