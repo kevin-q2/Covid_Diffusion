@@ -17,7 +17,7 @@ import time
 # case counts 
 
 # STATE LEVEL
-'''
+
 dset = pd.read_csv('./collected_data/state_dataset.csv', index_col = 0)
 #dset = mat_opr(dset)
 #population data
@@ -32,7 +32,7 @@ lapl = lapl.to_numpy()
 
 dset = dset.drop(["Alaska", "Hawaii", "Puerto Rico"], axis = 1)
 dset = mat_opr(dset)
-'''
+
 
 # COUNTY LEVEL
 '''
@@ -91,6 +91,7 @@ colname = "Population"
 
 
 # European Countries:
+'''
 eu_countries = ['RUS', 'UKR', 'FRA', 'ESP', 'SWE', 'NOR', 'KAZ', 'DEU', 'FIN', 'POL', 'ITA', 'GBR', 'ROU', 'BLR', 'GRC', 'BGR', 'HUN', 'PRT', 'AUT', 
                 'CZE', 'SRB', 'IRL', 'LTU', 'LVA', 'HRV', 'BIH', 'SVK', 'EST', 'DNK', 'CHE', 'NLD', 'MDA', 'BEL', 'ALB', 'MKD', 'TUR', 'SVN', 'MNE', 'KOS',
                 'AZE', 'LUX', 'GEO', 'AND', 'MLT', 'LIE', 'SMR', 'MCO', 'CYP', 'ARM']
@@ -103,12 +104,13 @@ population = population.loc[population.index.isin(eu_countries)]
 lapl = pd.read_csv('collected_data/worldLaplacian.csv', index_col = 0)
 lapl = lapl.loc[eu_countries, eu_countries].to_numpy()
 colname = "Population"
-
+'''
 
 
 
 # clean + normalize
-iso = dset.iso()
+#iso = dset.iso()
+iso = dset
 pop_dict = {}
 for col in iso.dataframe.columns:
     pop_dict[col] = population.loc[col,colname]
@@ -118,20 +120,20 @@ norm = iso.population_normalizer(pop_dict)
 
 # grid search over selected list of parameters to find the best
 ranks = list(range(1,10))
-betas = np.linspace(0,5,20)
+betas = np.linspace(0,2,10)
 #betas = [1]
 iters = 100000
 tol = 1e-9
 hidden = 0.2
-save1 = "./analysis/testing_data/europe_grid.csv"
-#save2 = "./analysis/testing_data/california_nmf.csv"
+save1 = "./analysis/testing_data/state_diff_error4.csv"
+save2 = "./analysis/testing_data/state_nmf_error4.csv"
 
 start = time.time()
 G = gridSearcher(norm.dataframe, laplacian = lapl, algorithm = "diffusion", max_iter = iters, validate = 10, tolerance = tol, percent_hide = hidden, saver = save1)
 G.grid_search(ranks, betas)
 
-#G = gridSearcher(norm.dataframe, laplacian = lapl, algorithm = "nmf", max_iter = iters, validate = 10, tolerance = tol, percent_hide = hidden, saver = save2)
-#G.grid_search(ranks, betas)
+G = gridSearcher(norm.dataframe, laplacian = lapl, algorithm = "nmf", max_iter = iters, validate = 10, tolerance = tol, percent_hide = hidden, saver = save2)
+G.grid_search(ranks, betas)
 
 end = time.time()
 hrs = (end - start) / 60**2
